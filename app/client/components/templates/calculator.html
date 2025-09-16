@@ -1,0 +1,130 @@
+<div class="calculator-container">
+    <h2>Калькулятор логистики Wildberries</h2>
+    <form id="storageCalculator">
+        <!-- Левая колонка (ввод данных) -->
+        <div class="inputs">
+            <div class="form-group">
+                <select id="storageType" name="storageType">
+                    <option disabled>Тип хранения:</option>
+                    <option value="box">Коробка</option>
+                    <option value="pallet">Паллета</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select id="warehouse" name="warehouse">
+                    <option disabled>Склад:</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="weight">Вес (кг):</label>
+                <input type="number" id="weight" name="weight" value="0.01" min="0.01" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Габариты (см):</label>
+                <div class="inputs-grid">
+                    <input type="number" id="length" name="length" value="1" min="1" step="1" placeholder="Длина">
+                    <input type="number" id="width" name="width" value="1" min="1" step="1" placeholder="Ширина">
+                    <input type="number" id="height" name="height" value="1" min="1" step="1" placeholder="Высота">
+                </div>
+            </div>
+            <div class="form-group hidden">
+                <label for="quantity">Количество шт.:</label>
+                <input type="number" id="quantity" name="quantity" value="1" min="1">
+            </div>
+            <div class="form-group">
+                <label for="price">Цена товара (₽):</label>
+                <input type="number" id="price" name="price" value="100" min="0" step="0.01">
+            </div>
+        </div>
+
+        <!-- Правая колонка (вывод результатов) -->
+        <div class="results">
+            <h3>Логистика</h3>
+            <div class="result-row">
+                <div class="label">
+                    Стоимость доставки
+                    <span class="tooltip" data-tooltip="Рассчитывается исходя из веса и габаритов товара.">?</span>
+                </div>
+                <div class="value">
+                    <span data-field="delivery">0.00</span> ₽
+                </div>
+            </div>
+            <div class="result-row">
+                <div class="label">
+                    Стоимость хранения
+                    <span class="tooltip" data-tooltip="Определяется по объёму, занимаемому товаром на складе.">?</span>
+                </div>
+                <div class="value">
+                    <span data-field="storage">0.00</span> ₽
+                </div>
+            </div>
+            <div class="result-row">
+                <div class="label">
+                    Стоимость возврата
+                    <span class="tooltip" data-tooltip="Расчёт осуществляется согласно логистическим стандартам.">?</span>
+                </div>
+                <div class="value">
+                    <span data-field="return">0.00</span> ₽
+                </div>
+            </div>
+            <div class="result-row total-line">
+                <div class="label">
+                    Итого расходы
+                    <span class="tooltip" data-tooltip="Суммарные затраты по доставке, хранению и возврату.">?</span>
+                </div>
+                <div class="value">
+                    <span data-field="total">0.00</span> ₽
+                </div>
+            </div>
+
+            <h3>Комиссии</h3>
+            <div class="result-row">
+                <div class="label">
+                    Комиссия маркетплейса
+                    <span class="tooltip" data-tooltip="Комиссия за продажу товара на маркетплейсе.">?</span>
+                </div>
+                <div class="value">
+                    <span data-field="commission-mp">0.00</span> ₽
+                    <span class="percent" data-percent="mp">(0%)</span>
+                </div>
+            </div>
+            <div class="result-row">
+                <div class="label">
+                    Комиссия поставщика
+                    <span class="tooltip" data-tooltip="Комиссия, взимаемая с продавца.">?</span>
+                </div>
+                <div class="value">
+                    <span data-field="commission-supplier">0.00</span> ₽
+                    <span class="percent" data-percent="supplier">(0%)</span>
+                </div>
+            </div>
+            <div class="result-row">
+                <div class="label">
+                    Комиссия экспресс
+                    <span class="tooltip" data-tooltip="Комиссия за экспресс-доставку.">?</span>
+                </div>
+                <div class="value">
+                    <span data-field="commission-express">0.00</span> ₽
+                    <span class="percent" data-percent="express">(0%)</span>
+                </div>
+            </div>
+            <div class="result-row">
+                <div class="label">
+                    Платное хранение
+                    <span class="tooltip" data-tooltip="Дополнительная плата за хранение товара на складе.">?</span>
+                </div>
+                <div class="value">
+                    <span data-field="commission-storage">0.00</span> ₽
+                    <span class="percent" data-percent="storage">(0%)</span>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Блок скрытой кнопки "Вернуться" при необходимости -->
+        <div class="back-button hidden">
+            <button id="backBtn" type="button">Вернуться</button>
+        </div>
+    </form>
+</div>
+

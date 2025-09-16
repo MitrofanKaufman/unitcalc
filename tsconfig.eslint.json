@@ -1,0 +1,33 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "*.ts",
+    "*.tsx",
+    "*.cjs",
+    "*.mts",
+    "*.cts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "vite.config.ts",
+    "vite-env.d.ts",
+    "src/vite-env.d.ts",
+    "cfg/**/*.ts",
+    "server.mjs",
+    "server/**/*.ts",
+    "app.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    ".vite",
+    "coverage"
+  ]
+}

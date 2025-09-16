@@ -1,0 +1,43 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/subscriptions",
+        "method": "POST",
+        "body": "={{$json[\"subscription\"]}}"
+      },
+      "name": "Create Subscription",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        300,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "subject": "Subscription Update",
+        "message": "You have successfully subscribed to the new plan!",
+        "to": "={{$json[\"email\"]}}"
+      },
+      "name": "Send Email Notification",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [
+        500,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Create Subscription": {
+      "main": [
+        [
+          {
+            "node": "Send Email Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

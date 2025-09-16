@@ -1,0 +1,186 @@
+/* --------------------------------------------------
+   Основные переменные цвета, отступов и стилей
+--------------------------------------------------- */
+:root {
+    --bg: #f8f9fb;
+    --card-bg: #fff;
+    --primary: #3b82f6;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --radius: 12px;
+}
+
+/* --------------------------------------------------
+   Сброс стилей: убираем стандартные отступы и переносим box-sizing
+--------------------------------------------------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* --------------------------------------------------
+   Стили для body
+--------------------------------------------------- */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    padding: 2rem;
+    color: var(--text);
+}
+
+/* --------------------------------------------------
+   Контейнер калькулятора
+--------------------------------------------------- */
+.calculator-container {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+/* --------------------------------------------------
+   Заголовки и общие отступы
+--------------------------------------------------- */
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* --------------------------------------------------
+   Формы и группы элементов
+--------------------------------------------------- */
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+/* --------------------------------------------------
+   Стили для меток и полей ввода
+--------------------------------------------------- */
+label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+/* --------------------------------------------------
+   Всплывающие подсказки (tooltip)
+--------------------------------------------------- */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+}
+
+.tooltip .tooltip-text {
+    visibility: hidden;
+    width: max-content;
+    background-color: #374151;
+    color: #fff;
+    text-align: left;
+    padding: 0.5rem;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* --------------------------------------------------
+   Результаты и информационные блоки
+--------------------------------------------------- */
+.results {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.results h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.results p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* --------------------------------------------------
+   Кнопки
+--------------------------------------------------- */
+.btn {
+    background-color: var(--primary);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn:hover {
+    background-color: #2563eb;
+    transform: scale(1.02);
+}
+
+.btn:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* --------------------------------------------------
+   Класс для скрытых элементов (используется вместо inline-стилей)
+--------------------------------------------------- */
+.hidden {
+    display: none;
+}
+
+/* --------------------------------------------------
+   Мобильные стили
+--------------------------------------------------- */
+@media (max-width: 640px) {
+    form {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Fetch Product Data",
+  "type": "n8n-nodes-base.httpRequest",
+  "parameters": {
+    "url": "http://localhost:3000/api/products",
+    "method": "GET"
+  },
+  "position": [
+    350,
+    500
+  ]
+}

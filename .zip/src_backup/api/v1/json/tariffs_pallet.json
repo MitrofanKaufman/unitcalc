@@ -1,0 +1,386 @@
+{
+  "response": {
+    "data": {
+      "dtNextPallet": "2025-04-30",
+      "dtTillMax": "2025-04-30",
+      "warehouseList": [
+        {
+          "palletDeliveryExpr": "100",
+          "palletDeliveryValueBase": "38",
+          "palletDeliveryValueLiter": "9,5",
+          "palletStorageExpr": "0",
+          "palletStorageValueExpr": "-",
+          "warehouseName": "Маркетплейс СГТ"
+        },
+        {
+          "palletDeliveryExpr": "200",
+          "palletDeliveryValueBase": "76",
+          "palletDeliveryValueLiter": "19",
+          "palletStorageExpr": "155",
+          "palletStorageValueExpr": "35.65",
+          "warehouseName": "Коледино"
+        },
+        {
+          "palletDeliveryExpr": "170",
+          "palletDeliveryValueBase": "64,6",
+          "palletDeliveryValueLiter": "16,15",
+          "palletStorageExpr": "240",
+          "palletStorageValueExpr": "55.2",
+          "warehouseName": "Подольск 3"
+        },
+        {
+          "palletDeliveryExpr": "335",
+          "palletDeliveryValueBase": "127,3",
+          "palletDeliveryValueLiter": "31,83",
+          "palletStorageExpr": "320",
+          "palletStorageValueExpr": "73.6",
+          "warehouseName": "Подольск 4"
+        },
+        {
+          "palletDeliveryExpr": "160",
+          "palletDeliveryValueBase": "60,8",
+          "palletDeliveryValueLiter": "15,2",
+          "palletStorageExpr": "125",
+          "palletStorageValueExpr": "28.75",
+          "warehouseName": "Электросталь"
+        },
+        {
+          "palletDeliveryExpr": "220",
+          "palletDeliveryValueBase": "83,6",
+          "palletDeliveryValueLiter": "20,9",
+          "palletStorageExpr": "180",
+          "palletStorageValueExpr": "41.4",
+          "warehouseName": "Тула"
+        },
+        {
+          "palletDeliveryExpr": "205",
+          "palletDeliveryValueBase": "77,9",
+          "palletDeliveryValueLiter": "19,48",
+          "palletStorageExpr": "215",
+          "palletStorageValueExpr": "49.45",
+          "warehouseName": "Чехов 1"
+        },
+        {
+          "palletDeliveryExpr": "205",
+          "palletDeliveryValueBase": "77,9",
+          "palletDeliveryValueLiter": "19,48",
+          "palletStorageExpr": "195",
+          "palletStorageValueExpr": "44.85",
+          "warehouseName": "Чехов 2"
+        },
+        {
+          "palletDeliveryExpr": "125",
+          "palletDeliveryValueBase": "47,5",
+          "palletDeliveryValueLiter": "11,88",
+          "palletStorageExpr": "125",
+          "palletStorageValueExpr": "28.75",
+          "warehouseName": "Белая дача"
+        },
+        {
+          "palletDeliveryExpr": "200",
+          "palletDeliveryValueBase": "76",
+          "palletDeliveryValueLiter": "19",
+          "palletStorageExpr": "200",
+          "palletStorageValueExpr": "46",
+          "warehouseName": "Вёшки"
+        },
+        {
+          "palletDeliveryExpr": "205",
+          "palletDeliveryValueBase": "77,9",
+          "palletDeliveryValueLiter": "19,48",
+          "palletStorageExpr": "205",
+          "palletStorageValueExpr": "47.15",
+          "warehouseName": "Пушкино"
+        },
+        {
+          "palletDeliveryExpr": "135",
+          "palletDeliveryValueBase": "51,3",
+          "palletDeliveryValueLiter": "12,83",
+          "palletStorageExpr": "135",
+          "palletStorageValueExpr": "31.05",
+          "warehouseName": "Иваново"
+        },
+        {
+          "palletDeliveryExpr": "100",
+          "palletDeliveryValueBase": "38",
+          "palletDeliveryValueLiter": "9,5",
+          "palletStorageExpr": "100",
+          "palletStorageValueExpr": "23",
+          "warehouseName": "СГТ Внуково"
+        },
+        {
+          "palletDeliveryExpr": "170",
+          "palletDeliveryValueBase": "64,6",
+          "palletDeliveryValueLiter": "16,15",
+          "palletStorageExpr": "185",
+          "palletStorageValueExpr": "42.55",
+          "warehouseName": "Обухово"
+        },
+        {
+          "palletDeliveryExpr": "265",
+          "palletDeliveryValueBase": "100,7",
+          "palletDeliveryValueLiter": "25,18",
+          "palletStorageExpr": "265",
+          "palletStorageValueExpr": "60.95",
+          "warehouseName": "Радумля 1"
+        },
+        {
+          "palletDeliveryExpr": "100",
+          "palletDeliveryValueBase": "38",
+          "palletDeliveryValueLiter": "9,5",
+          "palletStorageExpr": "100",
+          "palletStorageValueExpr": "23",
+          "warehouseName": "Радумля СГТ"
+        },
+        {
+          "palletDeliveryExpr": "125",
+          "palletDeliveryValueBase": "47,5",
+          "palletDeliveryValueLiter": "11,88",
+          "palletStorageExpr": "125",
+          "palletStorageValueExpr": "28.75",
+          "warehouseName": "Рязань (Тюшевское)"
+        },
+        {
+          "palletDeliveryExpr": "170",
+          "palletDeliveryValueBase": "64,6",
+          "palletDeliveryValueLiter": "16,15",
+          "palletStorageExpr": "155",
+          "palletStorageValueExpr": "35.65",
+          "warehouseName": "Обухово 2"
+        },
+        {
+          "palletDeliveryExpr": "175",
+          "palletDeliveryValueBase": "66,5",
+          "palletDeliveryValueLiter": "16,63",
+          "palletStorageExpr": "175",
+          "palletStorageValueExpr": "40.25",
+          "warehouseName": "Котовск"
+        },
+        {
+          "palletDeliveryExpr": "100",
+          "palletDeliveryValueBase": "38",
+          "palletDeliveryValueLiter": "9,5",
+          "palletStorageExpr": "100",
+          "palletStorageValueExpr": "23",
+          "warehouseName": "Обухово СГТ"
+        },
+        {
+          "palletDeliveryExpr": "100",
+          "palletDeliveryValueBase": "38",
+          "palletDeliveryValueLiter": "9,5",
+          "palletStorageExpr": "100",
+          "palletStorageValueExpr": "23",
+          "warehouseName": "Голицыно СГТ"
+        },
+        {
+          "palletDeliveryExpr": "250",
+          "palletDeliveryValueBase": "95",
+          "palletDeliveryValueLiter": "23,75",
+          "palletStorageExpr": "230",
+          "palletStorageValueExpr": "52.9",
+          "warehouseName": "Чашниково"
+        },
+        {
+          "palletDeliveryExpr": "210",
+          "palletDeliveryValueBase": "79,8",
+          "palletDeliveryValueLiter": "19,95",
+          "palletStorageExpr": "200",
+          "palletStorageValueExpr": "46",
+          "warehouseName": "Владимир"
+        },
+        {
+          "palletDeliveryExpr": "215",
+          "palletDeliveryValueBase": "81,7",
+          "palletDeliveryValueLiter": "20,43",
+          "palletStorageExpr": "215",
+          "palletStorageValueExpr": "49.45",
+          "warehouseName": "Щербинка"
+        },
+        {
+          "palletDeliveryExpr": "100",
+          "palletDeliveryValueBase": "38",
+          "palletDeliveryValueLiter": "9,5",
+          "palletStorageExpr": "100",
+          "palletStorageValueExpr": "23",
+          "warehouseName": "СГТ Воронеж КГТ"
+        },
+        {
+          "palletDeliveryExpr": "215",
+          "palletDeliveryValueBase": "81,7",
+          "palletDeliveryValueLiter": "20,43",
+          "palletStorageExpr": "200",
+          "palletStorageValueExpr": "46",
+          "warehouseName": "СЦ Шушары"
+        },
+        {
+          "palletDeliveryExpr": "100",
+          "palletDeliveryValueBase": "38",
+          "palletDeliveryValueLiter": "9,5",
+          "palletStorageExpr": "100",
+          "palletStorageValueExpr": "23",
+          "warehouseName": "Шушары СГТ"
+        },
+        {
+          "palletDeliveryExpr": "180",
+          "palletDeliveryValueBase": "68,4",
+          "palletDeliveryValueLiter": "17,1",
+          "palletStorageExpr": "180",
+          "palletStorageValueExpr": "41.4",
+          "warehouseName": "СЦ Вологда 2"
+        },
+        {
+          "palletDeliveryExpr": "155",
+          "palletDeliveryValueBase": "58,9",
+          "palletDeliveryValueLiter": "14,73",
+          "palletStorageExpr": "155",
+          "palletStorageValueExpr": "35.65",
+          "warehouseName": "Краснодар"
+        },
+        {
+          "palletDeliveryExpr": "225",
+          "palletDeliveryValueBase": "85,5",
+          "palletDeliveryValueLiter": "21,38",
+          "palletStorageExpr": "225",
+          "palletStorageValueExpr": "51.75",
+          "warehouseName": "Крыловская"
+        },
+        {
+          "palletDeliveryExpr": "110",
+          "palletDeliveryValueBase": "41,8",
+          "palletDeliveryValueLiter": "10,45",
+          "palletStorageExpr": "110",
+          "palletStorageValueExpr": "25.3",
+          "warehouseName": "Волгоград"
+        },
+        {
+          "palletDeliveryExpr": "175",
+          "palletDeliveryValueBase": "66,5",
+          "palletDeliveryValueLiter": "16,63",
+          "palletStorageExpr": "175",
+          "palletStorageValueExpr": "40.25",
+          "warehouseName": "Невинномысск"
+        },
+        {
+          "palletDeliveryExpr": "250",
+          "palletDeliveryValueBase": "95",
+          "palletDeliveryValueLiter": "23,75",
+          "palletStorageExpr": "240",
+          "palletStorageValueExpr": "55.2",
+          "warehouseName": "Казань"
+        },
+        {
+          "palletDeliveryExpr": "155",
+          "palletDeliveryValueBase": "58,9",
+          "palletDeliveryValueLiter": "14,73",
+          "palletStorageExpr": "135",
+          "palletStorageValueExpr": "31.05",
+          "warehouseName": "СЦ Кузнецк"
+        },
+        {
+          "palletDeliveryExpr": "200",
+          "palletDeliveryValueBase": "76",
+          "palletDeliveryValueLiter": "19",
+          "palletStorageExpr": "200",
+          "palletStorageValueExpr": "46",
+          "warehouseName": "Самара (Новосемейкино)"
+        },
+        {
+          "palletDeliveryExpr": "175",
+          "palletDeliveryValueBase": "66,5",
+          "palletDeliveryValueLiter": "16,63",
+          "palletStorageExpr": "160",
+          "palletStorageValueExpr": "36.8",
+          "warehouseName": "СЦ Ижевск"
+        },
+        {
+          "palletDeliveryExpr": "115",
+          "palletDeliveryValueBase": "43,7",
+          "palletDeliveryValueLiter": "10,93",
+          "palletStorageExpr": "0",
+          "palletStorageValueExpr": "0",
+          "warehouseName": "Екатеринбург - Перспективный 12"
+        },
+        {
+          "palletDeliveryExpr": "195",
+          "palletDeliveryValueBase": "74,1",
+          "palletDeliveryValueLiter": "18,53",
+          "palletStorageExpr": "180",
+          "palletStorageValueExpr": "41.4",
+          "warehouseName": "СЦ Барнаул"
+        },
+        {
+          "palletDeliveryExpr": "100",
+          "palletDeliveryValueBase": "38",
+          "palletDeliveryValueLiter": "9,5",
+          "palletStorageExpr": "100",
+          "palletStorageValueExpr": "23",
+          "warehouseName": "Хабаровск"
+        },
+        {
+          "palletDeliveryExpr": "85",
+          "palletDeliveryValueBase": "32,3",
+          "palletDeliveryValueLiter": "8,08",
+          "palletStorageExpr": "65",
+          "palletStorageValueExpr": "14.95",
+          "warehouseName": "СЦ Хабаровск"
+        },
+        {
+          "palletDeliveryExpr": "170",
+          "palletDeliveryValueBase": "64,6",
+          "palletDeliveryValueLiter": "16,15",
+          "palletStorageExpr": "155",
+          "palletStorageValueExpr": "35.65",
+          "warehouseName": "Минск"
+        },
+        {
+          "palletDeliveryExpr": "200",
+          "palletDeliveryValueBase": "76",
+          "palletDeliveryValueLiter": "19",
+          "palletStorageExpr": "200",
+          "palletStorageValueExpr": "46",
+          "warehouseName": "СЦ Брест"
+        },
+        {
+          "palletDeliveryExpr": "225",
+          "palletDeliveryValueBase": "85,5",
+          "palletDeliveryValueLiter": "21,38",
+          "palletStorageExpr": "215",
+          "palletStorageValueExpr": "49.45",
+          "warehouseName": "СЦ Гродно"
+        },
+        {
+          "palletDeliveryExpr": "70",
+          "palletDeliveryValueBase": "26,6",
+          "palletDeliveryValueLiter": "6,65",
+          "palletStorageExpr": "55",
+          "palletStorageValueExpr": "12.65",
+          "warehouseName": "Атакент"
+        },
+        {
+          "palletDeliveryExpr": "70",
+          "palletDeliveryValueBase": "26,6",
+          "palletDeliveryValueLiter": "6,65",
+          "palletStorageExpr": "25",
+          "palletStorageValueExpr": "5.75",
+          "warehouseName": "СЦ Байсерке"
+        },
+        {
+          "palletDeliveryExpr": "60",
+          "palletDeliveryValueBase": "22,8",
+          "palletDeliveryValueLiter": "5,7",
+          "palletStorageExpr": "60",
+          "palletStorageValueExpr": "13.8",
+          "warehouseName": "Актобе"
+        },
+        {
+          "palletDeliveryExpr": "70",
+          "palletDeliveryValueBase": "26,6",
+          "palletDeliveryValueLiter": "6,65",
+          "palletStorageExpr": "55",
+          "palletStorageValueExpr": "12.65",
+          "warehouseName": "Астана Карагандинское шоссе"
+        }
+      ]
+    }
+  }
+}

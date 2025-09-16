@@ -1,0 +1,60 @@
+site_name: Wildberries Calculator Docs
+site_url: https://example.com/docs/
+repo_name: wb-calculator
+repo_url: https://github.com/yourname/unit.calculator
+edit_uri: "edit/main/docs/"
+
+nav:
+  - Обзор: docs/overview.md
+  - Установка: docs/setup.md
+  - Архитектура: docs/architecture.md
+  - API: docs/api.md
+  - UI-компоненты: docs/ui-components.md
+  - Тестирование: docs/testing.md
+  - Dev-процессы: docs/dev-process.md
+  - FAQ: docs/faq.md
+  - История изменений: README_HISTORY.md
+
+theme:
+  name: material
+  language: ru
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.top
+    - toc.integrate
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: indigo
+    - scheme: slate
+      primary: deep purple
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - meta
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.emoji
+  - attr_list
+  - md_in_html
+  - tables
+
+plugins:
+  - search
+  - macros
+  - mermaid2:
+      arguments:
+        theme: neutral
+
+extra_css:
+  - css/custom-docs.css

@@ -1,0 +1,15 @@
+services:
+  n8n:
+    image: n8nio/n8n
+    container_name: n8n
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=n8n
+      - N8N_BASIC_AUTH_PASSWORD=secret
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - VUE_APP_URL_BASE_API=http://localhost:5678/api/v1
+    ports:
+      - "5678:5678"
+    volumes:
+      - api\n8n

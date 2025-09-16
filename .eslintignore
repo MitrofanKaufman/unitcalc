@@ -1,0 +1,50 @@
+# Директории
+node_modules/
+dist/
+build/
+coverage/
+
+# Файлы
+*.log
+*.md
+*.json
+*.yaml
+*.yml
+
+# Конфигурационные файлы
+.eslintrc.js
+.prettierrc
+
+# Другие файлы
+.DS_Store
+.env
+docs/.env.example
+!docs/.env.example
+
+# Резервные копии и временные файлы
+*~
+*.bak
+*.swp
+*.swo
+
+# Документация
+/docs
+
+# Тесты
+/tests
+/test
+/__tests__
+
+# Настройки редакторов
+.vscode/
+.idea/
+
+# Кэш
+.cache/
+.temp/
+
+# Другие
+public/
+scripts/
+backup/
+backup_*

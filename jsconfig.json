@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./app/*"]
+    },
+    "module": "commonjs",
+    "target": "es2020",
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node"
+  },
+  "include": [
+    "app/**/*",
+    "js/**/*",
+    "app/public/.data/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

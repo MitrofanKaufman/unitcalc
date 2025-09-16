@@ -1,0 +1,31 @@
+<!--
+  index.html — корневой HTML-шаблон приложения
+  Назначение: точка монтирования React и загрузка клиентского бандла
+  Принципы: минимальная разметка, корректные мета‑теги, стабильная точка входа
+-->
+<!doctype html>
+<html lang="ru" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Калькулятор рентабельности Wildberries — поиск товаров, расчёт маржи, расходов и ROI" />
+    <meta name="theme-color" content="#111827" />
+    <title>Unit Calculator</title>
+  </head>
+
+  <body>
+  <header>
+    <noscript>
+      Для работы приложения требуется включить JavaScript.
+    </noscript>
+  </header>
+  <main>
+    <div id="root"></div>
+      <script type="module" src="/app/client/main.tsx"></script>
+    </main>
+  <footer>
+    <B>Mitrofan Kaufman</B> - разработка приложения <br>
+    при <i>информационной поддержке <a href="https://wildberries.ru">Wildberries</a></i>
+  </footer>
+  </body>
+</html>
