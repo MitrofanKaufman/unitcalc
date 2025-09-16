@@ -135,10 +135,11 @@ node_modules.rar
 !/config/*.example
 
 # ============================================
-# Файлы, которые нужно игнорировать в продакшене
+# Файлы и папки, которые нужно игнорировать в продакшене
 # ============================================
 !docs/.env.example
 !.env.development.example
 !.env.production.example
 !.env.test.example
 !/.log/
+!/src/
