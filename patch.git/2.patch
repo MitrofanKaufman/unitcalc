@@ -1,0 +1,118 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2025
+From: fix <fix@unitcalc>
+Date: Mon, 16 Sep 2025 18:30:00 +0300
+Subject: [PATCH] Full frontend fix: vite config, tsconfig, main.tsx, App.tsx, package.json
+
+---
+ package.json                | 15 +++++++++++++++
+ tsconfig.json               | 12 ++++++++++++
+ vite.config.ts              | 16 ++++++++++++++++
+ src/main.tsx                | 12 ++++++++++++
+ src/components/App.tsx      | 12 ++++++++++++
+ 5 files changed, 67 insertions(+), 0 deletions(-)
+
+diff --git a/package.json b/package.json
+index 0000000..2222222 100644
+--- a/package.json
++++ b/package.json
+@@
+   "scripts": {
+-    "dev": "vite",
+-    "build": "vite build",
+-    "preview": "vite preview",
+-    "start": "vite"
++    "dev": "vite",
++    "build": "vite build",
++    "preview": "vite preview",
++    "start": "vite"
+   },
+   "dependencies": {
+-    "react": "^18.3.0",
+-    "react-dom": "^18.3.0",
+-    "react-router-dom": "^6.18.0"
++    "react": "^18.3.0",
++    "react-dom": "^18.3.0",
++    "react-router-dom": "^6.18.0"
+   },
+   "devDependencies": {
+-    "typescript": "^5.2.2",
+-    "vite": "^5.0.0",
+-    "@vitejs/plugin-react": "^3.1.0"
++    "typescript": "^5.2.2",
++    "vite": "^5.0.0",
++    "@vitejs/plugin-react": "^3.1.0"
+   }
+ }
+diff --git a/tsconfig.json b/tsconfig.json
+index 0000000..3333333 100644
+--- a/tsconfig.json
++++ b/tsconfig.json
+@@
+   "compilerOptions": {
++    "target": "ESNext",
++    "module": "ESNext",
++    "lib": ["DOM","ESNext"],
++    "jsx": "react-jsx",
++    "moduleResolution": "Node",
++    "esModuleInterop": true,
++    "forceConsistentCasingInFileNames": true,
++    "strict": true,
++    "skipLibCheck": true
+   }
+ }
+diff --git a/vite.config.ts b/vite.config.ts
+index 0000000..4444444 100644
+--- a/vite.config.ts
++++ b/vite.config.ts
+@@
++import { defineConfig } from 'vite';
++import react from '@vitejs/plugin-react';
++
++export default defineConfig({
++  plugins: [react()],
++  resolve: {
++    alias: {
++      '@': '/src'
++    }
++  },
++  server: {
++    proxy: {
++      // '/api': 'http://localhost:5000', // настройка прокси при необходимости
++    }
++  }
++});
+diff --git a/src/main.tsx b/src/main.tsx
+index 0000000..5555555 100644
+--- a/src/main.tsx
++++ b/src/main.tsx
+@@
+-import ReactDOM from 'react-dom';
++import ReactDOM from 'react-dom/client';
+ import App from './components/App';
++
++const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
++root.render(
++  <React.StrictMode>
++    <App />
++  </React.StrictMode>
++);
+diff --git a/src/components/App.tsx b/src/components/App.tsx
+index 0000000..6666666 100644
+--- a/src/components/App.tsx
++++ b/src/components/App.tsx
+@@
++import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
++
++import Home from './pages/Home';
++
+ const App = () => {
++  return (
++    <Router>
++      <Routes>
++        <Route path="/" element={<Home />} />
++      </Routes>
++    </Router>
++  );
+ };
+
+ export default App;
