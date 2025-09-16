@@ -1,19 +1,8 @@
-import { fileURLToPath } from 'url';
-import fs from 'fs';
-import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
+import path from 'path';
 
-// Получаем __dirname в ES модулях
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Загрузка конфигураций из папки config
-const _configPath = (filename: string) => path.resolve(__dirname, `./config/${filename}`);
-
-// Пути в структуре проекта
+// Project paths
 const projectPaths = {
   root: __dirname,
   client: path.resolve(__dirname, 'app/client'),
@@ -25,104 +14,26 @@ const projectPaths = {
   dev: path.resolve(__dirname, 'dev'),
 };
 
-// Получаем переменные окружения
-const _env = loadEnv('development', process.cwd(), '');
-
-// Автоматическая зачистка порта перед стартом
-async function killPort(port: number) {
-  try {
-    const { exec } = await import('node:child_process');
-    const { promisify } = await import('node:util');
-    const execAsync = promisify(exec);
-    
-    try {
-      const { stdout } = await execAsync(`lsof -i :${port} | grep LISTEN | awk '{print $2}'`);
-      const pids = stdout.split('\n').filter(pid => pid.trim() !== '');
-      
-      for (const pid of pids) {
-        try {
-          process.kill(parseInt(pid, 10), 'SIGTERM');
-          console.log(`Killed process ${pid} on port ${port}`);
-        } catch (e) {
-          console.error(`Failed to kill process ${pid}:`, e);
-        }
-      }
-    } catch (e: any) {
-      // Порт свободен или не удалось выполнить команду
-      if (!e.message.includes('Command failed')) {
-        console.error('Error killing port:', e);
-      }
-    }
-  } catch (e) {
-    console.error('Error importing required modules:', e);
-  }
-}
-
-// Проверка доступности API перед запуском
-async function checkBackendConnection(port: number = 3000): Promise<boolean> {
-  try {
-    const http = await import('node:http');
-    const { promisify } = await import('node:util');
-    const _setTimeoutPromise = promisify(setTimeout);
-    
-    return new Promise((resolve) => {
-      const req = http.request(
-        { host: 'localhost', port, method: 'HEAD', timeout: 2000 },
-        () => {
-          console.log(`Backend is running on port ${port}`);
-          resolve(true);
-        }
-      );
-
-      req.on('error', () => {
-        console.warn(`Backend is not running on port ${port}, starting in frontend-only mode`);
-        resolve(false);
-      });
-
-      req.on('timeout', () => {
-        console.warn(`Backend connection timeout on port ${port}, starting in frontend-only mode`);
-        req.destroy();
-        resolve(false);
-      });
-
-      req.end();
-    });
-  } catch (e) {
-    console.error('Error checking backend connection:', e);
-    return false;
-  }
-}
-
 // Основная конфигурация Vite
-export default defineConfig(async ({ mode }) => {
+export default defineConfig(({ mode }) => {
   const isDev = mode === 'development';
   const isProd = mode === 'production';
-  
-  // PostCSS настройки теперь в postcss.config.cjs
-  
-  // Загружаем переменные окружения
+
+  // Переменные окружения
   const env = loadEnv(mode, process.cwd(), '');
-  
-  // Базовый URL для API
-  const apiBaseUrl = env.VITE_API_BASE_URL || (isDev ? 'http://localhost:3000' : '/api');
-  
-  // Порт для разработки
   const devPort = parseInt(env.PORT || '5173', 10);
-  
+
   // Настройки прокси для API
   const apiProxy = {
     target: 'http://localhost:3000',
     changeOrigin: true,
     secure: false,
     rewrite: (path: string) => path.replace(/^\/api/, ''),
-    // Не падать при ошибках подключения к бэкенду
     ws: true,
     xfwd: true,
     logLevel: 'warn',
-    // Таймауты
     timeout: 30000,
     proxyTimeout: 30000,
-    // Обработка ошибок
     onError: (err: Error, req: any, res: any) => {
       console.warn('[Vite Proxy] Backend connection error:', err.message);
       if (!res.headersSent) {
@@ -136,95 +47,47 @@ export default defineConfig(async ({ mode }) => {
     }
   };
 
-  // В режиме разработки проверяем доступность бэкенда, но не падаем при ошибке
-  if (isDev) {
-    killPort(3000);
-    try {
-      await checkBackendConnection(3000);
-    } catch (error) {
-      console.warn('Backend server is not available. The application will run in frontend-only mode.');
-      console.warn('To enable full functionality, please start the backend server on port 3000');
-    }
-  }
-
   return {
-    // Базовый путь для продакшн-сборки
     base: isProd ? '/dist/' : '/',
-    
-    // Корневая директория проекта
     root: __dirname,
-    
-    // Настройки сервера разработки
+
     server: {
       port: devPort,
       strictPort: true,
       open: isDev,
-      host: '0.0.0.0', // Разрешаем доступ с других устройств в локальной сети
+      host: '0.0.0.0',
       proxy: {
-        // Прокси для API
         '/api': apiProxy,
-        // Правило для корректной загрузки статических файлов
-        '^/app/client/(.*)': {
-          target: `http://localhost:${devPort}`,
-          changeOrigin: true,
-          secure: false,
-          rewrite: (path) => path.replace(/^\/app\/client\//, '/')
-        }
       },
       fs: {
-        // Разрешаем доступ к файлам за пределами корневой директории
         allow: ['..'],
-        // Кешируем запросы к файловой системе
-        cachedChecks: true
+        cachedChecks: true,
       },
-      // Настройки HMR (Hot Module Replacement)
       hmr: {
         protocol: 'ws',
         host: 'localhost',
-        port: devPort
+        port: devPort,
       },
-      // Включить CORS для разработки
       cors: true,
     },
-    
-    // Настройки превью-сервера
+
     preview: {
       port: devPort + 1,
-      open: false, // Не открывать автоматически в режиме превью
+      open: false,
       cors: true,
-      proxy: serverProxy,
+      proxy: {
+        '/api': apiProxy,
+      },
     },
-    
-    // Плагины
+
     plugins: [
-      // Базовые плагины React
-      react({
-        /* jsxImportSource: '@emotion/react',
-        babel: {
-          plugins: ['@emotion/babel-plugin'],
-        }, */
-      }),
-      
-      // Поддержка SVG как компонентов React
-      /* svgr({
-        svgrOptions: {
-          icon: true,
-          svgProps: {
-            className: 'svg-icon',
-          },
-        },
-      }), */
-      
-    ].filter(Boolean),
-    
-    // Настройка разрешения модулей и алиасов
+      react(),
+    ],
+
     resolve: {
       alias: [
-        // Основные алиасы
         { find: '@', replacement: projectPaths.client },
         { find: '@root', replacement: projectPaths.root },
-        
-        // Алиасы клиентской части
         { find: '@app', replacement: path.resolve(projectPaths.client, 'app') },
         { find: '@components', replacement: path.resolve(projectPaths.client, 'components') },
         { find: '@pages', replacement: path.resolve(projectPaths.client, 'pages') },
@@ -233,12 +96,8 @@ export default defineConfig(async ({ mode }) => {
         { find: '@utils', replacement: path.resolve(projectPaths.client, 'utils') },
         { find: '@hooks', replacement: path.resolve(projectPaths.client, 'hooks') },
         { find: '@lib', replacement: path.resolve(projectPaths.client, 'lib') },
-        
-        // Алиасы бэкенда
         { find: '@server', replacement: projectPaths.server },
         { find: '@api', replacement: path.resolve(projectPaths.server, 'api/v1') },
-        
-        // Общие алиасы
         { find: '@shared', replacement: projectPaths.shared },
         { find: '@config', replacement: projectPaths.config },
         { find: '@tests', replacement: path.resolve(__dirname, 'tests') },
@@ -246,8 +105,7 @@ export default defineConfig(async ({ mode }) => {
       ],
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.mjs', '.svg'],
     },
-    
-    // Оптимизация сборки
+
     build: {
       outDir: 'dist',
       sourcemap: isDev ? 'inline' : isProd ? 'hidden' : false,
@@ -268,19 +126,15 @@ export default defineConfig(async ({ mode }) => {
           assetFileNames: (assetInfo) => {
             const info = assetInfo.name.split('.');
             const ext = info[info.length - 1];
-            
-            if (/\\.(png|jpe?g|svg|gif|tiff|bmp|ico|webp)$/i.test(assetInfo.name)) {
+            if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico|webp)$/i.test(assetInfo.name)) {
               return `assets/images/[name].[hash][ext]`;
             }
-            
-            if (/\\.(woff|woff2|eot|ttf|otf)$/i.test(assetInfo.name)) {
+            if (/\.(woff|woff2|eot|ttf|otf)$/i.test(assetInfo.name)) {
               return `assets/fonts/[name].[hash][ext]`;
             }
-            
             if (ext === 'css') {
               return `assets/css/[name].[hash][ext]`;
             }
-            
             return `assets/[name].[hash][ext]`;
           },
         },
@@ -289,18 +143,17 @@ export default defineConfig(async ({ mode }) => {
         transformMixedEsModules: true,
       },
     },
-    
-    // Глобальные переменные
+
     define: {
       'process.env': {},
       __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
       __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
       __MODE__: JSON.stringify(mode),
     },
-    
-    // Настройки CSS
+
     css: {
       devSourcemap: isDev,
+      postcss: './postcss.config.cjs',
       modules: {
         localsConvention: 'camelCaseOnly',
       },
@@ -313,8 +166,7 @@ export default defineConfig(async ({ mode }) => {
         },
       },
     },
-    
-    // Настройки для тестов
+
     test: {
       globals: true,
       environment: 'jsdom',
@@ -331,11 +183,8 @@ export default defineConfig(async ({ mode }) => {
         ],
       },
     },
-    
-    // Кеширование
+
     cacheDir: './node_modules/.vite',
-    
-    // Логи
     logLevel: isDev ? 'info' : 'warn',
     clearScreen: !isDev,
   };
