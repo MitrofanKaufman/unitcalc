@@ -1,257 +1,126 @@
-// path: src/api/v1/product/product.controller.ts
-/**
- * Контроллер для работы с товарами
- * Обрабатывает запросы, связанные с получением и обновлением информации о товарах
- */
+import { Request, Response } from 'express';
+import { BaseController, IApiResponse } from '../../../core/base/BaseController';
+import { logger } from '../../../utils/logger';
 
-import { Request, Response, NextFunction } from 'express';
-import { matchedData } from 'express-validator';
-import { getRepository } from 'typeorm';
-import { Product } from '@db/entities/Product';
-import ApiError from '@utils/ApiError';
-import { productService } from '../../../services/ProductService';
-import { 
-  IProduct, 
-  TProductResponse, 
-  TProductsResponse, 
-  IGetProductsQuery, 
-  IPaginatedResult,
-  IProductFilter
-} from './product.types';
+// Типы данных
+interface IProduct {
+  id: string;
+  name: string;
+  price: number;
+  // Другие поля продукта
+}
 
-/**
- * Получить информацию о товаре по ID
- */
-export const getProductById = async (
-  req: Request<{ id: string }>, 
-  res: Response<TProductResponse>, 
-  next: NextFunction
-) => {
-  try {
-    const { id: productId } = matchedData(req, { locations: ['params'] });
-    const { fields } = matchedData(req, { locations: ['query'] });
+export class ProductController extends BaseController {
+  // Пример временного хранилища (в реальном приложении используйте БД)
+  private products: IProduct[] = [];
+
+  /**
+   * Получить все товары
+   */
+  public getAllProducts = this.catchError(async (req: Request, res: Response): Promise<Response> => {
+    // В реальном приложении здесь будет запрос к БД
+    // const products = await this.productService.findAll(req.query);
     
-    // Получаем репозиторий для работы с продуктами
-    const productRepository = getRepository(Product);
+    // Пример пагинации
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
     
-    // Создаем query builder
-    const queryBuilder = productRepository.createQueryBuilder('product');
+    const result = this.products.slice(startIndex, endIndex);
     
-    // Выбираем только указанные поля, если они заданы
-    if (fields) {
-      const fieldList = fields.split(',').map(f => f.trim());
-      queryBuilder.select(fieldList.map(field => `product.${field}`));
-    }
+    // Метаданные для пагинации
+    const meta = {
+      page,
+      limit,
+      total: this.products.length,
+      totalPages: Math.ceil(this.products.length / limit)
+    };
     
-    // Добавляем условие поиска по ID
-    queryBuilder.where('product.id = :id', { id: productId });
+    return this.success(res, result, meta);
+  });
+
+  /**
+   * Получить товар по ID
+   */
+  public getProductById = this.catchError(async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
     
-    // Выполняем запрос
-    const product = await queryBuilder.getOne();
+    // В реальном приложении: const product = await this.productService.findById(id);
+    const product = this.products.find(p => p.id === id);
     
     if (!product) {
-      throw new ApiError('Товар не найден', 404, 'PRODUCT_NOT_FOUND');
+      return this.error(res, 'Product not found', 'NOT_FOUND', 404);
     }
     
-    res.json({
-      success: true,
-      data: product as unknown as IProduct
-    });
-    
-  } catch (error) {
-    next(error);
-  }
-};
+    return this.success(res, product);
+  });
 
-/**
- * Поиск товаров по запросу с пагинацией и фильтрацией
- */
-export const searchProducts = async (
-  req: Request<{}, {}, {}, IGetProductsQuery>,
-  res: Response<TProductsResponse>,
-  next: NextFunction
-) => {
-  try {
-    const { q, page = '1', limit = '10', sortBy, sortOrder = 'asc', ...filters } = req.query;
+  /**
+   * Создать новый товар
+   */
+  public createProduct = this.catchError(async (req: Request, res: Response): Promise<Response> => {
+    const { name, price } = req.body;
     
-    // Параметры пагинации
-    const pageNum = parseInt(page as string, 10) || 1;
-    const limitNum = parseInt(limit as string, 10) || 10;
-    const skip = (pageNum - 1) * limitNum;
-    
-    // Получаем репозиторий для работы с продуктами
-    const productRepository = getRepository(Product);
-    
-    // Создаем query builder
-    const queryBuilder = productRepository.createQueryBuilder('product');
-    
-    // Применяем поиск по тексту, если задан
-    if (q) {
-      queryBuilder.where(
-        'LOWER(product.name) LIKE :search OR LOWER(product.description) LIKE :search OR LOWER(JSON_EXTRACT(product.metadata, \'$.brand\')) LIKE :search OR LOWER(JSON_EXTRACT(product.metadata, \'$.category\')) LIKE :search',
-        { search: `%${q.toLowerCase()}%` }
-      );
+    // Валидация
+    if (!name || !price) {
+      return this.error(res, 'Name and price are required', 'VALIDATION_ERROR', 400);
     }
     
-    // Применяем фильтры
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value) {
-        if (Array.isArray(value)) {
-          queryBuilder.andWhere(`product.${key} IN (:...${key}Values)`, { [`${key}Values`]: value });
-        } else {
-          queryBuilder.andWhere(`product.${key} = :${key}`, { [key]: value });
-        }
-      }
-    });
+    // В реальном приложении: const newProduct = await this.productService.create({ name, price });
+    const newProduct: IProduct = {
+      id: Date.now().toString(),
+      name,
+      price: Number(price)
+    };
     
-    // Получаем общее количество записей
-    const total = await queryBuilder.getCount();
+    this.products.push(newProduct);
     
-    // Применяем сортировку
-    if (sortBy) {
-      const orderDirection = sortOrder === 'desc' ? 'DESC' : 'ASC';
-      queryBuilder.orderBy(`product.${sortBy}`, orderDirection);
-    } else {
-      // Сортировка по умолчанию
-      queryBuilder.orderBy('product.createdAt', 'DESC');
-    }
+    logger.info(`Product created: ${newProduct.id}`);
     
-    // Применяем пагинацию
-    queryBuilder.skip(skip).take(limitNum);
-    
-    // Выполняем запрос
-    const items = await queryBuilder.getMany();
-    
-    // Формируем ответ
-    const totalPages = Math.ceil(total / limitNum);
-    
-    res.json({
-      success: true,
-      data: {
-        items: items as unknown as IProduct[],
-        pagination: {
-          total,
-          page: pageNum,
-          limit: limitNum,
-          totalPages,
-          hasNextPage: pageNum < totalPages,
-          hasPrevPage: pageNum > 1,
-        }
-      }
-    });
-    
-  } catch (error) {
-    next(error);
-  }
-};
+    return this.success(res, newProduct, undefined, 201);
+  });
 
-/**
- * Получить список товаров с пагинацией
- */
-export const getProducts = async (
-  req: Request<{}, {}, {}, IGetProductsQuery>,
-  res: Response<TProductsResponse>,
-  next: NextFunction
-) => {
-  try {
-    const { page = '1', limit = '10', sortBy, sortOrder = 'asc', ...filters } = req.query;
+  /**
+   * Обновить товар
+   */
+  public updateProduct = this.catchError(async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+    const { name, price } = req.body;
     
-    // Параметры пагинации
-    const pageNum = parseInt(page as string, 10) || 1;
-    const limitNum = parseInt(limit as string, 10) || 10;
-    const skip = (pageNum - 1) * limitNum;
+    // Находим индекс товара
+    const productIndex = this.products.findIndex(p => p.id === id);
     
-    // Получаем репозиторий для работы с продуктами
-    const productRepository = getRepository(Product);
-    
-    // Создаем query builder
-    const queryBuilder = productRepository.createQueryBuilder('product');
-    
-    // Применяем фильтры
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value) {
-        if (Array.isArray(value)) {
-          queryBuilder.andWhere(`product.${key} IN (:...${key}Values)`, { [`${key}Values`]: value });
-        } else {
-          queryBuilder.andWhere(`product.${key} = :${key}`, { [key]: value });
-        }
-      }
-    });
-    
-    // Получаем общее количество записей
-    const total = await queryBuilder.getCount();
-    
-    // Применяем сортировку
-    if (sortBy) {
-      const orderDirection = sortOrder === 'desc' ? 'DESC' : 'ASC';
-      queryBuilder.orderBy(`product.${sortBy}`, orderDirection);
-    } else {
-      // Сортировка по умолчанию
-      queryBuilder.orderBy('product.createdAt', 'DESC');
+    if (productIndex === -1) {
+      return this.error(res, 'Product not found', 'NOT_FOUND', 404);
     }
     
-    // Применяем пагинацию
-    queryBuilder.skip(skip).take(limitNum);
+    // Обновляем данные
+    if (name) this.products[productIndex].name = name;
+    if (price) this.products[productIndex].price = Number(price);
     
-    // Выполняем запрос
-    const items = await queryBuilder.getMany();
+    logger.info(`Product updated: ${id}`);
     
-    // Формируем ответ
-    const totalPages = Math.ceil(total / limitNum);
-    
-    res.json({
-      success: true,
-      data: {
-        items: items as unknown as IProduct[],
-        pagination: {
-          total,
-          page: pageNum,
-          limit: limitNum,
-          totalPages,
-          hasNextPage: pageNum < totalPages,
-          hasPrevPage: pageNum > 1,
-        }
-      }
-    });
-    
-  } catch (error) {
-    next(error);
-  }
-};
+    return this.success(res, this.products[productIndex]);
+  });
 
-/**
- * Анализ товара по ID
- */
-export const analyzeProduct = async (
-  req: Request<{ id: string }>,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id: productId } = matchedData(req, { locations: ['params'] });
+  /**
+   * Удалить товар
+   */
+  public deleteProduct = this.catchError(async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
     
-    if (!productId) {
-      throw new ApiError('ID товара обязателен', 400, 'VALIDATION_ERROR');
+    const productIndex = this.products.findIndex(p => p.id === id);
+    
+    if (productIndex === -1) {
+      return this.error(res, 'Product not found', 'NOT_FOUND', 404);
     }
     
-    // Вызываем метод analyzeProduct из сервиса
-    const result = await productService.analyzeProduct(productId);
+    // Удаляем товар
+    this.products.splice(productIndex, 1);
     
-    if (!result.success) {
-      throw new ApiError(
-        result.error || 'Ошибка при анализе товара',
-        500,
-        result.code || 'ANALYSIS_ERROR',
-        result.details
-      );
-    }
+    logger.info(`Product deleted: ${id}`);
     
-    res.json({
-      success: true,
-      data: result.data
-    });
-    
-  } catch (error) {
-    next(error);
-  }
-};
+    return this.success(res, { success: true });
+  });
+}
