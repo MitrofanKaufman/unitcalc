@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from "react";
 
-import { ThemeManager } from "@lib/theme-manager";
+import { ThemeManager } from "./theme-manager";
 
 declare global {
   interface Window {

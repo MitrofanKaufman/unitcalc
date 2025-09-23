@@ -3,7 +3,7 @@ import { AlertTriangle } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "../components/ui/button.tsx";
 
 const NotFound = () => {
   const navigate = useNavigate();

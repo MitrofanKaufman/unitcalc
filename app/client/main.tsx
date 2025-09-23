@@ -5,7 +5,7 @@ import App from "@/App";
 
 // Global styles
 import "./styles/globals.css";
-import "./components/css/fonts.css"; // Шрифты
+import "./styles/fonts.css"; // Шрифты
 
 // Инициализация приложения
 createRoot(document.getElementById("root")!).render(

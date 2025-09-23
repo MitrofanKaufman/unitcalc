@@ -48,12 +48,12 @@
       "@assets/*": ["./app/client/assets/*"],
       "@styles/*": ["./app/client/styles/*"],
       "@utils/*": ["./app/client/utils/*"],
+      "@config/*": ["./app/config/*"],
       "@hooks/*": ["./app/client/hooks/*"],
       "@lib/*": ["./app/client/lib/*"],
       "@server/*": ["./app/server/*"],
       "@api/*": ["./app/server/api/*"],
       "@shared/*": ["./shared/*"],
-      "@config/*": ["./config/*"],
       "@tests/*": ["./tests/*"],
       "@settings": ["./settings.js"]
     },

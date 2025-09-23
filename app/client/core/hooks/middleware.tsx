@@ -1,11 +1,11 @@
 // src/middleware/index.ts
-import { Application, Request, Response, NextFunction } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
-import { logger } from '../utils/logger';
-import { AppConfig } from '../config';
+import { logger } from '../../utils/logger';
+import { AppConfig } from '../../config';
 
 export function applyMiddleware(app: Application, config: AppConfig) {
   // Security headers

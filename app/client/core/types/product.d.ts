@@ -2,7 +2,7 @@
  * Типы данных, связанные с товарами
  */
 
-declare module '@/types/product' {
+declare module './product' {
   /**
    * Информация о продавце
    */

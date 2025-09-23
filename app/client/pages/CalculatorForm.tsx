@@ -1,18 +1,25 @@
+// External dependencies
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ArrowLeft } from 'lucide-react';
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ProductCard } from '@/components/search/ProductCard';
-import { ProgressBar } from '@/components/ui/progress-bar';
-import { NeuButton as Button } from '@/components/ui-neu/neu-button';
-import { NeuInput as Input } from '@/components/ui-neu/neu-input';
-import { ThemeToggle } from '@/components/ui-neu/theme-toggle';
-import { useProductSearch } from '@/hooks/useProductSearch';
-import { Debouncer } from '@/utils/debounce';
-import { ThemeManager } from '@/utils/themeManager';
+// UI Components
+import { ProductCard } from '@/components/ProductCard';
+import { ProgressBar } from '@/components/ui/progress';
+import { NeuButton as Button } from '@/components/ui/neu-button';
+import { NeuInput as Input } from '@/components/ui/neu-input';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
-import { ProductInfo as Product } from '@/types/product';
+// Hooks
+import { useProductSearch } from '@/hooks/useProductSearch';
+
+// Utils
+import { Debouncer } from '@/core/utils/debounce';
+import { ThemeManager } from '@/core/utils/themeManager';
+
+// Types
+import { ProductInfo as Product } from '@/core/types/product';
 
 const MAX_ITEMS_PER_ROW = 2;
 

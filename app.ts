@@ -2,14 +2,18 @@
 import 'reflect-metadata';
 import http from 'http';
 import express, { Application } from 'express';
-import { logger } from './src/utils/logger';
-import { config } from './src/config/config';
-import { applyMiddleware } from './src/hooks/middleware';
-import { errorHandler } from './src/hooks/errorHandler';
-import { RouteRegistry } from './src/core/RouteRegistry';
-import { PortManager } from './src/core/PortManager';
-import { SignalHandler } from './src/core/services/SignalHandler';
 import { fileURLToPath } from 'url';
+
+// Core imports
+import { logger } from '@utils/logger';
+import { config } from './app/config';
+
+// Server imports
+import { applyMiddleware } from './app/client/core/hooks/middleware';
+import { errorHandler } from './app/client/core/hooks/errorHandler';
+import { RouteManager } from './app/client/core/RouteManager';
+import { PortManager } from './app/client/core/utils/PortManager';
+import { SignalHandler } from './app/client/core/services/SignalHandler';
 
 export class AppServer {
   private readonly app: Application;
@@ -31,7 +35,7 @@ export class AppServer {
     applyMiddleware(this.app, config);
 
     // Initialize routes
-    await RouteRegistry.initializeRoutes(this.app);
+    await RouteManager.initializeRoutes(this.app);
 
     // Error handling (must be last)
     this.app.use(errorHandler);
@@ -44,8 +48,7 @@ export class AppServer {
       await this.initialize();
     }
 
-    const portManager = new PortManager();
-    const port = await portManager.getAvailablePort(config.port);
+    const port = await PortManager.getAvailablePort(config.port);
 
     return new Promise((resolve, reject) => {
       this.server = this.app.listen(port, () => {
@@ -53,8 +56,7 @@ export class AppServer {
         resolve();
 
         // Set up signal handlers after server starts
-        const signalHandler = new SignalHandler();
-        signalHandler.handleExitSignals(this.shutdown.bind(this));
+        const signalHandler = new SignalHandler(() => this.shutdown());
       });
 
       this.server.on('error', (error: NodeJS.ErrnoException) => {

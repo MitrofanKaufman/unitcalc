@@ -1,4 +1,5 @@
-// path: src/components/pages/CalculationHistory.tsx
+// path: src/pages/CalculationHistory.tsx
+// External dependencies
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -15,19 +16,21 @@ import {
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Badge } from "@/components/ui/badge.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
-import { Input } from "@/components/ui/input.tsx";
+// UI Components
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select.tsx";
+} from "@/components/ui/select";
 
-import { CalculationHistory } from "@/types/product.ts";
+// Types
+import { CalculationHistory } from "@/types/calculation";
 
 const CalculationHistoryPage = () => {
   const navigate = useNavigate();

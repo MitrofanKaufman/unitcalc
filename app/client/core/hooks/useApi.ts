@@ -1,6 +1,6 @@
 import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from '@tanstack/react-query';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
-import { config } from '../config';
+import { config } from '../../config';
 
 // Базовый URL для API запросов
 const API_BASE_URL = `${config.api.prefix}/${config.api.version}`;

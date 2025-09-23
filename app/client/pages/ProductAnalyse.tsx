@@ -2,9 +2,9 @@ import { AlertCircle } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Alert, AlertDescription, AlertTitle } from '@components/ui/alert.js';
-import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card.js';
-import { Skeleton } from '@components/ui/skeleton.js';
+import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card.js';
+import { Skeleton } from '../components/ui/skeleton.js';
 
 interface Product {
   id: number;

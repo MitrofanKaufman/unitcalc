@@ -5,7 +5,13 @@
 [![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
 
-Калькулятор рентабельности для маркетплейса Wildberries с современным интерфейсом и расширенной аналитикой.
+Современный калькулятор рентабельности для маркетплейса Wildberries с современным интерфейсом и расширенной аналитикой.
+
+## 🌐 Доступные версии документации
+
+- **📖 [README.html](./README.html)** - Интерактивная HTML версия с переключением языков
+- **🇷🇺 [README.ru.md](./README.ru.md)** - Полная документация на русском языке
+- **🇺🇸 [README.en.md](./README.en.md)** - Full documentation in English
 
 <!-- prettier-ignore-start -->
 
@@ -21,12 +27,12 @@
 | [UI-компоненты](docs/ui-components.md) | Библиотеки, принципы стилизации, примеры |
 | [Тестирование](docs/testing.md) | Стратегия, примеры unit/integration/E2E |
 | [Dev-процессы](docs/dev-process.md) | Git flow, линтинг, форматирование, CI |
-| [История изменений](README_HISTORY.md) | Автоматически генерируемая таблица выполненных задач |
+| [История изменений](CHANGELOG.md) | Журнал всех изменений проекта |
 | [Частые вопросы](docs/faq.md) | Ответы на FAQ |
 
 </details>
 
-> 💡 Все документы расположены в папке `docs/`. Навигация выше генерируется вручную и может быть расширена.
+> 💡 **Новая интерактивная документация**: Используйте [README.html](./README.html) для удобной навигации между всеми документами проекта с поддержкой переключения между русским и английским языками.
 
 <!-- prettier-ignore-end -->
 

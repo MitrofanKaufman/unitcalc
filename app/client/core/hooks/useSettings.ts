@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { AppSettings, defaultSettings, validateSettings } from '@/@types/settings';
+import { AppSettings, defaultSettings, validateSettings } from '../../@types/settings';
 
 // Ключ для хранения настроек в localStorage
 const SETTINGS_STORAGE_KEY = 'wb_calculator_settings';

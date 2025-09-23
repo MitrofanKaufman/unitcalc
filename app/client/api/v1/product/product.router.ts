@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { BaseRouter } from '../../../core/base/BaseRouter';
+import { BaseRouter } from '../../../../../src/core/base/BaseRouter';
 import { ProductController } from './product.controller';
 
 export class ProductRouter extends BaseRouter {

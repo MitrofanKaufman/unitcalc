@@ -23,11 +23,11 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader } from "../components/ui/card";
 
 import "keen-slider/keen-slider.min.css";
-import { getProduct, analyzeProduct } from "@/api/productService";
+import { getProduct, analyzeProduct } from "../api/productService";
 
 interface ProductInfo {
   id?: string | number;

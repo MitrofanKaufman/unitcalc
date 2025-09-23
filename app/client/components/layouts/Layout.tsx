@@ -8,7 +8,7 @@ import { Outlet } from "react-router-dom";
 
 import { useTelegram, syncTheme } from "@/lib/telegram";
 import { ThemeManager } from "@/lib/theme-manager";
-import { Header } from "@components/layouts/Header";
+import { Header } from "@/components/layouts/Header";
 
 const Layout: React.FC = () => {
   const themeRef = useRef(new ThemeManager());

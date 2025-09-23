@@ -5,30 +5,31 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// UI components
 import { Layout } from "@/components/layouts/Layout";
-
-// UI компоненты глобального уровня
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-// Страницы приложения
-import HomePage from "@/pages/home"; // Главная страница
-import CalculatorForm from "@/components/pages/CalculatorForm";
-import CalculationHistory from "@/components/pages/CalculationHistory";
-import Calculator from "@/components/pages/Calculator";
-import CalculatorResultData from "@/components/pages/CalculatorResultData";
-import CalculatorAdd from "@/components/pages/CalculatorAdd";
-import CalculatorLatest from "@/components/pages/CalculatorLatest";
-import CalculatorVersion from "@/components/pages/CalculatorVersion";
-import ProductDetails from "@/components/pages/ProductDetails";
-import SellerDetails from "@/components/pages/SellerDetails";
-import Feedback from "@/components/pages/Feedback";
-import CardsDemo from "@/components/pages/CardsDemo";
-import NotFound from "@/components/pages/NotFound";
-import ProductAnalyse from "@/components/pages/ProductAnalyse"; // Updated path to match the actual file location
-import SettingsPage from "@pages/pages/settings"; // Страница настроек приложения
-import TestPage from "@/pages/TestPage"; // Тестовая страница для проверки стилей
+// Pages
+import HomePage from "@/pages/home";
+import CalculatorForm from "@/pages/CalculatorForm";
+import CalculationHistory from "@/pages/CalculationHistory";
+import Calculator from "@/pages/Calculator";
+import SettingsPage from "@/pages/settings";
+import TestPage from "@/pages/TestPage";
+import NotFound from "@/pages/NotFound";
+
+// Page Components
+import CalculatorResultData from "@/pages/CalculatorResultData";
+import CalculatorAdd from "@/pages/CalculatorAdd";
+import CalculatorLatest from "@/pages/CalculatorLatest";
+import CalculatorVersion from "@/pages/CalculatorVersion";
+import ProductDetails from "@/pages/ProductDetails";
+import SellerDetails from "@/pages/SellerDetails";
+import Feedback from "@/pages/Feedback";
+import CardsDemo from "@/pages/CardsDemo";
+import ProductAnalyse from "@/pages/ProductAnalyse";
 
 // Инициализация клиента React Query с настройками для оффлайн-режима
 const queryClient = new QueryClient({

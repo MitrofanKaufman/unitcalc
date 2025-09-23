@@ -1,15 +1,38 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2025
-From: Dmitriy <you@example.com>
-Date: Tue, 17 Sep 2025 17:50:00 +0300
-Subject: [PATCH] fix: import useQuery in health.ts to resolve ReferenceError
-
----
- app/client/utils/health.ts | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/app/client/utils/health.ts b/app/client/utils/health.ts
-index e69de29..f1a2b3c 100644
---- a/app/client/utils/health.ts
-+++ b/app/client/utils/health.ts
-@@
-+import { useQuery } from '@tanstack/react-query';
+diff --git a/package.json b/package.json
+index 1234567..89abcde 100644
+--- a/package.json
++++ b/package.json
+@@ -6,10 +6,12 @@
+-    "dev": "tsx watch --clear-screen=false --no-warnings app.ts",
++    "dev": "tsx -r tsconfig-paths/register watch --clear-screen=false --no-warnings app.ts",
+     "frontend": "vite",
+     "wait": "wait-on tcp:3000",
+-    "dev:all": "npx kill-port 3000 3001 4000 && concurrently -k -n BACKEND,FRONTEND -c green,cyan \"npm run dev\" \"npm run wait && npm run frontend\""
++    "dev:all": "npx kill-port 3000 3001 4000 && concurrently -k -n BACKEND,FRONTEND -c green,cyan \"npm run dev\" \"npm run wait && npm run frontend\""
+   },
+   "dependencies": {
++    "tsconfig-paths": "^4.2.0"
+   }
+ }
+diff --git a/tsconfig.json b/tsconfig.json
+index abcdef0..1234567 100644
+--- a/tsconfig.json
++++ b/tsconfig.json
+@@ -10,6 +10,16 @@
+     "strict": true,
+     "esModuleInterop": true,
+     "skipLibCheck": true,
+-    "forceConsistentCasingInFileNames": true
++    "forceConsistentCasingInFileNames": true,
++    "baseUrl": "./app",
++    "paths": {
++      "@config/*": ["config/*"],
++      "@utils/*": ["utils/*"],
++      "@services/*": ["services/*"],
++      "@models/*": ["models/*"],
++      "@controllers/*": ["controllers/*"],
++      "@middlewares/*": ["middlewares/*"],
++      "@routes/*": ["routes/*"]
++    }
+   }
+ }

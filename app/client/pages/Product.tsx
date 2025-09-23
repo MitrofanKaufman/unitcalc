@@ -1,6 +1,6 @@
 import { Button } from "@ui/button";
 import { Card, CardContent } from "@ui/card";
-import { CalculatorResults as TCalculatorResults } from "@utils/calculateResults";
+import { CalculatorResults as TCalculatorResults } from "../utils/calculateResults";
 import { motion } from "framer-motion";
 import { ArrowLeft, Moon, Sparkles, Sun } from "lucide-react";
 import React, { useEffect, useState } from 'react';

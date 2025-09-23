@@ -4,10 +4,10 @@ import { ArrowLeft, Sparkles, Moon, Sun, Package, Users } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import ProductCard from "@/components/ProductCard.tsx";
-import SellerCard from "@/components/SellerCard.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
+import ProductCard from "../components/ProductCard.tsx";
+import SellerCard from "../components/SellerCard.tsx";
+import { Button } from "../components/ui/button.tsx";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card.tsx";
 
 import { ProductInfo, SellerInfo } from "@/types/product.ts";
 

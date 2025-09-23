@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { WildberriesService } from '@/core/services/wildberries';
+import { WildberriesService } from '../services/wildberries';
 import { ProductInfo as Product } from '@/types/product';
 
 const ITEMS_PER_PAGE = 10;

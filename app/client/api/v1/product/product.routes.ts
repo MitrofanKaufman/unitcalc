@@ -5,7 +5,12 @@
  */
 
 import { Router } from 'express';
-import { getProductById, searchProducts, getProducts, analyzeProduct } from './product.controller';
+import { 
+  getProductById, 
+  searchProducts, 
+  getProducts, 
+  analyzeProduct 
+} from './product.controller';
 import { productValidation, validateRequest } from '../../../middleware/validation';
 
 const router = Router();
@@ -13,28 +18,40 @@ const router = Router();
 // Определение маршрутов
 // Обратите внимание: префикс /api/v1/products или /api/v1/product добавляется в RouteManager
 
-// Получить товар по ID
-// Полный путь: /api/v1/products/:id или /api/v1/product/:id
+/**
+ * @route GET /:id
+ * @desc Получить товар по ID
+ * @access Public
+ */
 router.get('/:id', 
   productValidation.getById, 
   validateRequest, 
   getProductById
 );
 
-// Поиск товаров
-// Полный путь: /api/v1/products/search или /api/v1/product/search
+/**
+ * @route GET /search
+ * @desc Поиск товаров
+ * @access Public
+ */
 router.get('/search', 
   productValidation.search, 
   validateRequest, 
   searchProducts
 );
 
-// Получить список товаров
-// Полный путь: /api/v1/products или /api/v1/product
+/**
+ * @route GET /
+ * @desc Получить список всех товаров (с пагинацией)
+ * @access Public
+ */
 router.get('/', getProducts);
 
-// Анализ товара по ID
-// Полный путь: /api/v1/products/:id/analyze или /api/v1/product/:id/analyze
+/**
+ * @route GET /:id/analyze
+ * @desc Анализ товара по ID
+ * @access Public
+ */
 router.get(
   '/:id/analyze',
   productValidation.getById,

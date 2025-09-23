@@ -1,13 +1,13 @@
 // path: src/components/pages/CalculatorResultData.tsx
 
-import { calculateResults, CalculatorResults as TCalculatorResults } from "@utils/calculateResults"; // ⬅ Переименован тип
+import { calculateResults, CalculatorResults as TCalculatorResults } from "../../lib/utils/calculateResults"; // ⬅ Переименован тип
 import { motion, Variants } from "framer-motion";
 import { ArrowLeft, Sparkles, Moon, Sun } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Navigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button.tsx";
-import { Card, CardContent } from "@/components/ui/card.tsx";
+import { Button } from "../components/ui/button.tsx";
+import { Card, CardContent } from "../components/ui/card.tsx";
 
 const easeOutExpo = [0.4, 0, 0.2, 1];
 

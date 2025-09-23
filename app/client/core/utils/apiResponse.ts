@@ -6,7 +6,7 @@
 
 import { Response } from 'express';
 
-import { HTTP_STATUS_CODES, ERROR_CODES } from '../config/constants';
+import { HTTP_STATUS_CODES, ERROR_CODES } from '../../config/constants';
 import { IErrorDetails, IValidationError } from './ApiError';
 
 /**
