@@ -1,0 +1,4 @@
+/* path: app/styles/index.css */
+/* aliased imports */
+@import '@/styles/header.css';
+@import '@/styles/footer.css';

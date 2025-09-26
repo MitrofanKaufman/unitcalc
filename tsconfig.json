@@ -1,92 +1,30 @@
 {
   "compilerOptions": {
-    /* ============================================
-     * Базовые настройки компилятора
-     * =========================================== */
-    "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "ES2022"],
+    "allowJs": false,
+    "checkJs": false,
+    "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
-    
-    /* ============================================
-     * Строгость проверки типов
-     * =========================================== */
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "useUnknownInCatchVariables": true,
-    "exactOptionalPropertyTypes": true,
-    
-    /* ============================================
-     * Настройки путей и модулей
-     * =========================================== */
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./app/client/*"],
-      "@app/*": ["./app/client/app/*"],
-      "@components/*": ["./app/client/components/*"],
-      "@pages/*": ["./app/client/pages/*"],
-      "@assets/*": ["./app/client/assets/*"],
-      "@styles/*": ["./app/client/styles/*"],
-      "@utils/*": ["./app/client/utils/*"],
-      "@config/*": ["./app/config/*"],
-      "@hooks/*": ["./app/client/hooks/*"],
-      "@lib/*": ["./app/client/lib/*"],
-      "@server/*": ["./app/server/*"],
-      "@api/*": ["./app/server/api/*"],
-      "@shared/*": ["./shared/*"],
-      "@tests/*": ["./tests/*"],
-      "@settings": ["./settings.js"]
-    },
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "allowJs": true,
-    "checkJs": false,
-    
-    /* ============================================
-     * Дополнительные настройки
-     * =========================================== */
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "sourceMap": true,
-    "declaration": false,
-    "declarationMap": false,
-    "inlineSources": true,
-    "inlineSourceMap": false,
-    "removeComments": false,
-    "types": ["vite/client", "@types/node"]
+    "noEmit": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["app/*"]
+    }
   },
   
   /* ============================================
    * Включение/исключение файлов
    * =========================================== */
-  "include": [
-    "app/client/**/*.ts",
-    "app/client/**/*.tsx",
-    "app/server/**/*.ts",
-    "app/shared/**/*.ts",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
-  ],
+  "include": ["app", "vite-env.d.ts"]
   "exclude": [
     "node_modules",
     "dist",
