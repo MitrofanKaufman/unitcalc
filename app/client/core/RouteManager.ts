@@ -147,13 +147,16 @@ export class RouteManager {
    * @private
    */
   private addStaticRoutes(): void {
-    // Обслуживание статических файлов
-    this.app.use(express.static(path.join(this.basePath, 'public')));
-    
-    // Обработка SPA маршрутов (все остальные запросы отправляют index.html)
-    this.app.get('*', (req: Request, res: Response) => {
-      res.sendFile(path.join(this.basePath, 'public', 'index.html'));
-    });
+    // NOTE: Static file serving removed - frontend (Vite) handles static files
+    // Обслуживание статических файлов отключено - фронтенд (Vite) обслуживает статические файлы
+
+    // Если нужно обслуживать статические файлы с бэкенда, раскомментируйте ниже:
+    // this.app.use(express.static(path.join(this.basePath, 'public')));
+
+    // Обработка SPA маршрутов отключена - пусть фронтенд обрабатывает 404
+    // this.app.get('*', (req: Request, res: Response) => {
+    //   res.sendFile(path.join(this.basePath, 'public', 'index.html'));
+    // });
   }
 
   /**
@@ -167,7 +170,7 @@ export class RouteManager {
       
       res.on('finish', () => {
         const duration = Date.now() - start;
-        logger.http(`${req.method} ${req.originalUrl} - ${res.statusCode} ${duration}ms`);
+        logger.info(`HTTP ${req.method} ${req.originalUrl} - ${res.statusCode} (${duration}ms)`);
       });
       
       next();

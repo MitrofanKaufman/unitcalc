@@ -53,7 +53,8 @@ const HomePage: React.FC = () => {
     <AnimatePresence>
       {/* Баннер о недоступности бэкенда */}
       {showBackendWarning && !isBackendAvailable && (
-        <motion.div 
+        <motion.div
+          key="backend-warning"
           className="fixed top-4 right-4 z-50 max-w-md p-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-900 rounded-lg shadow-lg flex items-start gap-3"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -65,7 +66,7 @@ const HomePage: React.FC = () => {
             <p className="text-sm text-yellow-700 dark:text-yellow-300">
               Некоторые функции могут быть ограничены. Пожалуйста, проверьте подключение к интернету и убедитесь, что сервер запущен.
             </p>
-            <button 
+            <button
               onClick={() => setShowBackendWarning(false)}
               className="mt-2 text-xs text-yellow-600 dark:text-yellow-400 hover:underline"
             >
@@ -76,25 +77,26 @@ const HomePage: React.FC = () => {
       )}
 
       <motion.div
-        className="min-h-screen bg-gradient-to-br from-background to-muted/20"
+        key="main-content"
+        className="min-h-screen bg-background"
         initial="hidden"
         animate="visible"
         exit="exit"
         variants={containerVariants}
       >
-        {/* Header with theme toggle */}
-        <header className="w-full fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm border-b border-border/50">
+        {/* Header with neumorphism */}
+        <header className="w-full fixed top-0 left-0 right-0 z-40 neu-container">
           <nav className="container mx-auto px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Box className="w-6 h-6 text-primary" />
-              <span className="font-bold text-xl bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              <span className="font-bold text-xl text-primary">
                 WB Calc
               </span>
             </div>
-            
+
             <motion.button
               onClick={toggleTheme}
-              className="w-10 h-10 rounded-lg flex items-center justify-center bg-background border border-border shadow-sm hover:bg-accent/50 transition-colors"
+              className="neu-button w-10 h-10 rounded-lg flex items-center justify-center"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -117,41 +119,8 @@ const HomePage: React.FC = () => {
           </nav>
         </header>
 
-        {/* Background elements */}
-        <div className="fixed inset-0 -z-10 overflow-hidden">
-          <motion.div 
-            className="absolute -top-1/4 -right-1/4 w-1/2 h-1/2 rounded-full bg-primary/5 dark:bg-primary/10 blur-3xl"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1,
-              x: [0, 50, 0],
-              y: [0, -50, 0]
-            }}
-            transition={{
-              x: { duration: 20, repeat: Infinity, ease: "easeInOut" },
-              y: { duration: 25, repeat: Infinity, ease: "easeInOut" },
-              opacity: { duration: 1 },
-              scale: { duration: 1 }
-            }}
-          />
-          <motion.div 
-            className="absolute top-3/4 left-1/4 w-1/2 h-1/2 rounded-full bg-secondary/5 dark:bg-secondary/10 blur-3xl"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1,
-              x: [0, -30, 0],
-              y: [0, 30, 0]
-            }}
-            transition={{
-              x: { duration: 25, repeat: Infinity, ease: "easeInOut", delay: 1 },
-              y: { duration: 30, repeat: Infinity, ease: "easeInOut", delay: 2 },
-              opacity: { duration: 1, delay: 0.3 },
-              scale: { duration: 1, delay: 0.3 }
-            }}
-          />
-        </div>
+        {/* Neumorphism background */}
+        <div className="fixed inset-0 -z-10 bg-background"></div>
 
         {/* Main content */}
         <main className="pt-20">

@@ -8,8 +8,22 @@ import { logger } from '../../utils/logger';
 import { AppConfig } from '../../config';
 
 export function applyMiddleware(app: Application, config: AppConfig) {
-  // Security headers
-  app.use(helmet());
+  // Security headers - excluding health endpoint to avoid 426 errors
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    // Skip helmet for health check and API endpoints to avoid 426 Upgrade Required
+    if (req.path === '/health' || req.path.startsWith('/api/')) {
+      // Apply only basic security headers for API endpoints
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+      res.setHeader('X-XSS-Protection', '1; mode=block');
+      return next();
+    }
+    // Apply full helmet for other routes
+    helmet({
+      crossOriginEmbedderPolicy: false, // Disable COEP to avoid 426 errors
+      crossOriginOpenerPolicy: false,   // Disable COOP to avoid 426 errors
+    })(req, res, next);
+  });
 
   // Compression
   app.use(compression());
@@ -43,12 +57,7 @@ export function applyMiddleware(app: Application, config: AppConfig) {
       const start = Date.now();
       res.on('finish', () => {
         const duration = Date.now() - start;
-        logger.http({
-          method: req.method,
-          path: req.path,
-          status: res.statusCode,
-          duration: `${duration}ms`,
-        });
+        logger.info(`HTTP ${req.method} ${req.path} - ${res.statusCode} (${duration}ms)`);
       });
       next();
     });

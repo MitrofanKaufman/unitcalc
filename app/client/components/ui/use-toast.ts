@@ -1,4 +1,4 @@
 // path: src/components/ui/use-toast.ts
-import { useToast, toast } from "@hooks/use-toast";
+import { toast as sonnerToast } from "sonner";
 
-export { useToast, toast };
+export { sonnerToast as toast };

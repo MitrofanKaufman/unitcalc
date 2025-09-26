@@ -6,26 +6,26 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
-import { useTelegram, syncTheme } from "@/lib/telegram";
-import { ThemeManager } from "@/lib/theme-manager";
+// import { useTelegram, syncTheme } from "@/lib/telegram";
+import { ThemeManager } from "@/core/utils/themeManager";
 import { Header } from "@/components/layouts/Header";
 
 const Layout: React.FC = () => {
   const themeRef = useRef(new ThemeManager());
   const [dark, setDark] = useState(themeRef.current.isDark);
 
-  const tg = useTelegram();
+  const tg = null; // useTelegram();
   const _isTG = Boolean(tg); // eslint-disable-line @typescript-eslint/no-unused-vars
 
   useEffect(() => {
-    if (tg) syncTheme(themeRef.current);
-    
+    // if (tg) syncTheme(themeRef.current);
+
     // Применяем класс темы к корневому элементу
     document.documentElement.classList.toggle('dark', dark);
     
     // Сохраняем предпочтение темы в localStorage
     localStorage.setItem('theme', dark ? 'dark' : 'light');
-  }, [tg, dark]);
+  }, [dark]);
 
   // Временно убираем Header по требованию
   const showHeader = false;

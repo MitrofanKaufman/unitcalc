@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -39,10 +40,23 @@ export function sleep(ms: number): Promise<void> {
  * @param value - The value to check
  * @returns True if the value is empty, false otherwise
  */
-export function isEmpty(value: unknown): boolean {
-  if (value === null || value === undefined) return true;
-  if (typeof value === 'string' && value.trim() === '') return true;
-  if (Array.isArray(value) && value.length === 0) return true;
-  if (typeof value === 'object' && Object.keys(value).length === 0) return true;
-  return false;
+/**
+ * Hook to detect if the device is mobile
+ * @returns True if the device is mobile, false otherwise
+ */
+export function useIsMobile() {
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  return isMobile;
 }

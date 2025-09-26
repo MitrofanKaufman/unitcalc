@@ -1,0 +1,329 @@
+/* Modern App Styles with Unified Design System */
+:root {
+  /* Unified Color System */
+  --background: 248 250 252;
+  --foreground: 15 23 42;
+  --card: 255 255 255;
+  --card-foreground: 15 23 42;
+  --popover: 255 255 255;
+  --popover-foreground: 15 23 42;
+  --primary: 59 130 246;
+  --primary-foreground: 255 255 255;
+  --secondary: 241 245 249;
+  --secondary-foreground: 51 65 85;
+  --muted: 107 114 128;
+  --muted-foreground: 107 114 128;
+  --accent: 241 245 249;
+  --accent-foreground: 51 65 85;
+  --destructive: 239 68 68;
+  --destructive-foreground: 255 255 255;
+  --border: 229 231 235;
+  --input: 229 231 235;
+  --ring: 59 130 246;
+  --radius: 16px;
+
+  /* Advanced Visual Effects */
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-shadow: rgba(31, 38, 135, 0.37);
+
+  /* Neumorphism System */
+  --neu-bg: 248 250 252;
+  --neu-shadow-light: 255 255 255;
+  --neu-shadow-dark: 229 231 235;
+
+  /* Typography */
+  --font-family: 'Inter', sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Transitions */
+  --transition-fast: 0.15s;
+  --transition-base: 0.2s;
+  --transition-slow: 0.3s;
+  --transition-slower: 0.4s;
+  --transition-medium: 0.3s;
+}
+
+.dark-theme,
+[data-theme="dark"] {
+  /* Dark Theme - Unified System */
+  --background: 15 23 42;
+  --foreground: 248 250 252;
+  --card: 30 41 59;
+  --card-foreground: 248 250 252;
+  --popover: 30 41 59;
+  --popover-foreground: 248 250 252;
+  --primary: 96 165 250;
+  --primary-foreground: 15 23 42;
+  --secondary: 51 65 85;
+  --secondary-foreground: 226 232 240;
+  --muted: 71 85 105;
+  --muted-foreground: 148 163 184;
+  --accent: 51 65 85;
+  --accent-foreground: 226 232 240;
+  --destructive: 248 113 113;
+  --destructive-foreground: 15 23 42;
+  --border: 51 65 85;
+  --input: 51 65 85;
+  --ring: 96 165 250;
+
+  /* Dark Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
+
+  /* Dark Neumorphism */
+  --neu-bg: 15 23 42;
+  --neu-shadow-light: 51 65 85;
+  --neu-shadow-dark: 30 41 59;
+
+}
+
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  min-height: 100vh;
+  transition: all 0.3s ease;
+}
+
+/* Enhanced Neumorphic form elements */
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  background: rgb(var(--input-bg) / <alpha-value>);
+  border: none;
+  border-radius: var(--radius);
+  padding: 12px 20px;
+  font-size: 16px;
+  color: rgb(var(--foreground));
+  box-shadow:
+    inset 6px 6px 12px rgb(var(--neu-shadow-dark) / 0.1),
+    inset -6px -6px 12px rgb(var(--neu-shadow-light) / 0.9);
+  transition: all var(--transition-base) ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  box-shadow:
+    inset 4px 4px 8px rgb(var(--neu-shadow-dark) / 0.15),
+    inset -4px -4px 8px rgb(var(--neu-shadow-light) / 0.95),
+    0 0 0 2px rgb(var(--primary) / 0.3);
+}
+
+/* Enhanced Neumorphic buttons */
+button {
+  background: rgb(var(--button-bg));
+  border: none;
+  border-radius: var(--radius);
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  color: rgb(var(--foreground));
+  box-shadow:
+    6px 6px 12px rgb(var(--neu-shadow-dark) / 0.1),
+    -6px -6px 12px rgb(var(--neu-shadow-light) / 0.9);
+  transition: all var(--transition-base) ease;
+}
+
+button:hover {
+  box-shadow:
+    8px 8px 16px rgb(var(--neu-shadow-dark) / 0.15),
+    -8px -8px 16px rgb(var(--neu-shadow-light) / 0.95);
+  transform: translateY(-1px);
+}
+
+button:active {
+  box-shadow:
+    inset 4px 4px 8px rgb(var(--neu-shadow-dark) / 0.15),
+    inset -4px -4px 8px rgb(var(--neu-shadow-light) / 0.95);
+  transform: translateY(0px);
+}
+
+/* Enhanced Neumorphic card */
+.card {
+  padding: 2em;
+  border-radius: var(--radius);
+  background: rgb(var(--card-bg));
+  color: rgb(var(--foreground));
+  box-shadow:
+    8px 8px 16px rgb(var(--neu-shadow-dark) / 0.1),
+    -8px -8px 16px rgb(var(--neu-shadow-light) / 0.9);
+  transition: all var(--transition-base) ease;
+}
+
+.card:hover {
+  box-shadow:
+    12px 12px 24px rgb(var(--neu-shadow-dark) / 0.15),
+    -12px -12px 24px rgb(var(--neu-shadow-light) / 0.95);
+  transform: translateY(-2px);
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em rgba(59, 130, 246, 0.4));
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em rgba(97, 218, 251, 0.4));
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.read-the-docs {
+  color: var(--muted);
+}
+
+/* Modern container for better layout */
+.app-container {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.37),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  margin: 1rem;
+}
+
+/* Enhanced form styling */
+.form-section {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin: 1rem 0;
+  box-shadow:
+    6px 6px 12px rgba(0, 0, 0, 0.1),
+    -6px -6px 12px rgba(255, 255, 255, 0.9);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* Modern button variants */
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow:
+    4px 4px 8px rgba(0, 0, 0, 0.1),
+    -4px -4px 8px rgba(255, 255, 255, 0.9);
+}
+
+.btn-primary:hover {
+  box-shadow:
+    6px 6px 12px rgba(0, 0, 0, 0.15),
+    -6px -6px 12px rgba(255, 255, 255, 0.95);
+}
+
+.btn-secondary {
+  background: var(--secondary);
+  color: var(--text);
+  box-shadow:
+    4px 4px 8px rgba(0, 0, 0, 0.05),
+    -4px -4px 8px rgba(255, 255, 255, 0.9);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+
+  .app-container {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+
+  .form-section {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #root {
+    padding: 0.5rem;
+  }
+
+  .app-container {
+    margin: 0.25rem;
+    padding: 0.75rem;
+  }
+
+  .form-section {
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+  }
+
+  /* Mobile-specific adjustments */
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    padding: 10px 16px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+}
