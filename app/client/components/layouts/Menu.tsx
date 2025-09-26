@@ -1,10 +1,10 @@
-// path: src/components/layouts/Menu.tsx
+// path: app/client/components/layouts/Menu.tsx
 // Neumorphic вертикальное меню навигации со ссылками на основные разделы.
 
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 const links = [
   { to: "/", label: "Главная" },

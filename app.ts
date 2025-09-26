@@ -51,8 +51,20 @@ export class AppServer {
     const port = await PortManager.getAvailablePort(config.port);
 
     return new Promise((resolve, reject) => {
-      this.server = this.app.listen(port, () => {
+      // Create HTTP server with explicit HTTP/1.1 settings
+      this.server = http.createServer({
+        keepAlive: true,
+        keepAliveMsecs: 10000,
+        maxHeadersCount: 0, // No limit on headers
+        // Disable HTTP/2
+        maxHeaderSize: 16384, // 16KB
+        insecureHTTPParser: false // Use strict HTTP/1.1 parsing
+      }, this.app);
+
+      // Start listening
+      this.server.listen(port, () => {
         logger.info(`Server running on port ${port} in ${config.env} mode`);
+        logger.info('Using HTTP/1.1 protocol');
         resolve();
 
         // Set up signal handlers after server starts

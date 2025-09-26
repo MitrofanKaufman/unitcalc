@@ -17,42 +17,68 @@ const projectPaths = {
   core: path.resolve(__dirname, 'app/client/core'),
 };
 
-// Основная конфигурация Vite
+// Main Vite configuration
 export default defineConfig(({ mode }) => {
-  const isDev = mode === 'development';
   const isProd = mode === 'production';
-
-  // Переменные окружения
   const env = loadEnv(mode, process.cwd(), '');
   const devPort = parseInt(env.PORT || '5173', 10);
-
-  // Настройки прокси для API
-  const apiProxy = {
-    target: 'http://localhost:3000',
-    changeOrigin: true,
-    secure: false,
-    rewrite: (path: string) => path.replace(/^\/api/, ''),
-    ws: true,
-    xfwd: true,
-    logLevel: 'warn',
-    timeout: 30000,
-    proxyTimeout: 30000,
-    onError: (err: Error, req: any, res: any) => {
-      console.warn('[Vite Proxy] Backend connection error:', err.message);
-      if (!res.headersSent) {
-        res.writeHead(503, { 'Content-Type': 'application/json' });
-      }
-      res.end(JSON.stringify({
-        error: 'Backend is not available',
-        message: 'The backend server is not running. Please start the backend server.',
-        details: process.env.NODE_ENV === 'development' ? err.message : undefined
-      }));
-    }
-  };
+  const apiTarget = 'http://localhost:3000';
 
   return {
     base: isProd ? '/dist/' : '/',
     root: __dirname,
+    
+    // Configure the development server
+    server: {
+      port: devPort,
+      strictPort: true,
+      // Disable HMR to prevent WebSocket issues
+      hmr: false,
+      // Configure proxy for API requests
+      proxy: {
+        '^/api': {
+          target: apiTarget,
+          changeOrigin: true,
+          secure: false,
+          // Disable HTTP/2
+          http2: false,
+          // Configure request headers
+          headers: {
+            'Connection': 'keep-alive',
+            'Accept': 'application/json',
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          },
+          // Configure proxy events
+          configure: (proxy: any) => {
+            // Log proxy requests
+            proxy.on('proxyReq', (proxyReq: any) => {
+              console.log(`[Vite Proxy] Proxying ${proxyReq.method} ${proxyReq.path}`);
+              // Ensure we're using HTTP/1.1
+              proxyReq.setHeader('Connection', 'keep-alive');
+            });
+            
+            // Log proxy responses
+            proxy.on('proxyRes', (proxyRes: any, req: any) => {
+              console.log(`[Vite Proxy] Received ${proxyRes.statusCode} for ${req.url}`);
+            });
+          }
+        }
+      }
+    },
+
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'app/client'),
+        '@client': path.resolve(__dirname, 'app/client'),
+        '@server': path.resolve(__dirname, 'app/server'),
+        '@shared': path.resolve(__dirname, 'shared'),
+        '@components': path.resolve(__dirname, 'app/client/components'),
+        '@core': path.resolve(__dirname, 'app/client/core'),
+        '@utils': path.resolve(__dirname, 'app/client/core/utils'),
+      },
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.mjs', '.svg'],
+    },
 
     server: {
       port: devPort,
@@ -90,6 +116,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: [
         { find: '@', replacement: projectPaths.client },
+        { find: '@/client', replacement: projectPaths.client },
         { find: '@root', replacement: projectPaths.root },
         { find: '@app', replacement: path.resolve(projectPaths.client, 'app') },
         { find: '@server', replacement: projectPaths.server },

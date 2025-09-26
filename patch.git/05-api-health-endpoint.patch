@@ -1,0 +1,25 @@
+diff --git a/app/client/core/RouteManager.ts b/app/client/core/RouteManager.ts
+index 2f3g4h5..6i7j8k9 100644
+--- a/app/client/core/RouteManager.ts
++++ b/app/client/core/RouteManager.ts
+@@ -88,6 +88,14 @@
+   private addSystemRoutes(): void {
+     this.routes.push({
+       path: '/health',
++      router: (req: Request, res: Response) =>
++        res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() }),
++      description: 'Проверка работоспособности сервиса',
++      methods: ['GET']
++    });
+
++    // Добавляем /api/health для совместимости с клиентом
++    this.routes.push({
++      path: '/api/health',
+       router: (req: Request, res: Response) =>
+         res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() }),
+       description: 'Проверка работоспособности API',
++      methods: ['GET']
++    });
+
+     this.routes.push({
+       path: '/api/ping',

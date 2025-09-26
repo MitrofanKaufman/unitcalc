@@ -1,4 +1,4 @@
-// path: src/components/layouts/Layout.tsx
+// path: app/client/components/layouts/Layout.tsx
 // Neumorphic шаблон страницы. Содержит Header, боковое Menu и
 // `<main>` для вывода текущего маршрута (`<Outlet />`).
 // Управляет темой через ThemeManager (dark/light).
@@ -6,9 +6,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
-// import { useTelegram, syncTheme } from "@/lib/telegram";
-import { ThemeManager } from "@/core/utils/themeManager";
-import { Header } from "@/components/layouts/Header";
+import { ThemeManager } from "../../core/utils/themeManager";
+import { Header } from "./Header";
 
 const Layout: React.FC = () => {
   const themeRef = useRef(new ThemeManager());
@@ -37,7 +36,7 @@ const Layout: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col bg-background text-foreground ${dark ? 'dark' : ''}`}>
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
       {showHeader && (
         <Header
           dark={dark}

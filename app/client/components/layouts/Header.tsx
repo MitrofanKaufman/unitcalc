@@ -1,11 +1,11 @@
-// path: src/components/layouts/Header.tsx
+// path: app/client/components/layouts/Header.tsx
 // Neumorphic Header с названием приложения и переключателем темы.
 
 import { Sun, Moon, Menu as MenuIcon, X } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { NeuButton } from "@/components/ui-neu/neu-button";
+import { NeuButton } from "../ui-neu/neu-button";
 
 interface HeaderProps {
   dark: boolean;
@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({ dark, onToggleTheme, onToggleMenu, menu
   <header className="neu flex items-center justify-between px-4 py-3 mb-4 md:mb-6">
     <div className="flex items-center gap-2">
       {/* Burger only visible on mobile */}
-      {showBurger && onToggleMenu && (
+      {showBurger && (
         <NeuButton
           variant="ghost"
           size="icon"

@@ -86,11 +86,41 @@ export class RouteManager {
    * @private
    */
   private addSystemRoutes(): void {
+    // Корневой маршрут для API сервера
+    this.routes.push({
+      path: '/',
+      router: (req: Request, res: Response) => 
+        res.status(200).json({ 
+          message: 'WB Calculator API Server',
+          version: '1.0.0',
+          status: 'running',
+          timestamp: new Date().toISOString(),
+          endpoints: {
+            health: '/health',
+            api: '/api',
+            apiHealth: '/api/health',
+            apiPing: '/api/ping',
+            docs: '/api/docs'
+          }
+        }),
+      description: 'Информация о API сервере',
+      methods: ['GET']
+    });
+
     this.routes.push({
       path: '/health',
       router: (req: Request, res: Response) => 
         res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() }),
       description: 'Проверка работоспособности сервиса',
+      methods: ['GET']
+    });
+
+    // Добавляем /api/health для совместимости с клиентом
+    this.routes.push({
+      path: '/api/health',
+      router: (req: Request, res: Response) => 
+        res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() }),
+      description: 'Проверка работоспособности API',
       methods: ['GET']
     });
 

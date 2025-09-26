@@ -19,6 +19,7 @@ import Calculator from "@/pages/Calculator";
 import SettingsPage from "@/pages/settings";
 import TestPage from "@/pages/TestPage";
 import NotFound from "@/pages/NotFound";
+import NeumorphicDemo from "@/components/NeumorphicDemo";
 
 // Page Components
 import CalculatorResultData from "@/pages/CalculatorResultData";
@@ -45,15 +46,15 @@ const queryClient = new QueryClient({
       // Время кеширования 5 минут
       staleTime: 5 * 60 * 1000,
       // Время хранения кеша 10 минут
-      cacheTime: 10 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
       // Обработчик ошибок
-      onError: (error) => {
+      onError: (error: Error) => {
         console.error('React Query Error:', error);
       }
     },
     mutations: {
       // Настройки для мутаций
-      onError: (error) => {
+      onError: (error: Error) => {
         console.error('Mutation Error:', error);
       }
     }
@@ -102,6 +103,9 @@ const App: React.FC = () => (
 
             {/* Обратная связь */}
             <Route path="feedback" element={<Feedback />} />
+
+            {/* Демо неоморфных эффектов */}
+            <Route path='/demo' element={<NeumorphicDemo />} />
 
             {/* Страница настроек */}
             <Route path="/settings" element={<SettingsPage />} />

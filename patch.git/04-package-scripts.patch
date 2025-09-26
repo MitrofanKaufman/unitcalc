@@ -1,0 +1,40 @@
+diff --git a/package.json b/package.json
+index 1a2b3c4..5d6e7f8 100644
+--- a/package.json
++++ b/package.json
+@@ -7,31 +7,31 @@
+   "scripts": {
+-    "preinstall": "npx npm-force-resolutions",
+-    "path": "bash src/core/utils/where_i.sh",
++    "preinstall": "echo 'Installing dependencies...'",
++    "path": "bash app/client/core/utils/where_i.sh",
+     "build": "tsc && vite build",
+     "dev": "tsx watch --clear-screen=false --no-warnings app.ts",
+-    "start": "node dist/bundle.js",
+-    "server": "node app/server/server.js",
++    "start": "node dist/server.js",
++    "server": "node server.mjs 3000",
+     "frontend": "vite --port 4000",
+     "wait": "wait-on tcp:3000",
+-    "dev:all": "npx kill-port 3000 3001 4000 && concurrently -k -n BACKEND,FRONTEND -c green,cyan \"npm run dev\" \"npm run wait && npm run frontend\"",
++    "dev:all": "npx kill-port 3000 3001 4000 && concurrently -k -n BACKEND,FRONTEND -c green,cyan \"npm run dev\" \"npm run wait && npm run frontend\"",
+     "db:check": "echo 'Database check script not implemented'",
+     "db:migrate": "echo 'Database migration not implemented'",
+     "db:migrate:generate": "echo 'Database migration generation not implemented'",
+     "db:migrate:revert": "echo 'Database migration revert not implemented'",
+     "db:migrate:show": "echo 'Database migration show not implemented'",
+-    "db:seed": "tsx src/db/seed/index.ts",
++    "db:seed": "echo 'Database seeding not implemented'",
+     "db:seed:products": "npm run db:seed products",
+     "db:clean": "npm run db:seed clean",
+     "db:reset": "npm run db:clean && npm run db:migrate && npm run db:seed:products",
+-    "db:backup": "node scripts/db-utils.js backup",
+-    "db:exec": "node scripts/db-utils.js exec",
+-    "db:status": "tsx scripts/check-db.ts",
+-    "db:init": "ts-node -r tsconfig-paths/register src/db/init.ts",
++    "db:backup": "echo 'Database backup not implemented'",
++    "db:exec": "echo 'Database execute not implemented'",
++    "db:status": "echo 'Database status not implemented'",
++    "db:init": "echo 'Database initialization not implemented'",
+     "lint": "eslint . --ext ts,tsx --report-unused-disable-directories --max-warnings 0"
+   },

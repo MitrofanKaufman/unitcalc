@@ -1,0 +1,81 @@
+diff --git a/app/client/components/layouts/Layout.tsx b/app/client/components/layouts/Layout.tsx
+index abc1234..def5678 100644
+--- a/app/client/components/layouts/Layout.tsx
++++ b/app/client/components/layouts/Layout.tsx
+@@ -7,8 +7,8 @@
+ import React, { useRef, useState, useEffect } from "react";
+ import { Outlet } from "react-router-dom";
+ 
+-import { ThemeManager } from "@/client/core/utils/themeManager";
+-import { Header } from "@/client/components/layouts/Header";
++import { ThemeManager } from "../../core/utils/themeManager";
++import { Header } from "./Header";
+ 
+ const Layout: React.FC = () => {
+   const themeRef = useRef(new ThemeManager());
+diff --git a/app/client/components/layouts/Header.tsx b/app/client/components/layouts/Header.tsx
+index xyz7890..uvw1234 100644
+--- a/app/client/components/layouts/Header.tsx
++++ b/app/client/components/layouts/Header.tsx
+@@ -5,7 +5,7 @@ import { Sun, Moon, Menu as MenuIcon, X } from "lucide-react";
+ import React from "react";
+ import { Link } from "react-router-dom";
+ 
+-import { NeuButton } from "@/client/components/ui-neu/neu-button";
++import { NeuButton } from "../ui-neu/neu-button";
+ 
+ interface HeaderProps {
+   dark: boolean;
+diff --git a/app/client/components/layouts/Menu.tsx b/app/client/components/layouts/Menu.tsx
+index lmn4567..opq8901 100644
+--- a/app/client/components/layouts/Menu.tsx
++++ b/app/client/components/layouts/Menu.tsx
+@@ -4,7 +4,7 @@
+ import React from "react";
+ import { NavLink } from "react-router-dom";
+ 
+-import { cn } from "@/client/lib/utils";
++import { cn } from "../../lib/utils";
+ 
+ const links = [
+   { to: "/", label: "Главная" },
+
+diff --git a/vite.config.ts b/vite.config.ts
+index 123abcd..456efgh 100644
+--- a/vite.config.ts
++++ b/vite.config.ts
+@@ -90,7 +90,7 @@ export default defineConfig(({ mode }) => {
+   return {
+     base: isProd ? '/dist/' : '/',
+     root: __dirname,
+-
++
+     server: {
+       port: devPort,
+       strictPort: true,
+@@ -112,7 +112,7 @@ export default defineConfig(({ mode }) => {
+       host: 'localhost',
+       port: devPort,
+     },
+-
++
+     preview: {
+       port: devPort + 1,
+       open: false,
+@@ -129,6 +129,7 @@ export default defineConfig(({ mode }) => {
+     resolve: {
+       alias: [
+         { find: '@', replacement: projectPaths.client },
++        { find: '@/client', replacement: projectPaths.client },
+         { find: '@root', replacement: projectPaths.root },
+         { find: '@app', replacement: path.resolve(projectPaths.client, 'app') },
+         { find: '@server', replacement: projectPaths.server },
+@@ -138,7 +139,7 @@ export default defineConfig(({ mode }) => {
+       ],
+       extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.mjs', '.svg'],
+     },
+-
++
+     build: {
+       outDir: 'dist',
+       sourcemap: isDev ? 'inline' : isProd ? 'hidden' : false,

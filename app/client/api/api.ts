@@ -3,7 +3,7 @@ import { httpClient } from './httpClient';
 /**
  * Базовый URL для API
  */
-const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 /**
  * API сервис для работы с товарами
