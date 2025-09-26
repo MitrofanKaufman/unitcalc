@@ -63,7 +63,7 @@
   --transition-medium: 0.3s;
 }
 
-.dark-theme,
+,dark-theme,
 [data-theme="dark"] {
   /* Dark Theme - Unified System */
   --background: 15 23 42;
