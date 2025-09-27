@@ -1,0 +1,28 @@
+/* For line-clamp support */
+.lineClamp2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Custom scrollbar for suggestions */
+.suggestionsScrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.suggestionsScrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.suggestionsScrollbar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.suggestionsScrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

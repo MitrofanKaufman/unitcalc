@@ -1,0 +1,51 @@
+# \Dockerfile.server
+# Dockerfile для серверной части приложения
+
+FROM node:18-alpine AS builder
+
+# Установка зависимостей
+WORKDIR /app
+COPY server/package*.json ./
+RUN npm ci --only=production && npm cache clean --force
+
+# Создание пользователя для безопасности
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+# Копирование исходного кода
+COPY server/ ./
+
+# Сборка TypeScript
+RUN npm run build
+
+# Финальный образ
+FROM node:18-alpine AS runner
+
+WORKDIR /app
+
+# Копирование зависимостей и собранного приложения
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package.json ./package.json
+
+# Создание пользователя для безопасности
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+# Создание директории для логов
+RUN mkdir -p /app/logs && chown -R nextjs:nodejs /app
+USER nextjs
+
+# Порт приложения
+EXPOSE 3001
+
+# Переменные окружения по умолчанию
+ENV NODE_ENV=production
+ENV PORT=3001
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "const http=require('http');const req=http.request({hostname:'localhost',port:process.env.PORT,path:'/health'},res=>{process.exit(res.statusCode===200?0:1)});req.on('error',()=>process.exit(1));req.end();"
+
+# Запуск приложения
+CMD ["node", "dist/index.js"]

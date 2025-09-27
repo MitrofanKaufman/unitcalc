@@ -1,0 +1,33 @@
+{
+  "name": "wb-calc-desktop",
+  "version": "1.0.0",
+  "description": "Electron desktop application for WB Marketplace Calculator",
+  "main": "dist/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "dist": "npm run build"
+  },
+  "dependencies": {
+    "electron": "^25.0.0"
+  },
+  "devDependencies": {
+    "electron-builder": "^24.0.0"
+  },
+  "build": {
+    "appId": "com.wbcalc.desktop",
+    "productName": "WB Calculator",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}

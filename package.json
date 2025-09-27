@@ -1,0 +1,60 @@
+{
+  "name": "wb-calc",
+  "version": "1.0.0",
+  "description": "Unit Calculator Application",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "services/*",
+    "client"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "debug:client": "cd client && npm run dev -- --debug",
+    "debug:server": "cd server && npm run dev:debug",
+    "debug": "concurrently -n client,server \"npm run debug:client\" \"npm run debug:server\"",
+    "start": "node server/dist/index.js",
+    "test": "npm test --workspaces --if-present",
+    "lint": "eslint . --ext .ts,.tsx",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "unit",
+    "calculator",
+    "conversion"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.55.1",
+    "@types/node": "^24.5.2",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^8.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^8.0.0",
+    "eslint-plugin-react": "^7.0.0",
+    "eslint-plugin-react-hooks": "^4.0.0",
+    "husky": "^8.0.0",
+    "prettier": "^2.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.2",
+    "@mui/material": "^7.3.2",
+    "@reduxjs/toolkit": "^2.9.0",
+    "@types/react-redux": "^7.1.34",
+    "express-rate-limit": "^8.1.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.9.3"
+  }
+}

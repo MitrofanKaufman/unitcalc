@@ -1,0 +1,35 @@
+---
+
+# ⚙️ Tailwind + tokens
+
+`tailwind.config.js`: ```js
+const tokens = require("./tokens.json");
+
+module.exports = {
+content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+theme: {
+extend: {
+colors: {
+primary: tokens.color.primary.value,
+background: tokens.color.background.value,
+foreground: tokens.color.foreground.value,
+success: tokens.color.success.value,
+warning: tokens.color.warning.value,
+error: tokens.color.error.value
+},
+borderRadius: {
+sm: tokens.radius.sm.value,
+md: tokens.radius.md.value,
+lg: tokens.radius.lg.value
+},
+spacing: {
+xs: tokens.spacing.xs.value,
+sm: tokens.spacing.sm.value,
+md: tokens.spacing.md.value,
+lg: tokens.spacing.lg.value,
+xl: tokens.spacing.xl.value
+}
+}
+},
+plugins: []
+};

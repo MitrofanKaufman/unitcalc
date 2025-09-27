@@ -1,0 +1,109 @@
+# \docker-compose.yml
+# Docker Compose конфигурация для Unit Calculator
+
+version: '3.8'
+
+services:
+  # Серверная часть
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: wb-calc-server
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=/app/data/units.db
+      - JWT_SECRET=${JWT_SECRET:-your-jwt-secret-key}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-your-refresh-secret-key}
+      - CLIENT_URL=${CLIENT_URL:-http://localhost}
+    volumes:
+      - server_data:/app/data
+      - server_logs:/app/logs
+    ports:
+      - "3001:3001"
+    networks:
+      - wb-calc-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http=require('http');const req=http.request({hostname:'localhost',port:3001,path:'/health'},res=>{process.exit(res.statusCode===200?0:1)});req.on('error',()=>process.exit(1));req.end();"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Клиентская часть
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: wb-calc-client
+    restart: unless-stopped
+    environment:
+      - VITE_API_URL=${CLIENT_URL:-http://localhost}/api
+    ports:
+      - "80:80"
+    networks:
+      - wb-calc-network
+    depends_on:
+      server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # База данных (SQLite файл)
+  # database:
+  #   image: alpine:latest
+  #   container_name: wb-calc-db
+  #   volumes:
+  #     - server_data:/data
+  #   command: ["sh", "-c", "while true; do sleep 30; done"]
+  #   networks:
+  #     - wb-calc-network
+
+  # Redis для кеширования (опционально)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: wb-calc-redis
+  #   restart: unless-stopped
+  #   command: redis-server --appendonly yes
+  #   volumes:
+  #     - redis_data:/data
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - wb-calc-network
+
+  # Nginx reverse proxy (опционально, для продакшена)
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: wb-calc-nginx
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+  #     - ./ssl:/etc/nginx/ssl:ro
+  #   depends_on:
+  #     - client
+  #     - server
+  #   networks:
+  #     - wb-calc-network
+
+# Сеть для взаимодействия контейнеров
+networks:
+  wb-calc-network:
+    driver: bridge
+
+# Volumes для персистентного хранения данных
+volumes:
+  server_data:
+    driver: local
+  server_logs:
+    driver: local
+  # redis_data:
+  #   driver: local
