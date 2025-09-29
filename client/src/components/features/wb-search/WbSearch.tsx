@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -87,7 +87,13 @@ export function WbSearch() {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (query.trim()) {
-        fetchSuggestions(query);
+        // Mock suggestions for development
+        const mockSuggestions: SearchSuggestion[] = [
+          { id: 1, name: query, brand: 'товар' },
+          { id: 2, name: `${query} бренд`, brand: 'бренд' },
+          { id: 3, name: `${query} каталог`, brand: 'каталог' },
+        ];
+        setSuggestions(mockSuggestions);
       } else {
         setSuggestions([]);
       }
@@ -266,9 +272,10 @@ export function WbSearch() {
                   
                   {/* Search suggestions dropdown */}
                   {showSuggestions && suggestions.length > 0 && (
-                    <div 
+                    <div
                       id="search-suggestions"
                       role="listbox"
+                      aria-label="Предложения поиска"
                       className={`absolute z-20 mt-1 w-full bg-white dark:bg-gray-800 shadow-lg rounded-md border border-gray-200 dark:border-gray-700 max-h-96 overflow-auto ${styles.suggestionsScrollbar}`}
                     >
                       <div className="divide-y divide-gray-100 dark:divide-gray-700">
@@ -276,7 +283,7 @@ export function WbSearch() {
                           <div
                             key={`${suggestion.id}-${index}`}
                             role="option"
-                            aria-selected={selectedSuggestion === index ? 'true' : 'false'}
+                            aria-selected={selectedSuggestion === index}
                             className={cn(
                               'px-4 py-2.5 cursor-pointer flex items-center justify-between',
                               'hover:bg-gray-50 dark:hover:bg-gray-700/50',

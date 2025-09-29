@@ -1,31 +1,31 @@
 import React, { useState } from 'react';
-import { 
-  AppBar, 
-  Box, 
-  Drawer, 
-  IconButton, 
-  List, 
-  ListItemButton, 
+import {
+  AppBar,
+  Box,
+  Drawer,
+  IconButton,
+  List,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
-  Toolbar, 
-  Typography,
+  Toolbar,
   useMediaQuery,
   useTheme,
-  styled,
   Collapse
 } from '@mui/material';
-import { 
-  Menu as MenuIcon, 
-  Brightness4 as Brightness4Icon, 
+import {
+  Menu as MenuIcon,
+  Brightness4 as Brightness4Icon,
   Brightness7 as Brightness7Icon,
   ExpandLess,
   ExpandMore
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { getMenuItems } from '../../config/menuConfig';
+import { AnimatedHeading } from './MainLayout';
 
 // Types and interfaces
-export type UserRole = 'user' | 'admin';
+export type UserRole = 'guest' | 'user' | 'manager' | 'admin';
 
 export interface UserData {
   name: string;
@@ -37,7 +37,7 @@ export interface MenuItemBase {
   id: string;
   text: string | React.ReactNode;
   path: string;
-  icon?: string | React.ReactNode;
+  icon?: React.ReactNode;
   access?: 'public' | 'authenticated' | 'admin';
   authRequired?: boolean;
   hideWhenAuth?: boolean;
@@ -52,15 +52,8 @@ export interface MenuItemWithChildren extends MenuItemBase {
 
 export type MenuItem = MenuItemBase | MenuItemWithChildren;
 
-// Styled components
-const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
-  '&:hover': {
-    backgroundColor: theme.palette.action.hover,
-  },
-}));
-
 interface ResponsiveHeaderProps {
-  menuItems: MenuItem[];
+  menuItems?: MenuItem[];
   isAuthenticated: boolean;
   user?: UserData | null;
   onLogout: () => void;
@@ -69,26 +62,46 @@ interface ResponsiveHeaderProps {
 }
 
 const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
-  menuItems,
-  isAuthenticated,
-  user,
-  onLogout,
-  darkMode,
-  onThemeChange,
+  menuItems = [],
+  isAuthenticated = false,
+  user = null,
+  onLogout = () => {},
+  darkMode = false,
+  onThemeChange = () => {},
 }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
   const theme = useTheme();
-  useMediaQuery(theme.breakpoints.down('md')); // Track mobile state but don't use it yet
   const navigate = useNavigate();
-  
-  // Filter menu items based on authentication status
-  const filteredMenuItems = menuItems.filter(item => {
+  const location = useLocation();
+
+  // Track mobile state for responsive behavior
+  useMediaQuery(theme.breakpoints.down('md'));
+
+  // Get filtered menu items based on user role
+  const currentUserRole = isAuthenticated ? (user?.role || 'user') : 'guest';
+  const itemsToRender = menuItems.length > 0 ? menuItems : getMenuItems(currentUserRole);
+
+  const filteredMenuItems = itemsToRender.filter((item: MenuItem) => {
     if (item.hideWhenAuth && isAuthenticated) return false;
-    if (item.authRequired && !isAuthenticated) return false;
-    if (item.isLogout && !isAuthenticated) return false;
-    return true;
+    if (item.access === 'public') return true;
+    if (item.access === 'authenticated' && isAuthenticated) return true;
+    if (item.access === 'admin' && currentUserRole === 'admin') return true;
+    return false;
   });
+
+  // Helper function to check if a menu item is active
+  const isItemActive = (item: MenuItem): boolean => {
+    if (item.path && location.pathname === item.path) return true;
+    if ('children' in item && item.children) {
+      return item.children.some(child => child.path && location.pathname === child.path);
+    }
+    return false;
+  };
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
   const handleClick = (itemId: string) => {
     setExpandedItems(prev => ({
@@ -100,15 +113,20 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
   const handleMenuItemClick = (item: MenuItem, event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    
+
     if ('children' in item && item.children) {
       handleClick(item.id);
     } else if (item.path) {
+      // Collapse all expanded items when navigating to a new section
+      setExpandedItems({});
       navigate(item.path);
       setMobileOpen(false);
     } else if (item.isLogout) {
+      // Collapse all expanded items on logout
+      setExpandedItems({});
       onLogout();
       setMobileOpen(false);
+      navigate('/');
     }
   };
 
@@ -124,27 +142,62 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
 
       return (
         <React.Fragment key={item.id}>
-          <ListItemButton 
+          <ListItemButton
             onClick={(e) => handleMenuItemClick(item, e)}
             sx={{
               minHeight: 48,
               justifyContent: 'initial',
-              px: 2.5,
+              px: 3, // Blue space (increased from 2.5)
+              '&:not(:last-child)': {
+                mb: 1.5, // Green space between items (3/2 = 1.5)
+              },
+              backgroundColor: isItemActive(item) ? theme.palette.primary.main : 'transparent',
+              color: isItemActive(item) ? theme.palette.primary.contrastText : 'inherit',
+              '&:hover': {
+                backgroundColor: isItemActive(item) ? theme.palette.primary.dark : theme.palette.action.hover,
+              },
+              '&.Mui-selected': {
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+              },
             }}
             component="div"
           >
             {iconElement && (
-              <ListItemIcon sx={{ minWidth: 0, mr: 2, justifyContent: 'center' }}>
+              <ListItemIcon sx={{ 
+                mr: 3, // Red space (equal to blue space)
+                justifyContent: 'center',
+                color: 'inherit',
+              }}>
                 {iconElement}
               </ListItemIcon>
             )}
-            <ListItemText primary={itemText} />
+            <ListItemText 
+              primary={itemText} 
+              primaryTypographyProps={{
+                sx: {
+                  fontSize: '0.9rem',
+                  fontWeight: 500,
+                }
+              }}
+            />
             {expandIcon}
           </ListItemButton>
           
           {hasChildren && (
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
+              <List component="div" disablePadding sx={{
+                pl: 2, // Indent for submenu
+                '& .MuiListItemButton-root': {
+                  pl: 5, // Adjust submenu item padding
+                  '& .MuiListItemIcon-root': {
+                    minWidth: 36, // Reduce icon size in submenu
+                  },
+                  '& .MuiListItemText-primary': {
+                    fontSize: '0.85rem', // Slightly smaller text in submenu
+                  }
+                }
+              }}>
                 {renderMenuItems(('children' in item ? item.children : []) || [])}
               </List>
             </Collapse>
@@ -162,14 +215,14 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
             color="inherit"
             aria-label="open drawer"
             edge="start"
-            onClick={() => setMobileOpen(!mobileOpen)}
+            onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { md: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            WB Calculator
-          </Typography>
+          <AnimatedHeading variant="h6" noWrap className="fade-out" sx={{ flexGrow: 1 }}>
+            Marketplace Calculator
+          </AnimatedHeading>
           <IconButton onClick={onThemeChange} color="inherit">
             {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
@@ -180,9 +233,9 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
       <Drawer
         variant="temporary"
         open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
+        onClose={handleDrawerToggle}
         ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
+          keepMounted: true, // Better open performance on mobile
         }}
         sx={{
           display: { xs: 'block', md: 'none' },

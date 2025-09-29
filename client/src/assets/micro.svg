@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+        width="2048"
+        height="1152"
+        viewBox="0 0 2048 1152"
+        xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-label="Animated technical line background with sharp angles and small nodes"
+>
+    <defs>
+        <!-- Colors and styling variables -->
+        <style><![CDATA[
+      :root {
+        --bg: #000000;          /* backdrop */
+        --line: #ffffff;        /* line color */
+        --node: #ffffff;        /* node color */
+        --stroke: 2;            /* line thickness */
+        --fade: 0.85;           /* line opacity */
+        --dur: 5000ms;   /* общая длительность */
+        --gap: 1ms;      /* убираем дополнительные задержки */
+      }
+
+      .bg { fill: var(--bg); }
+
+      .draw {
+        fill: none;
+        stroke: var(--line);
+        stroke-width: var(--stroke);
+        stroke-linecap: square;
+        stroke-linejoin: miter;
+        opacity: var(--fade);
+        /* dash values set dynamically by JS to match path length */
+        animation: draw var(--dur) ease-out forwards;
+        animation-delay: var(--delay, 0ms);
+      }
+
+      /* Small nodes (circles and squares) fade in after lines complete */
+      .node {
+        fill: var(--node);
+        opacity: 0;
+        animation: nodeIn 50ms ease-out forwards;
+        animation-delay: var(--nodeDelay, 0ms);
+      }
+
+      @keyframes draw {
+        from { stroke-dashoffset: var(--dash); }
+        to   { stroke-dashoffset: 0; }
+      }
+
+      @keyframes nodeIn {
+        from { opacity: 0; transform: scale(0.6); }
+        to   { opacity: 1; transform: scale(1); }
+      }
+
+      /* Respect reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .draw, .node {
+          animation: none !important;
+          opacity: 1 !important;
+        }
+      }
+    ]]></style>
+    </defs>
+
+    <!-- Background -->
+    <rect class="bg" x="0" y="0" width="2048" height="1152"/>
+
+    <!-- Edge rails (left, right, top, bottom) -->
+    <g id="rails" opacity="0.9">
+        <path class="draw" d="M64 160 H480 V200 H300 V240 H420" style="--delay: 0ms"/>
+        <path class="draw" d="M64 280 H360 V320 H220 V360 H380" style="--delay: 150ms"/>
+        <path class="draw" d="M64 880 H520 V920 H420 V960 H600" style="--delay: 300ms"/>
+
+        <path class="draw" d="M1984 200 H1568 V240 H1748 V280 H1620" style="--delay: 0ms"/>
+        <path class="draw" d="M1984 320 H1688 V360 H1828 V400 H1648" style="--delay: 150ms"/>
+        <path class="draw" d="M1984 880 H1500 V920 H1680 V960 H1520" style="--delay: 300ms"/>
+
+        <path class="draw" d="M240 64 V320 H280 V220 H320" style="--delay: 0ms"/>
+        <path class="draw" d="M1808 64 V300 H1768 V220 H1688" style="--delay: 200ms"/>
+
+        <path class="draw" d="M240 1088 V860 H280 V940 H360" style="--delay: 350ms"/>
+        <path class="draw" d="M1808 1088 V840 H1768 V920 H1688" style="--delay: 500ms"/>
+    </g>
+
+    <!-- Central grid with breaks and sharp turns -->
+    <g id="center" opacity="0.95">
+        <!-- Horizontal fragments -->
+        <path class="draw" d="M620 520 H880" style="--delay: 600ms"/>
+        <path class="draw" d="M940 520 H1120" style="--delay: 750ms"/>
+        <path class="draw" d="M1180 520 H1420" style="--delay: 900ms"/>
+
+        <!-- Upper band with stepped corners -->
+        <path class="draw" d="M700 420 H860 V460 H740 V500 H900" style="--delay: 700ms"/>
+        <path class="draw" d="M1040 440 H1200 V480 H1100 V520 H1260" style="--delay: 850ms"/>
+
+        <!-- Lower band with staggered breaks -->
+        <path class="draw" d="M680 600 H840 V640 H760 V680 H920" style="--delay: 950ms"/>
+        <path class="draw" d="M1020 620 H1180 V660 H1100 V700 H1260" style="--delay: 1100ms"/>
+
+        <!-- Vertical connectors with 90° bends -->
+        <path class="draw" d="M900 400 V460 H940 V500" style="--delay: 800ms"/>
+        <path class="draw" d="M1260 580 V540 H1220 V500" style="--delay: 1000ms"/>
+        <path class="draw" d="M980 700 V640 H1020 V600" style="--delay: 1150ms"/>
+
+        <!-- Sparse micro-fragments to keep air in the center -->
+        <path class="draw" d="M880 560 H930" style="--delay: 900ms"/>
+        <path class="draw" d="M1140 560 H1180" style="--delay: 1020ms"/>
+        <path class="draw" d="M1000 480 H1040" style="--delay: 840ms"/>
+        <path class="draw" d="M1060 640 H1100" style="--delay: 1120ms"/>
+    </g>
+
+    <!-- Small nodes: circles and squares (no arcs in lines, nodes appear after trace) -->
+    <g id="nodes" opacity="0.95">
+        <!-- Circles -->
+        <circle class="node" cx="480" cy="200" r="5" style="--nodeDelay: 900ms"/>
+        <circle class="node" cx="1568" cy="240" r="5" style="--nodeDelay: 900ms"/>
+        <circle class="node" cx="880" cy="520" r="4" style="--nodeDelay: 1200ms"/>
+        <circle class="node" cx="1180" cy="520" r="4" style="--nodeDelay: 1200ms"/>
+        <circle class="node" cx="1020" cy="600" r="4" style="--nodeDelay: 1300ms"/>
+        <circle class="node" cx="1100" cy="700" r="4" style="--nodeDelay: 1400ms"/>
+
+        <!-- Squares -->
+        <rect class="node" x="736" y="456" width="8" height="8" style="--nodeDelay: 1050ms"/>
+        <rect class="node" x="1096" y="476" width="8" height="8" style="--nodeDelay: 1150ms"/>
+        <rect class="node" x="756" y="636" width="8" height="8" style="--nodeDelay: 1250ms"/>
+        <rect class="node" x="1116" y="656" width="8" height="8" style="--nodeDelay: 1350ms"/>
+    </g>
+
+    <!-- Initialize stroke-dash animation lengths and stagger -->
+    <script><![CDATA[
+    (function() {
+      const segments = Array.from(document.querySelectorAll('.draw'));
+      segments.forEach((el) => {
+        const len = el.getTotalLength();
+        el.style.strokeDasharray = `${len}`;
+        el.style.setProperty('--dash', `${len}`);
+        el.style.strokeDashoffset = len;
+      });
+      // Optional: add extra global stagger beyond inline --delay
+      // segments.forEach((el, i) => el.style.animationDelay =
+      //   `calc(var(--delay, 0ms) + ${i * parseInt(getComputedStyle(document.documentElement).getPropertyValue('--gap'))}ms)`);
+    })();
+  ]]></script>
+</svg>

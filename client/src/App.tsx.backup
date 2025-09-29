@@ -1,0 +1,100 @@
+import { useState } from 'react';
+import { UnitConverter } from '@/components/features/unit-converter/UnitConverter';
+import { WbSearch } from '@/components/features/wb-search/WbSearch';
+import CalculateIcon from '@mui/icons-material/Calculate';
+import SearchIcon from '@mui/icons-material/Search';
+import MainLayout from '@/components/layout/MainLayout';
+import { Box, Typography, Button } from '@mui/material';
+import './App.css';
+
+/**
+ * Тип для активной вкладки приложения
+ * Определяет возможные значения: 'calculator' или 'search'
+ */
+type Tab = 'calculator' | 'search';
+
+/**
+ * Главный компонент приложения WB Tools
+ *
+ * Отвечает за:
+ * - Управление состоянием активной вкладки
+ * - Отображение заголовка и описания приложения
+ * - Переключение между калькулятором и поиском товаров
+ * - Обертывание контента в MainLayout для единого стиля
+ */
+function App() {
+  // Состояние для отслеживания активной вкладки
+  const [activeTab, setActiveTab] = useState<Tab>('calculator');
+
+  return (
+    <MainLayout>
+      {/* Основной контейнер контента с максимальной шириной и отступами */}
+      <Box sx={{
+        maxWidth: 1200,
+        mx: 'auto',
+        py: 4,
+        px: { xs: 2, sm: 3, md: 4 }
+      }}>
+
+        {/* Заголовок и описание приложения */}
+        <Box sx={{ textAlign: 'center', mb: 4 }}>
+          <Typography variant="h3" component="h1" gutterBottom>
+            WB Tools
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary" paragraph>
+            Набор инструментов для работы с Wildberries
+          </Typography>
+        </Box>
+
+        {/* Блок навигации между вкладками */}
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 2,
+          mb: 4
+        }}>
+          <Button
+            onClick={() => setActiveTab('calculator')}
+            variant={activeTab === 'calculator' ? 'contained' : 'outlined'}
+            startIcon={<CalculateIcon />}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              borderRadius: '8px',
+              transition: 'all 0.3s',
+            }}
+          >
+            Калькулятор
+          </Button>
+          <Button
+            onClick={() => setActiveTab('search')}
+            variant={activeTab === 'search' ? 'contained' : 'outlined'}
+            startIcon={<SearchIcon />}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              borderRadius: '8px',
+              transition: 'all 0.3s',
+            }}
+          >
+            Поиск товаров
+          </Button>
+        </Box>
+
+        {/* Контейнер для активного компонента (калькулятор или поиск) */}
+        <Box sx={{
+          bgcolor: 'background.paper',
+          borderRadius: 2,
+          boxShadow: 1,
+          p: 3,
+          mt: 2
+        }}>
+          {/* Условный рендеринг: показываем калькулятор или поиск в зависимости от активной вкладки */}
+          {activeTab === 'calculator' ? <UnitConverter /> : <WbSearch />}
+        </Box>
+      </Box>
+    </MainLayout>
+  );
+}
+
+export default App;

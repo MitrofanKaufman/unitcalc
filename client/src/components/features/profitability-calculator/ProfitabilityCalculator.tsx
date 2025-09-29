@@ -1,137 +1,155 @@
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import React, { useState } from 'react';
+import { Container } from '@mui/material';
+import { PageHeader } from '@/components/common/PageHeader';
+import { SearchBar } from '@/components/common/SearchBar';
+import { Product, MARKETPLACES, PRODUCT_CATEGORIES } from '@/types';
+import { CalculatorForm } from './components/CalculatorForm';
 
-interface CalculationResult {
-  revenue: number;
-  commission: number;
-  logistics: number;
-  profit: number;
-  profitability: number;
-}
-
+/**
+ * Главная страница калькулятора доходности маркетплейсов
+ * Использует стандартизированную структуру страниц
+ */
 export function ProfitabilityCalculator() {
-  const [price, setPrice] = useState<number | ''>('');
-  const [cost, setCost] = useState<number | ''>('');
-  const [commissionRate, setCommissionRate] = useState<number>(10); // Default 10% commission
-  const [logisticsCost, setLogisticsCost] = useState<number | ''>('');
-  const [result, setResult] = useState<CalculationResult | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showCalculator, setShowCalculator] = useState(false);
 
-  const calculateProfitability = () => {
-    if (price === '' || cost === '' || logisticsCost === '') {
-      setResult(null);
-      return;
+  // Моковые данные товаров для демонстрации
+  const mockProducts: Product[] = [
+    {
+      id: 'wb_1',
+      name: 'Смартфон Samsung Galaxy A54 256GB',
+      price: 35000,
+      category: 'electronics',
+      marketplace: 'wb',
+      characteristics: {
+        weight: 202,
+        dimensions: { length: 158, width: 76, height: 8 },
+        brand: 'Samsung',
+        rating: 4.5,
+        reviews: 1250
+      }
+    },
+    {
+      id: 'ozon_1',
+      name: 'Ноутбук Lenovo IdeaPad 3 15.6"',
+      price: 55000,
+      category: 'electronics',
+      marketplace: 'ozon',
+      characteristics: {
+        weight: 2500,
+        dimensions: { length: 359, width: 236, height: 20 },
+        brand: 'Lenovo',
+        rating: 4.2,
+        reviews: 890
+      }
     }
+  ];
 
-    const priceValue = Number(price);
-    const costValue = Number(cost);
-    const logisticsValue = Number(logisticsCost);
-    
-    const commission = (priceValue * commissionRate) / 100;
-    const revenue = priceValue - commission - logisticsValue;
-    const profit = revenue - costValue;
-    const profitability = (profit / priceValue) * 100;
-
-    setResult({
-      revenue: Number(revenue.toFixed(2)),
-      commission: Number(commission.toFixed(2)),
-      logistics: logisticsValue,
-      profit: Number(profit.toFixed(2)),
-      profitability: Number(profitability.toFixed(2))
-    });
+  const handleSearch = (query: string, filters: Record<string, string | string[]>) => {
+    console.log('Поиск:', query, 'Фильтры:', filters);
+    // Здесь будет логика поиска товаров
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle>Калькулятор доходности</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="price">Цена продажи (₽)</Label>
-              <Input
-                id="price"
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(e.target.value ? Number(e.target.value) : '')}
-                placeholder="0.00"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="cost">Себестоимость (₽)</Label>
-              <Input
-                id="cost"
-                type="number"
-                value={cost}
-                onChange={(e) => setCost(e.target.value ? Number(e.target.value) : '')}
-                placeholder="0.00"
-              />
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="commission">Комиссия WB (%)</Label>
-              <Input
-                id="commission"
-                type="number"
-                value={commissionRate}
-                onChange={(e) => setCommissionRate(Number(e.target.value))}
-                min="0"
-                max="100"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="logistics">Логистика (₽)</Label>
-              <Input
-                id="logistics"
-                type="number"
-                value={logisticsCost}
-                onChange={(e) => setLogisticsCost(e.target.value ? Number(e.target.value) : '')}
-                placeholder="0.00"
-              />
-            </div>
-          </div>
+    <Container maxWidth="lg">
+      {/* Стандартизированный заголовок страницы */}
+      <PageHeader
+        title="Marketplace Calculator"
+        subtitle="Расчет доходности товаров для маркетплейсов России"
+        breadcrumbs={[
+          { label: 'Главная', href: '/' },
+          { label: 'Калькулятор доходности' }
+        ]}
+        actions={[
+          {
+            label: 'Очистить кеш',
+            onClick: () => {
+              console.log('Очистка кеша');
+            },
+            variant: 'secondary'
+          }
+        ]}
+      />
 
-          <Button 
-            className="w-full mt-4"
-            onClick={calculateProfitability}
-            disabled={!price || !cost || !logisticsCost}
-          >
-            Рассчитать
-          </Button>
+      {/* Стандартизированная поисковая панель */}
+      <SearchBar
+        placeholder="Поиск товаров по названию или бренду..."
+        onSearch={handleSearch}
+        filters={[
+          {
+            key: 'marketplace',
+            label: 'Маркетплейс',
+            options: MARKETPLACES.map(m => ({ value: m.id, label: `${m.icon} ${m.name}` }))
+          },
+          {
+            key: 'category',
+            label: 'Категория',
+            options: PRODUCT_CATEGORIES.map(c => ({ value: c.id, label: c.name }))
+          }
+        ]}
+        showAdvanced={true}
+      />
 
-          {result && (
-            <div className="mt-6 space-y-2 p-4 bg-gray-50 rounded-lg">
-              <h3 className="font-medium text-lg">Результаты расчета</h3>
-              <div className="grid grid-cols-2 gap-2">
-                <div>Выручка:</div>
-                <div className="text-right font-medium">{result.revenue} ₽</div>
-                
-                <div>Комиссия WB:</div>
-                <div className="text-right text-red-600">-{result.commission} ₽</div>
-                
-                <div>Логистика:</div>
-                <div className="text-right text-red-600">-{result.logistics} ₽</div>
-                
-                <div className="border-t border-gray-200 pt-2 font-medium">Прибыль:</div>
-                <div className="border-t border-gray-200 pt-2 text-right font-medium">
-                  {result.profit} ₽
+      {/* Демонстрационные товары для тестирования */}
+      <div style={{ marginTop: '2rem' }}>
+        <h3 style={{ marginBottom: '1rem' }}>Демонстрационные товары для тестирования:</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+          {mockProducts.map(product => (
+            <div
+              key={product.id}
+              style={{
+                padding: '16px',
+                border: '1px solid #e0e0e0',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                backgroundColor: '#fafafa'
+              }}
+              onClick={() => {
+                setSelectedProduct(product);
+                setShowCalculator(true);
+              }}
+            >
+              <h4 style={{ margin: '0 0 8px 0' }}>{product.name}</h4>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span>Цена: {product.price.toLocaleString()} ₽</span>
+                <span>{MARKETPLACES.find(m => m.id === product.marketplace)?.name}</span>
+              </div>
+              {product.characteristics?.brand && (
+                <div style={{ color: '#666', fontSize: '0.9rem' }}>
+                  Бренд: {product.characteristics.brand}
                 </div>
-                
-                <div className="font-medium">Рентабельность:</div>
-                <div className={`text-right font-medium ${result.profitability >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {result.profitability}%
-                </div>
+              )}
+              <div style={{ marginTop: '8px' }}>
+                <button
+                  style={{
+                    padding: '8px 16px',
+                    backgroundColor: '#1976d2',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Рассчитать доходность
+                </button>
               </div>
             </div>
-          )}
+          ))}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* Форма калькулятора для выбранного товара */}
+      {selectedProduct && showCalculator && (
+        <CalculatorForm
+          product={selectedProduct}
+          onClose={() => {
+            setSelectedProduct(null);
+            setShowCalculator(false);
+          }}
+        />
+      )}
+    </Container>
   );
 }
+
+export default ProfitabilityCalculator;

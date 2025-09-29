@@ -1,55 +1,52 @@
-import React, { useState } from 'react';
-import { Box, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
-import ResponsiveHeader from './ResponsiveHeader';
-import type { MenuItem, UserData } from './ResponsiveHeader';
-import { useNavigate } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { Box, CssBaseline, ThemeProvider, createTheme, Typography } from '@mui/material';
+import { useNavigate, Outlet } from 'react-router-dom';
+import ResponsiveHeader, { type UserData, type MenuItem } from './ResponsiveHeader';
+import Footer from './Footer';
+import { getMenuItems } from '../../config/menuConfig';
 
-interface MainLayoutProps {
-  children: React.ReactNode;
-}
+// AnimatedHeading component
+export const AnimatedHeading: React.FC<React.ComponentProps<typeof Typography>> = (props) => {
+  return (
+    <Typography
+      {...props}
+      sx={{
+        ...props.sx,
+        background: 'linear-gradient(45deg, #1976d2 30%, #21CBF3 90%)',
+        backgroundClip: 'text',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        animation: 'fadeIn 1s ease-in-out',
+        '@keyframes fadeIn': {
+          '0%': {
+            opacity: 0,
+            transform: 'translateY(-10px)',
+          },
+          '100%': {
+            opacity: 1,
+            transform: 'translateY(0)',
+          },
+        },
+      }}
+    />
+  );
+};
 
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+const MainLayout: React.FC = () => {
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
-  
-  // Mock authentication state - replace with your actual auth logic
-  const isAuthenticated = false;
-  const user = null;
 
-  // Define menu items
-  const menuItems: MenuItem[] = [
-    {
-      id: 'home',
-      text: 'Главная',
-      path: '/',
-      access: 'public',
-    },
-    {
-      id: 'calculator',
-      text: 'Калькулятор',
-      path: '/calculator',
-      access: 'public',
-    },
-    {
-      id: 'profile',
-      text: 'Профиль',
-      path: '/profile',
-      access: 'authenticated',
-    },
-    {
-      id: 'admin',
-      text: 'Админ панель',
-      path: '/admin',
-      access: 'admin',
-    },
-    {
-      id: 'logout',
-      text: 'Выйти',
-      path: '/logout',
-      access: 'authenticated',
-      isLogout: true,
-    },
-  ];
+  // Mock authentication state - replace with your actual auth logic
+  const isAuthenticated = true; // Set to true to see the menu items
+  const user: UserData | null = isAuthenticated ? {
+    name: 'Test User',
+    avatar: '',
+    role: 'admin' // Set to 'admin' to see all menu items including admin ones
+  } : null;
+
+  // Get menu items based on user role
+  const currentUserRole = isAuthenticated ? (user?.role || 'user') : 'guest';
+  const menuItemsList: MenuItem[] = getMenuItems(currentUserRole);
 
   // Handle logout
   const handleLogout = () => {
@@ -58,53 +55,26 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     navigate('/login');
   };
 
-  // Toggle theme
   const toggleTheme = () => {
     setDarkMode(!darkMode);
   };
 
-  // Create theme based on dark mode
-  const theme = createTheme({
-    palette: {
-      mode: darkMode ? 'dark' : 'light',
-      primary: {
-        main: '#1976d2',
-      },
-      secondary: {
-        main: '#dc004e',
-      },
-      background: {
-        default: darkMode ? '#121212' : '#f5f5f5',
-        paper: darkMode ? '#1e1e1e' : '#ffffff',
-      },
-    },
-    typography: {
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    },
-    components: {
-      MuiCssBaseline: {
-        styleOverrides: {
-          body: {
-            margin: 0,
-            padding: 0,
-            minHeight: '100vh',
-          },
-          '#root': {
-            minHeight: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-          },
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: darkMode ? 'dark' : 'light',
         },
-      },
-    },
-  });
+      }),
+    [darkMode]
+  );
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+      <Box sx={{ display: 'flex', minHeight: '100vh', flexDirection: 'column' }}>
         <ResponsiveHeader
-          menuItems={menuItems}
+          menuItems={menuItemsList}
           isAuthenticated={isAuthenticated}
           user={user}
           onLogout={handleLogout}
@@ -115,14 +85,23 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           component="main"
           sx={{
             flexGrow: 1,
+            width: '100%',
             p: 3,
-            marginTop: '64px', // Height of the AppBar
-            width: { md: `calc(100% - 240px)` },
-            ml: { md: '240px' },
+            pt: '80px',
+            bgcolor: 'background.default',
+            '& > *': {
+              maxWidth: '100%',
+              width: '100%',
+              mx: 'auto',
+              px: { xs: 2, md: 4 },
+            }
           }}
         >
-          {children}
+          <div className="max-w-[1600px] w-full mx-auto">
+            <Outlet />
+          </div>
         </Box>
+        <Footer />
       </Box>
     </ThemeProvider>
   );

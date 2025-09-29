@@ -83,7 +83,6 @@ export function UnitConverter() {
   const [result, setResult] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentUnits, setCurrentUnits] = useState<Unit[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     const search = async () => {
@@ -92,15 +91,12 @@ export function UnitConverter() {
         return;
       }
       
-      setIsSearching(true);
       try {
         const results = await searchUnits(searchQuery, category);
         setCurrentUnits(results);
       } catch (error) {
         console.error('Search failed:', error);
         setCurrentUnits(units[category]);
-      } finally {
-        setIsSearching(false);
       }
     };
 
