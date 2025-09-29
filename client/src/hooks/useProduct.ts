@@ -1,16 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Product, AsyncState } from '@/types';
-import { ProductStorageService } from '@/services/productStorageService';
+import { Product, AsyncState, SearchProductsDto } from '@/types';
+import { apiClient } from '@/services/apiClient';
 
 /**
- * Кастомный хук для работы с локальным хранилищем товаров
- * Реализует алгоритм: локально → сервер → скраппинг
+ * Кастомный хук для работы с товарами через API
+ * Реализует взаимодействие с сервером через API клиент
  *
- * @param productId - ID товара для получения
+ * @param productId - ID товара для получения (опционально)
  * @returns Состояние загрузки товара и функции управления
  */
 export function useProduct(productId?: string) {
-  const [state, setState] = useState<AsyncState<Product>>({
+  const [productState, setProductState] = useState<AsyncState<Product>>({
     data: null,
     loading: false,
     error: null
@@ -24,26 +24,18 @@ export function useProduct(productId?: string) {
 
   // Получение товара по ID
   const fetchProduct = useCallback(async (id: string) => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
+    setProductState(prev => ({ ...prev, loading: true, error: null }));
 
     try {
-      const product = await ProductStorageService.getProduct(id);
+      const product = await apiClient.getProduct(id);
 
-      if (product) {
-        setState({
-          data: product,
-          loading: false,
-          error: null
-        });
-      } else {
-        setState({
-          data: null,
-          loading: false,
-          error: 'Товар не найден'
-        });
-      }
+      setProductState({
+        data: product,
+        loading: false,
+        error: null
+      });
     } catch (error) {
-      setState({
+      setProductState({
         data: null,
         loading: false,
         error: error instanceof Error ? error.message : 'Ошибка загрузки товара'
@@ -52,32 +44,39 @@ export function useProduct(productId?: string) {
   }, []);
 
   // Поиск товаров
-  const searchProducts = useCallback(async (
-    query: string,
-    marketplace?: string,
-    category?: string
-  ) => {
-    setSearchState(prev => ({ ...prev, loading: true, error: null }));
+  const searchProducts = useCallback(
+    async (query: string, marketplace?: string, category?: string) => {
+      setSearchState(prev => ({ ...prev, loading: true, error: null }));
 
-    try {
-      const products = await ProductStorageService.searchProducts(query, marketplace, category);
+      try {
+        const searchDto: SearchProductsDto = {
+          query,
+          marketplace,
+          category,
+          limit: 20,
+          offset: 0
+        };
 
-      setSearchState({
-        data: products,
-        loading: false,
-        error: null
-      });
+        const products = await apiClient.searchProducts(searchDto);
 
-      return products;
-    } catch (error) {
-      setSearchState({
-        data: [],
-        loading: false,
-        error: error instanceof Error ? error.message : 'Ошибка поиска товаров'
-      });
-      return [];
-    }
-  }, []);
+        setSearchState({
+          data: products,
+          loading: false,
+          error: null
+        });
+
+        return products;
+      } catch (error) {
+        setSearchState({
+          data: [],
+          loading: false,
+          error: error instanceof Error ? error.message : 'Ошибка поиска товаров'
+        });
+        return [];
+      }
+    },
+    []
+  );
 
   // Загрузка товара при изменении productId
   useEffect(() => {
@@ -86,50 +85,105 @@ export function useProduct(productId?: string) {
     }
   }, [productId, fetchProduct]);
 
-  // Очистка кеша при монтировании компонента
+  // Health check при монтировании
   useEffect(() => {
-    ProductStorageService.cleanupCache();
+    const checkHealth = async () => {
+      try {
+        await apiClient.healthCheck();
+        console.log('✅ API сервер доступен');
+      } catch (error) {
+        console.warn('⚠️ API сервер недоступен, используется моковый режим');
+      }
+    };
+
+    checkHealth();
   }, []);
 
   return {
     // Состояние товара
-    product: state.data,
-    productLoading: state.loading,
-    productError: state.error,
+    product: productState.data,
+    productLoading: productState.loading,
+    productError: productState.error,
     refetchProduct: () => productId && fetchProduct(productId),
 
     // Состояние поиска
     searchResults: searchState.data,
     searchLoading: searchState.loading,
     searchError: searchState.error,
-    searchProducts,
-
-    // Утилиты
-    cacheStats: ProductStorageService.getCacheStats(),
-    cleanupCache: ProductStorageService.cleanupCache
+    searchProducts
   };
 }
 
 /**
- * Хук для управления состоянием кеша товаров
+ * Хук для получения справочников (маркетплейсы, категории)
  */
-export function useProductCache() {
-  const [cacheStats, setCacheStats] = useState(() =>
-    ProductStorageService.getCacheStats()
-  );
+export function useReferences() {
+  const [marketplaces, setMarketplaces] = useState<AsyncState<any[]>>({
+    data: null,
+    loading: false,
+    error: null
+  });
 
-  const refreshStats = useCallback(() => {
-    setCacheStats(ProductStorageService.getCacheStats());
+  const [categories, setCategories] = useState<AsyncState<any[]>>({
+    data: null,
+    loading: false,
+    error: null
+  });
+
+  // Загрузка маркетплейсов
+  const fetchMarketplaces = useCallback(async () => {
+    setMarketplaces(prev => ({ ...prev, loading: true, error: null }));
+
+    try {
+      const data = await apiClient.getMarketplaces();
+      setMarketplaces({
+        data,
+        loading: false,
+        error: null
+      });
+    } catch (error) {
+      setMarketplaces({
+        data: null,
+        loading: false,
+        error: error instanceof Error ? error.message : 'Ошибка загрузки маркетплейсов'
+      });
+    }
   }, []);
 
-  const cleanupCache = useCallback(() => {
-    ProductStorageService.cleanupCache();
-    refreshStats();
-  }, [refreshStats]);
+  // Загрузка категорий
+  const fetchCategories = useCallback(async () => {
+    setCategories(prev => ({ ...prev, loading: true, error: null }));
+
+    try {
+      const data = await apiClient.getCategories();
+      setCategories({
+        data,
+        loading: false,
+        error: null
+      });
+    } catch (error) {
+      setCategories({
+        data: null,
+        loading: false,
+        error: error instanceof Error ? error.message : 'Ошибка загрузки категорий'
+      });
+    }
+  }, []);
+
+  // Загрузка всех справочников при монтировании
+  useEffect(() => {
+    fetchMarketplaces();
+    fetchCategories();
+  }, [fetchMarketplaces, fetchCategories]);
 
   return {
-    cacheStats,
-    refreshStats,
-    cleanupCache
+    marketplaces: marketplaces.data || [],
+    categories: categories.data || [],
+    referencesLoading: marketplaces.loading || categories.loading,
+    referencesError: marketplaces.error || categories.error,
+    refetchReferences: () => {
+      fetchMarketplaces();
+      fetchCategories();
+    }
   };
 }
