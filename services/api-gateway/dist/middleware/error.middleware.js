@@ -1,6 +1,6 @@
-import { logger } from '@wb-calc/logging';
+import { error as logError } from '@wb-calc/logging';
 export const errorHandler = (err, req, res, next) => {
-    logger.error('API Error', {
+    logError('API Error', {
         error: err.message,
         stack: err.stack,
         url: req.url,

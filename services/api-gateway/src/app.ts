@@ -28,25 +28,69 @@ const wss = new WebSocketServer({ server, path: '/ws' })
 
 // WebSocket connection handler
 wss.on('connection', (ws) => {
-  log('WebSocket client connected')
+  console.log('WebSocket client connected')
 
   ws.on('message', (message) => {
-    log(`Received message: ${message}`)
+    console.log(`Received message: ${message}`)
     // Echo back the message
     ws.send(`Echo: ${message}`)
   })
 
   ws.on('close', () => {
-    log('WebSocket client disconnected')
+    console.log('WebSocket client disconnected')
   })
 
   ws.on('error', (error) => {
-    log(`WebSocket error: ${error}`)
+    console.log(`WebSocket error: ${error}`)
   })
 })
 
-// Security middleware
-app.use(helmet())
+// Body parsing middleware (нужен до прокси)
+app.use(express.json({ limit: '10mb' }))
+app.use(express.urlencoded({ extended: true }))
+
+// Прокси для Wildberries API (упрощенная версия для отладки)
+app.use(['/api/wildberries', '/api/suggests'], async (req, res) => {
+  try {
+    console.log(`Прокси запрос: ${req.method} ${req.path}${req.url}`);
+
+    // Определяем целевой URL в зависимости от пути
+    let targetUrl: string;
+
+    if (req.path.startsWith('/api/suggests')) {
+      // Для подсказок
+      targetUrl = `https://u-suggests.wb.ru${req.path.replace('/api/suggests', '')}${req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''}`;
+    } else {
+      // Для каталога товаров
+      targetUrl = `https://catalog.wb.ru${req.path.replace('/api/wildberries', '')}${req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''}`;
+    }
+
+    console.log(`Целевой URL: ${targetUrl}`);
+
+    const response = await fetch(targetUrl, {
+      method: req.method,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    });
+
+    const data = await response.text();
+    console.log(`Ответ от внешнего API: ${data.substring(0, 100)}`);
+
+    res.status(response.status);
+    response.headers.forEach((value, key) => {
+      res.setHeader(key, value);
+    });
+
+    res.send(data);
+
+  } catch (error) {
+    console.error('Ошибка прокси:', error);
+    res.status(500).json({ error: 'Ошибка прокси' });
+  }
+});
 
 // CORS configuration
 app.use(cors({
@@ -54,14 +98,10 @@ app.use(cors({
   credentials: true
 }))
 
-// Body parsing middleware
-app.use(express.json({ limit: '10mb' }))
-app.use(express.urlencoded({ extended: true }))
-
 // Request logging
 app.use(requestLogger)
 
-// Rate limiting
+// Rate limiting (только для API путей, не затрагивающих прокси)
 app.use('/api/', rateLimitMiddleware)
 
 // Health check endpoint
@@ -86,13 +126,15 @@ app.get('/', (req, res) => {
       units: '/api/units/*',
       currency: '/api/currency/*',
       calculations: '/api/calculations/*',
-      scraping: '/api/scraping/*'
+      scraping: '/api/scraping/*',
+      wildberries: '/api/wildberries/*',
+      suggests: '/api/suggests/*'
     },
     timestamp: new Date().toISOString()
   })
 })
 
-// API routes
+// API routes (после прокси)
 app.use('/api/units', unitsRoutes)
 app.use('/api/currency', currencyRoutes)
 app.use('/api/calculations', calculationsRoutes)
