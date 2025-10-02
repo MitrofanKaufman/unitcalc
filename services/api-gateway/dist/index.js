@@ -1,21 +1,21 @@
 import { config } from 'dotenv';
-import { server } from './app';
+import { app } from './app';
+import { logger } from '@wb-calc/logging';
 config();
 const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => {
-    console.log(`API Gateway запущен на порту ${PORT}`);
-    console.log(`Документация API: http://localhost:${PORT}/api-docs`);
-    console.log(`WebSocket endpoint: ws://localhost:${PORT}/ws`);
+const server = app.listen(PORT, () => {
+    logger.info(`API Gateway запущен на порту ${PORT}`);
+    logger.info(`Документация API: http://localhost:${PORT}/api-docs`);
 });
 process.on('SIGTERM', () => {
-    console.log('Получен сигнал SIGTERM, завершение работы...');
+    logger.info('Получен сигнал SIGTERM, завершение работы...');
     server.close(() => {
-        console.log('API Gateway остановлен');
+        logger.info('API Gateway остановлен');
     });
 });
 process.on('SIGINT', () => {
-    console.log('Получен сигнал SIGINT, завершение работы...');
+    logger.info('Получен сигнал SIGINT, завершение работы...');
     server.close(() => {
-        console.log('API Gateway остановлен');
+        logger.info('API Gateway остановлен');
     });
 });
