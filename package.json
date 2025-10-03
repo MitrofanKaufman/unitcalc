@@ -6,14 +6,14 @@
   "workspaces": [
     "packages/*",
     "services/*",
-    "client"
+    "app/web"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
-    "dev:client": "cd client && npm run dev",
+    "dev:client": "cd app/web && npm run dev",
     "dev:server": "cd server && npm run dev",
-    "debug:client": "cd client && npm run dev -- --debug",
+    "debug:client": "cd app/web && npm run dev -- --debug",
     "debug:server": "cd server && npm run dev:debug",
     "debug": "concurrently -n client,server \"npm run debug:client\" \"npm run debug:server\"",
     "start": "node server/dist/index.js",
