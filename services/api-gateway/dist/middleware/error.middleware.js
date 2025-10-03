@@ -1,7 +1,7 @@
 import { error as logError } from '@wb-calc/logging';
 export const errorHandler = (err, req, res, next) => {
     logError('API Error', {
-        error: err.message,
+        message: err.message,
         stack: err.stack,
         url: req.url,
         method: req.method,
@@ -9,16 +9,18 @@ export const errorHandler = (err, req, res, next) => {
         userAgent: req.get('User-Agent')
     });
     if (err.name === 'ValidationError') {
-        return res.status(400).json({
+        res.status(400).json({
             error: 'Ошибка валидации',
             message: err.message
         });
+        return;
     }
     if (err.name === 'CastError') {
-        return res.status(400).json({
+        res.status(400).json({
             error: 'Неверный формат данных',
             message: 'Проверьте корректность ID или параметров'
         });
+        return;
     }
     res.status(500).json({
         error: 'Внутренняя ошибка сервера',

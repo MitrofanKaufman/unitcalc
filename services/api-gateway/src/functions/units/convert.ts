@@ -16,13 +16,13 @@ export const convertUnits = async (from: string, to: string, value: number): Pro
   formula?: string
 }> => {
   // Базовая логика конвертации (в будущем будет подключена к сервисам)
-  const conversions: Record<string, Record<string, number>> = {
+  const conversions: Record<string, Record<string, number | ((value: number) => number)>> = {
     meters: { feet: 3.28084, inches: 39.3701 },
     feet: { meters: 0.3048, inches: 12 },
     kg: { lbs: 2.20462 },
     lbs: { kg: 0.453592 },
-    celsius: { fahrenheit: (c) => c * 9/5 + 32 },
-    fahrenheit: { celsius: (f) => (f - 32) * 5/9 }
+    celsius: { fahrenheit: (c: number) => c * 9/5 + 32 },
+    fahrenheit: { celsius: (f: number) => (f - 32) * 5/9 }
   }
 
   if (from === to) {

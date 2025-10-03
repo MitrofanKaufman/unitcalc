@@ -14,15 +14,17 @@ router.get('/convert', async (req, res) => {
     const { from, to, value } = req.query
 
     if (!from || !to || !value) {
-      return res.status(400).json({
+      res.status(400).json({
         error: 'Отсутствуют обязательные параметры: from, to, value'
       })
+      return
     }
 
     const result = await convertUnits(from as string, to as string, Number(value))
     res.json(result)
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    const err = error as Error
+    res.status(500).json({ error: err.message })
   }
 })
 
@@ -32,7 +34,8 @@ router.get('/categories', async (req, res) => {
     const categories = await getUnitCategories()
     res.json(categories)
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    const err = error as Error
+    res.status(500).json({ error: err.message })
   }
 })
 

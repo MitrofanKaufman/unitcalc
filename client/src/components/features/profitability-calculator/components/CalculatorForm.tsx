@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -8,11 +8,10 @@ import {
   Button,
   Paper,
   Divider,
-  Grid,
   Chip,
 } from '@mui/material';
 import { Calculate as CalculateIcon, Clear as ClearIcon } from '@mui/icons-material';
-import { Product, MARKETPLACES, PRODUCT_CATEGORIES } from '@/types';
+import { type Product, MARKETPLACES, PRODUCT_CATEGORIES } from '@/types';
 
 interface CalculatorFormProps {
   product: Product;

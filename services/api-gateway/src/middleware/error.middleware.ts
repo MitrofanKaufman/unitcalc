@@ -6,33 +6,35 @@ import { Request, Response, NextFunction } from 'express'
 import { error as logError } from '@wb-calc/logging'
 
 export const errorHandler = (
-  err: any,
+  err: Error,
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): void => {
   logError('API Error', {
-    error: err.message,
+    message: err.message,
     stack: err.stack,
     url: req.url,
     method: req.method,
     ip: req.ip,
     userAgent: req.get('User-Agent')
-  })
+  } as any)
 
   // Определение типа ошибки
   if (err.name === 'ValidationError') {
-    return res.status(400).json({
+    res.status(400).json({
       error: 'Ошибка валидации',
       message: err.message
     })
+    return
   }
 
   if (err.name === 'CastError') {
-    return res.status(400).json({
+    res.status(400).json({
       error: 'Неверный формат данных',
       message: 'Проверьте корректность ID или параметров'
     })
+    return
   }
 
   // Общая ошибка сервера

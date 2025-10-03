@@ -4,9 +4,10 @@ router.post('/profit', async (req, res) => {
     try {
         const { productData } = req.body;
         if (!productData) {
-            return res.status(400).json({
+            res.status(400).json({
                 error: 'Отсутствуют данные продукта'
             });
+            return;
         }
         res.json({
             message: 'Profit calculation endpoint - заглушка',
@@ -16,16 +17,18 @@ router.post('/profit', async (req, res) => {
         });
     }
     catch (error) {
-        res.status(500).json({ error: error.message });
+        const err = error;
+        res.status(500).json({ error: err.message });
     }
 });
 router.get('/margin', async (req, res) => {
     try {
         const { cost, price } = req.query;
         if (!cost || !price) {
-            return res.status(400).json({
+            res.status(400).json({
                 error: 'Отсутствуют обязательные параметры: cost, price'
             });
+            return;
         }
         const costNum = Number(cost);
         const priceNum = Number(price);
@@ -39,7 +42,8 @@ router.get('/margin', async (req, res) => {
         });
     }
     catch (error) {
-        res.status(500).json({ error: error.message });
+        const err = error;
+        res.status(500).json({ error: err.message });
     }
 });
 export default router;

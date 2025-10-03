@@ -6,39 +6,7 @@ Unit Calculator - это полнофункциональное веб-прил�
 
 ## 🏗️ Архитектура проекта
 
-### Структура проекта
 
-```
-wb-calc/
-├── 📁 client/              # Клиентская часть (React + TypeScript)
-│   ├── 📁 src/
-│   │   ├── 📁 components/   # React компоненты
-│   │   ├── 📁 services/     # API сервисы
-│   │   ├── 📁 types/        # TypeScript типы
-│   │   ├── 📁 hooks/        # React хуки
-│   │   ├── 📁 utils/        # Утилиты
-│   │   ├── 📁 stores/       # Состояние приложения
-│   │   └── 📁 styles/       # Стили и CSS
-│   ├── 📁 public/           # Статические файлы
-│   └── package.json         # Зависимости клиента
-│
-├── 📁 server/              # Серверная часть (Node.js + TypeScript)
-│   ├── 📁 src/
-│   │   ├── 📁 controllers/  # Контроллеры API
-│   │   ├── 📁 models/       # Модели данных
-│   │   ├── 📁 routes/       # Маршруты API
-│   │   ├── 📁 services/     # Бизнес-логика
-│   │   ├── 📁 middleware/   # Middleware
-│   │   ├── 📁 utils/        # Утилиты
-│   │   ├── 📁 config/       # Конфигурация
-│   │   └── 📁 types/        # TypeScript типы
-│   ├── package.json         # Зависимости сервера
-│   └── tsconfig.json        # TypeScript конфигурация
-│
-├── 📁 docs/                # Документация проекта
-├── 📁 dev/                 # Файлы разработки
-└── 📄 README.md            # Этот файл
-```
 
 ## 🚀 Быстрый старт
 

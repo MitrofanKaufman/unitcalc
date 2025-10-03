@@ -8,16 +8,18 @@ router.get('/rates', async (req, res) => {
         });
     }
     catch (error) {
-        res.status(500).json({ error: error.message });
+        const err = error;
+        res.status(500).json({ error: err.message });
     }
 });
 router.get('/convert', async (req, res) => {
     try {
         const { from, to, amount } = req.query;
         if (!from || !to || !amount) {
-            return res.status(400).json({
+            res.status(400).json({
                 error: 'Отсутствуют обязательные параметры: from, to, amount'
             });
+            return;
         }
         res.json({
             from: from,
@@ -29,7 +31,8 @@ router.get('/convert', async (req, res) => {
         });
     }
     catch (error) {
-        res.status(500).json({ error: error.message });
+        const err = error;
+        res.status(500).json({ error: err.message });
     }
 });
 export default router;

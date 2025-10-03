@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
 import AdminPanel from '@/components/features/admin/AdminPanel';
 import Documentation from '@/components/features/admin/Documentation';
@@ -10,19 +10,23 @@ import { ProfitabilityCalculator } from '@/components/features/profitability-cal
 function App() {
   return (
     <Routes>
-      {/* Основные инструменты приложения с MainLayout */}
+      {/* Основной макет с навигацией */}
       <Route path="/" element={<MainLayout />}>
-        <Route index element={<ProfitabilityCalculator />} />
+        {/* Основные маршруты */}
+        <Route index element={<Navigate to="/calculator" replace />} />
         <Route path="calculator" element={<ProfitabilityCalculator />} />
-      </Route>
-
-      {/* Админ панель */}
-      <Route path="/admin" element={<AdminPanel />}>
-        <Route path="documentation" element={<Documentation />} />
-        <Route path="settings" element={<Settings />} />
-        <Route path="components" element={<Components />} />
-        <Route path="changelog" element={<Changelog />} />
-        <Route index element={<Documentation />} />
+        
+        {/* Админ панель */}
+        <Route path="admin" element={<AdminPanel />}>
+          <Route index element={<Navigate to="documentation" replace />} />
+          <Route path="documentation" element={<Documentation />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="components" element={<Components />} />
+          <Route path="changelog" element={<Changelog />} />
+        </Route>
+        
+        {/* Другие маршруты */}
+        <Route path="*" element={<Navigate to="/calculator" replace />} />
       </Route>
     </Routes>
   );

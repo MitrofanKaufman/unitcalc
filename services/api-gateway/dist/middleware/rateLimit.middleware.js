@@ -12,7 +12,7 @@ export const rateLimitMiddleware = rateLimit({
         res.status(429).json({
             error: 'Слишком много запросов',
             message: 'Превышен лимит запросов. Попробуйте через 15 минут.',
-            retryAfter: Math.ceil((req.rateLimit.resetTime - Date.now()) / 1000 / 60)
+            retryAfter: Math.ceil((req.rateLimit?.resetTime ? (req.rateLimit.resetTime - Date.now()) / 1000 / 60 : 15))
         });
     },
     skip: (req) => req.path === '/health'

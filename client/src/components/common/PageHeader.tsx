@@ -1,46 +1,39 @@
-import React from 'react';
-import {
-  Box,
-  Typography,
-  Breadcrumbs,
-  Link,
-  IconButton,
-  Button,
-  Tooltip,
-} from '@mui/material';
+import * as React from 'react';
 import { Home as HomeIcon } from '@mui/icons-material';
+import { Box, Typography, Breadcrumbs, Link, Button, Tooltip } from '@mui/material';
+
+// Define a more specific type for ReactNode that excludes problematic types
+type SafeReactNode = Exclude<React.ReactNode, bigint | boolean | null | undefined>;
 
 export interface BreadcrumbItem {
-  label: string;
+  label: string | SafeReactNode;
   href?: string;
-  icon?: React.ReactNode;
+  to?: string;
+  disabled?: boolean;
+  onClick?: () => void;
 }
 
 export interface PageHeaderAction {
-  label: string;
-  icon?: React.ReactNode;
-  onClick: () => void;
-  variant?: 'primary' | 'secondary' | 'error';
-  disabled?: boolean;
+  label: string | SafeReactNode;
+  icon?: SafeReactNode;
+  onClick?: () => void;
+  variant?: 'text' | 'outlined' | 'contained';
+  color?: 'primary' | 'secondary' | 'error' | 'success' | 'info' | 'warning';
   tooltip?: string;
+  disabled?: boolean;
 }
 
 export interface PageHeaderProps {
-  title: string;
-  subtitle?: string;
+  title: SafeReactNode;
+  subtitle?: SafeReactNode;
   breadcrumbs?: BreadcrumbItem[];
   actions?: PageHeaderAction[];
-  children?: React.ReactNode;
+  children?: SafeReactNode;
 }
 
 /**
  * Стандартизированный заголовок страницы с действиями и навигацией
- *
- * @param title - Основной заголовок страницы
- * @param subtitle - Подзаголовок страницы
- * @param breadcrumbs - Навигационные хлебные крошки
- * @param actions - Действия доступные на странице
- * @param children - Дополнительный контент в заголовке
+{{ ... }}
  * @returns JSX элемент заголовка страницы
  */
 export function PageHeader({
@@ -49,7 +42,7 @@ export function PageHeader({
   breadcrumbs = [],
   actions = [],
   children
-}: PageHeaderProps) {
+}: PageHeaderProps): React.ReactElement {
   return (
     <Box sx={{ mb: 4 }}>
       {/* Навигационные хлебные крошки */}
@@ -66,17 +59,25 @@ export function PageHeader({
           </Link>
           {breadcrumbs.map((breadcrumb, index) => (
             <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-              {breadcrumb.icon && (
-                <Box sx={{ mr: 0.5, display: 'flex', alignItems: 'center' }}>
-                  {breadcrumb.icon}
-                </Box>
-              )}
               {breadcrumb.href ? (
-                <Link underline="hover" color="inherit" href={breadcrumb.href}>
-                  {breadcrumb.label}
+                <Link 
+                  underline="hover" 
+                  color="inherit" 
+                  href={breadcrumb.href}
+                  onClick={breadcrumb.onClick}
+                >
+                  {typeof breadcrumb.label === 'string' ? (
+                    <Typography component="span" color="text.primary">
+                      {breadcrumb.label}
+                    </Typography>
+                  ) : (
+                    <span>{breadcrumb.label as any}</span>
+                  )}
                 </Link>
               ) : (
-                <Typography color="text.primary">{breadcrumb.label}</Typography>
+                <Typography component="span" color="text.primary">
+                  {breadcrumb.label as any}
+                </Typography>
               )}
             </Box>
           ))}
@@ -93,11 +94,11 @@ export function PageHeader({
       }}>
         <Box sx={{ flex: 1 }}>
           <Typography variant="h4" component="h1" gutterBottom>
-            {title}
+            {title as any}
           </Typography>
           {subtitle && (
-            <Typography variant="subtitle1" color="text.secondary">
-              {subtitle}
+            <Typography variant="subtitle1" component="div" color="text.secondary">
+              {subtitle as any}
             </Typography>
           )}
         </Box>
@@ -108,14 +109,14 @@ export function PageHeader({
             {actions.map((action, index) => (
               <Tooltip key={index} title={action.tooltip || action.label}>
                 <Button
-                  variant={action.variant === 'secondary' ? 'outlined' : 'contained'}
-                  color={action.variant === 'error' ? 'error' : 'primary'}
+                  variant={action.variant || 'contained'}
+                  color={action.color || 'primary'}
                   startIcon={action.icon}
                   onClick={action.onClick}
                   disabled={action.disabled}
                   size="medium"
                 >
-                  {action.label}
+                  {action.label as any}
                 </Button>
               </Tooltip>
             ))}

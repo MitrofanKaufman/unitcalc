@@ -26,31 +26,44 @@ wss.on('connection', (ws) => {
         console.log(`WebSocket error: ${error}`);
     });
 });
-app.use('/api/wildberries', async (req, res) => {
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
+app.use(['/api/wildberries', '/api/suggests'], async (req, res) => {
     try {
-        const url = `https://catalog.wb.ru${req.path}${req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''}`;
-        const response = await fetch(url, {
+        console.log(`Прокси запрос: ${req.method} ${req.path}${req.url}`);
+        let targetUrl;
+        if (req.path.startsWith('/api/suggests')) {
+            targetUrl = `https://u-suggests.wb.ru${req.path.replace('/api/suggests', '')}${req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''}`;
+        }
+        else {
+            targetUrl = `https://catalog.wb.ru${req.path.replace('/api/wildberries', '')}${req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''}`;
+        }
+        console.log(`Целевой URL: ${targetUrl}`);
+        const response = await fetch(targetUrl, {
             method: req.method,
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-            },
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
         });
-        const data = await response.json();
-        res.json(data);
+        const data = await response.text();
+        console.log(`Ответ от внешнего API: ${data.substring(0, 100)}`);
+        res.status(response.status);
+        response.headers.forEach((value, key) => {
+            res.setHeader(key, value);
+        });
+        res.send(data);
     }
     catch (error) {
-        console.error('Ошибка проксирования к Wildberries API:', error);
-        res.status(500).json({ error: 'Ошибка при запросе к Wildberries API' });
+        console.error('Ошибка прокси:', error);
+        res.status(500).json({ error: 'Ошибка прокси' });
     }
 });
 app.use(cors({
     origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true
 }));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
 app.use('/api/', rateLimitMiddleware);
 app.get('/health', (req, res) => {
@@ -72,7 +85,9 @@ app.get('/', (req, res) => {
             units: '/api/units/*',
             currency: '/api/currency/*',
             calculations: '/api/calculations/*',
-            scraping: '/api/scraping/*'
+            scraping: '/api/scraping/*',
+            wildberries: '/api/wildberries/*',
+            suggests: '/api/suggests/*'
         },
         timestamp: new Date().toISOString()
     });

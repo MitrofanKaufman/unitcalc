@@ -18,7 +18,9 @@ import {
   Brightness4 as Brightness4Icon,
   Brightness7 as Brightness7Icon,
   ExpandLess,
-  ExpandMore
+  ExpandMore,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getMenuItems } from '../../config/menuConfig';
@@ -70,13 +72,14 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
   onThemeChange = () => {},
 }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [desktopMenuOpen, setDesktopMenuOpen] = useState(true);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
   // Track mobile state for responsive behavior
-  useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   // Get filtered menu items based on user role
   const currentUserRole = isAuthenticated ? (user?.role || 'user') : 'guest';
@@ -100,14 +103,37 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
   };
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+    // На мобильных устройствах переключаем мобильное меню
+    // На десктопе переключаем десктопное меню
+    if (isMobile) {
+      setMobileOpen(!mobileOpen);
+    } else {
+      setDesktopMenuOpen(!desktopMenuOpen);
+    }
+  };
+
+  const handleDesktopMenuToggle = () => {
+    setDesktopMenuOpen(!desktopMenuOpen);
   };
 
   const handleClick = (itemId: string) => {
-    setExpandedItems(prev => ({
-      ...prev,
-      [itemId]: !prev[itemId]
-    }));
+    setExpandedItems(prev => {
+      const isCurrentlyExpanded = prev[itemId] || false;
+      const newExpandedItems: Record<string, boolean> = {};
+
+      // Если элемент не развернут, развернуть его и свернуть все остальные
+      if (!isCurrentlyExpanded) {
+        // Найти все элементы с детьми для свертывания
+        filteredMenuItems.forEach(item => {
+          if ('children' in item && item.children && item.children.length > 0) {
+            newExpandedItems[item.id] = item.id === itemId;
+          }
+        });
+      }
+      // Если элемент развернут, просто свернуть его (оставить остальные как есть)
+
+      return newExpandedItems;
+    });
   };
 
   const handleMenuItemClick = (item: MenuItem, event: React.MouseEvent) => {
@@ -216,16 +242,13 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: 'none' } }}
+            sx={{ mr: 2 }}
           >
             <MenuIcon />
           </IconButton>
           <AnimatedHeading variant="h6" noWrap className="fade-out" sx={{ flexGrow: 1 }}>
             Marketplace Calculator
           </AnimatedHeading>
-          <IconButton onClick={onThemeChange} color="inherit">
-            {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
         </Toolbar>
       </AppBar>
       
@@ -243,19 +266,46 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
         }}
       >
         <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
-          <List>
+        <Box sx={{ overflow: 'auto', display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <List sx={{ flexGrow: 1 }}>
             {renderMenuItems(filteredMenuItems)}
           </List>
+          {/* Theme toggle button at bottom */}
+          <Box sx={{ mt: 'auto', p: 2 }}>
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                onThemeChange();
+              }}
+              color="inherit"
+              sx={{
+                width: '100%',
+                justifyContent: 'center',
+                backgroundColor: 'transparent',
+                border: 'none',
+                '&:hover': {
+                  backgroundColor: theme.palette.action.hover,
+                },
+                '& .MuiIconButton-root': {
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                }
+              }}
+            >
+              {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
+          </Box>
         </Box>
       </Drawer>
 
       {/* Desktop Menu */}
       <Drawer
-        variant="permanent"
+        variant="temporary"
+        open={desktopMenuOpen}
+        onClose={handleDesktopMenuToggle}
         sx={{
           display: { xs: 'none', md: 'block' },
-          '& .MuiDrawer-paper': { 
+          '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
             width: 240,
             position: 'relative',
@@ -264,13 +314,37 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
             backgroundColor: theme.palette.background.default,
           },
         }}
-        open
       >
         <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
-          <List>
+        <Box sx={{ overflow: 'auto', display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <List sx={{ flexGrow: 1 }}>
             {renderMenuItems(filteredMenuItems)}
           </List>
+          {/* Theme toggle button at bottom */}
+          <Box sx={{ mt: 'auto', p: 2 }}>
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                onThemeChange();
+              }}
+              color="inherit"
+              sx={{
+                width: '100%',
+                justifyContent: 'center',
+                backgroundColor: 'transparent',
+                border: 'none',
+                '&:hover': {
+                  backgroundColor: theme.palette.action.hover,
+                },
+                '& .MuiIconButton-root': {
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                }
+              }}
+            >
+              {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
+          </Box>
         </Box>
       </Drawer>
     </Box>
