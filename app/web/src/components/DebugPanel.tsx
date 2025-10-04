@@ -144,6 +144,7 @@ const DebugPanel: React.FC<{
         <div style={{ display: 'flex', gap: '4px' }}>
           <button
             onClick={() => setIsOpen(false)}
+            title="Свернуть панель"
             style={{
               background: 'none',
               border: 'none',
@@ -171,6 +172,7 @@ const DebugPanel: React.FC<{
           </button>
           <button
             onClick={() => setIsOpen(false)}
+            title="Закрыть панель"
             style={{
               background: 'none',
               border: 'none',
