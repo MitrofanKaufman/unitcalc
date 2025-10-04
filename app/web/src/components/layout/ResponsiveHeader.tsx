@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   AppBar,
   Box,
@@ -11,7 +11,10 @@ import {
   Toolbar,
   useMediaQuery,
   useTheme,
-  Collapse
+  Collapse,
+  CssBaseline,
+  ThemeProvider,
+  createTheme
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -25,6 +28,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getMenuItems } from '../../config/menuConfig';
 import { AnimatedHeading } from './MainLayout';
+import { ProfitabilityCalculator } from '../features/profitability-calculator/ProfitabilityCalculator';
 
 // Types and interfaces
 export type UserRole = 'guest' | 'user' | 'manager' | 'admin';
@@ -74,6 +78,10 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
   const [mobileOpen, setMobileOpen] = useState(false);
   const [desktopMenuOpen, setDesktopMenuOpen] = useState(true);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+  const [internalDarkMode, setInternalDarkMode] = useState(darkMode);
+  const [internalAuthenticated, setInternalAuthenticated] = useState(isAuthenticated);
+  const [internalUser, setInternalUser] = useState<UserData | null>(user);
+  const [showCalculator, setShowCalculator] = useState(false);
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -81,14 +89,25 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
   // Track mobile state for responsive behavior
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
+  // Create theme based on dark mode state
+  const currentTheme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: internalDarkMode ? 'dark' : 'light',
+        },
+      }),
+    [internalDarkMode]
+  );
+
   // Get filtered menu items based on user role
-  const currentUserRole = isAuthenticated ? (user?.role || 'user') : 'guest';
+  const currentUserRole = internalAuthenticated ? (internalUser?.role || 'user') : 'guest';
   const itemsToRender = menuItems.length > 0 ? menuItems : getMenuItems(currentUserRole);
 
   const filteredMenuItems = itemsToRender.filter((item: MenuItem) => {
-    if (item.hideWhenAuth && isAuthenticated) return false;
+    if (item.hideWhenAuth && internalAuthenticated) return false;
     if (item.access === 'public') return true;
-    if (item.access === 'authenticated' && isAuthenticated) return true;
+    if (item.access === 'authenticated' && internalAuthenticated) return true;
     if (item.access === 'admin' && currentUserRole === 'admin') return true;
     return false;
   });
@@ -110,6 +129,17 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
     } else {
       setDesktopMenuOpen(!desktopMenuOpen);
     }
+  };
+
+  const handleThemeToggle = () => {
+    const newDarkMode = !internalDarkMode;
+    if (onThemeChange) {
+      onThemeChange();
+    }
+  };
+
+  const handleCalculatorToggle = () => {
+    setShowCalculator(!showCalculator);
   };
 
   const handleDesktopMenuToggle = () => {
@@ -150,9 +180,8 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
     } else if (item.isLogout) {
       // Collapse all expanded items on logout
       setExpandedItems({});
-      onLogout();
+      handleLogout();
       setMobileOpen(false);
-      navigate('/');
     }
   };
 
@@ -234,23 +263,25 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <AnimatedHeading variant="h6" noWrap className="fade-out" sx={{ flexGrow: 1 }}>
-            Marketplace Calculator
-          </AnimatedHeading>
-        </Toolbar>
-      </AppBar>
+    <ThemeProvider theme={currentTheme}>
+      <CssBaseline />
+      <Box sx={{ display: 'flex' }}>
+        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <AnimatedHeading variant="h6" noWrap className="fade-out" sx={{ flexGrow: 1 }}>
+              Marketplace Calculator
+            </AnimatedHeading>
+          </Toolbar>
+        </AppBar>
       
       {/* Mobile Drawer */}
       <Drawer
@@ -275,7 +306,7 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();
-                onThemeChange();
+                handleThemeToggle();
               }}
               color="inherit"
               sx={{
@@ -292,7 +323,7 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
                 }
               }}
             >
-              {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+              {internalDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
           </Box>
         </Box>
@@ -325,7 +356,7 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();
-                onThemeChange();
+                handleThemeToggle();
               }}
               color="inherit"
               sx={{
@@ -342,12 +373,46 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
                 }
               }}
             >
-              {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+              {internalDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
           </Box>
         </Box>
       </Drawer>
-    </Box>
+
+      {/* Calculator Component */}
+      {showCalculator && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+          }}
+          onClick={() => setShowCalculator(false)}
+        >
+          <Box
+            sx={{
+              backgroundColor: 'background.paper',
+              borderRadius: 2,
+              maxWidth: '90vw',
+              maxHeight: '90vh',
+              overflow: 'auto',
+              p: 2,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ProfitabilityCalculator />
+          </Box>
+        </Box>
+      )}
+      </Box>
+    </ThemeProvider>
   );
 };
 
