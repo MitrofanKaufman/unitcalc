@@ -6,7 +6,7 @@ import { Box, Typography, Breadcrumbs, Link, Button, Tooltip } from '@mui/materi
 type SafeReactNode = Exclude<React.ReactNode, bigint | boolean | null | undefined>;
 
 export interface BreadcrumbItem {
-  label: string | SafeReactNode;
+  label: string | React.ReactNode;
   href?: string;
   to?: string;
   disabled?: boolean;
@@ -14,8 +14,8 @@ export interface BreadcrumbItem {
 }
 
 export interface PageHeaderAction {
-  label: string | SafeReactNode;
-  icon?: SafeReactNode;
+  label: string;
+  icon?: React.ReactElement;
   onClick?: () => void;
   variant?: 'text' | 'outlined' | 'contained';
   color?: 'primary' | 'secondary' | 'error' | 'success' | 'info' | 'warning';
@@ -24,11 +24,11 @@ export interface PageHeaderAction {
 }
 
 export interface PageHeaderProps {
-  title: SafeReactNode;
-  subtitle?: SafeReactNode;
+  title: React.ReactNode;
+  subtitle?: React.ReactNode;
   breadcrumbs?: BreadcrumbItem[];
   actions?: PageHeaderAction[];
-  children?: SafeReactNode;
+  children?: React.ReactNode;
 }
 
 /**
@@ -71,7 +71,7 @@ export function PageHeader({
                       {breadcrumb.label}
                     </Typography>
                   ) : (
-                    <span>{breadcrumb.label as any}</span>
+                    <span>{breadcrumb.label}</span>
                   )}
                 </Link>
               ) : (
@@ -116,7 +116,8 @@ export function PageHeader({
                   disabled={action.disabled}
                   size="medium"
                 >
-                  {action.label as any}
+                  {/* @ts-ignore */}
+                  {action.label}
                 </Button>
               </Tooltip>
             ))}

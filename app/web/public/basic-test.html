@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test</title>
+</head>
+<body>
+    <div style="padding: 20px; background: #4CAF50; color: white; text-align: center; margin: 40px;">
+        <h1>✅ Basic HTML Works!</h1>
+        <p>Server is responding correctly.</p>
+        <p>Time: <span id="time"></span></p>
+    </div>
+
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        console.log('Basic HTML loaded successfully');
+    </script>
+</body>
+</html>

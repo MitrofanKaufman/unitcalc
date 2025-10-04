@@ -1,5 +1,11 @@
-import { Router } from 'express';
-const router = Router();
+"use strict";
+// \services\api-gateway\src\routes\scraping.routes.ts
+// Маршруты для функций веб-скрапинга
+// Импортирует функции из отдельных файлов
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const router = (0, express_1.Router)();
+// POST /api/scraping/product
 router.post('/product', async (req, res) => {
     try {
         const { url, productId } = req.body;
@@ -9,6 +15,7 @@ router.post('/product', async (req, res) => {
             });
             return;
         }
+        // Заглушка для скрапинга данных продукта
         res.json({
             message: 'Product scraping endpoint - заглушка',
             url: url,
@@ -26,6 +33,7 @@ router.post('/product', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+// GET /api/scraping/price
 router.get('/price', async (req, res) => {
     try {
         const { url } = req.query;
@@ -35,6 +43,7 @@ router.get('/price', async (req, res) => {
             });
             return;
         }
+        // Заглушка для получения цены
         res.json({
             url: url,
             price: 1000,
@@ -47,4 +56,5 @@ router.get('/price', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-export default router;
+exports.default = router;
+//# sourceMappingURL=scraping.routes.js.map

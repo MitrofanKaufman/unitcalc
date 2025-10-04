@@ -1,7 +1,8 @@
 // \packages\core\src\domain\entities\ProductCost.ts
 // Сущность для затрат на товар
 
-import { Money, Currency } from '../value-objects/Money'
+import { Money } from '../value-objects/Money'
+import { Currency } from '../value-objects/Currency'
 import { Weight } from '../value-objects/Weight'
 
 /**

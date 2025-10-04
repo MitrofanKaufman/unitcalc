@@ -1,5 +1,11 @@
-import { Router } from 'express';
-const router = Router();
+"use strict";
+// \services\api-gateway\src\routes\calculations.routes.ts
+// Маршруты для функций расчетов
+// Импортирует функции из отдельных файлов
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const router = (0, express_1.Router)();
+// POST /api/calculations/profit
 router.post('/profit', async (req, res) => {
     try {
         const { productData } = req.body;
@@ -9,6 +15,7 @@ router.post('/profit', async (req, res) => {
             });
             return;
         }
+        // Заглушка для расчета прибыли
         res.json({
             message: 'Profit calculation endpoint - заглушка',
             productData: productData,
@@ -21,6 +28,7 @@ router.post('/profit', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+// GET /api/calculations/margin
 router.get('/margin', async (req, res) => {
     try {
         const { cost, price } = req.query;
@@ -46,4 +54,5 @@ router.get('/margin', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-export default router;
+exports.default = router;
+//# sourceMappingURL=calculations.routes.js.map

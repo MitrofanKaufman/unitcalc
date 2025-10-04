@@ -1,7 +1,13 @@
-import { Router } from 'express';
-import { convertUnits } from '../functions/units/convert';
-import { getUnitCategories } from '../functions/units/categories';
-const router = Router();
+"use strict";
+// \services\api-gateway\src\routes\units.routes.ts
+// Маршруты для функций единиц измерения
+// Импортирует функции из отдельных файлов
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const convert_1 = require("../functions/units/convert");
+const categories_1 = require("../functions/units/categories");
+const router = (0, express_1.Router)();
+// GET /api/units/convert
 router.get('/convert', async (req, res) => {
     try {
         const { from, to, value } = req.query;
@@ -11,7 +17,7 @@ router.get('/convert', async (req, res) => {
             });
             return;
         }
-        const result = await convertUnits(from, to, Number(value));
+        const result = await (0, convert_1.convertUnits)(from, to, Number(value));
         res.json(result);
     }
     catch (error) {
@@ -19,9 +25,10 @@ router.get('/convert', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+// GET /api/units/categories
 router.get('/categories', async (req, res) => {
     try {
-        const categories = await getUnitCategories();
+        const categories = await (0, categories_1.getUnitCategories)();
         res.json(categories);
     }
     catch (error) {
@@ -29,4 +36,5 @@ router.get('/categories', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-export default router;
+exports.default = router;
+//# sourceMappingURL=units.routes.js.map

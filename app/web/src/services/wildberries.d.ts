@@ -1,32 +1,12 @@
-declare module '@/services/wildberries' {
-  interface ProgressCallback {
-    (currentStep: number, totalSteps: number): void;
-  }
-
-  interface Product {
-    id: string;
-    name: string;
-    price: number;
-    category: string;
-    marketplace: string;
-    characteristics?: {
-      weight?: number;
-      dimensions?: {
-        length?: number;
-        width?: number;
-        height?: number;
-      };
-      brand?: string;
-      rating?: number;
-      reviews?: number;
-    };
-  }
-
-  export const WildberriesService: {
-    fetchSuggestions(query: string): Promise<string[]>;
-    fetchProducts(
-      query: string,
-      onProgress?: ProgressCallback
-    ): Promise<Product[]>;
-  };
+declare class WildberriesService {
+    static fetchSuggestions(query: string): Promise<any>;
+    /**
+     * Получает список товаров по запросу с отслеживанием прогресса
+     * @param query Поисковый запрос
+     * @param onProgressCallback Колбек для отслеживания прогресса (текущий шаг, всего шагов)
+     */
+    static fetchProducts(query: string, onProgressCallback?: (current: number, total: number) => void): Promise<any>;
+    static getImageUrl(productId: number): string;
+    static getProductById(id: number): Promise<any>;
 }
+export { WildberriesService };

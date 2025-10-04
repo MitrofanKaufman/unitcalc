@@ -1,4 +1,4 @@
-import { Product, ApiResponse, AsyncState } from '@/types';
+import type { Product } from '@/types';
 
 /**
  * Сервис для управления локальным хранилищем товаров
@@ -51,12 +51,12 @@ export class ProductStorageService {
    */
   static async searchProducts(
     query: string,
-    marketplace?: string,
-    category?: string
+    _marketplace?: string,
+    _category?: string
   ): Promise<Product[]> {
     try {
       // Сначала проверяем локальное хранилище
-      const localProducts = this.searchInLocalStorage(query, marketplace, category);
+      const localProducts = this.searchInLocalStorage(query, _marketplace, _category);
 
       if (localProducts.length > 0) {
         console.log('✅ Найдены данные в локальном хранилище');
@@ -64,7 +64,7 @@ export class ProductStorageService {
       }
 
       // Запрос к серверу
-      const serverProducts = await this.searchOnServer(query, marketplace, category);
+      const serverProducts = await this.searchOnServer(query, _marketplace, _category);
 
       if (serverProducts.length > 0) {
         console.log('✅ Данные получены с сервера');
@@ -75,7 +75,7 @@ export class ProductStorageService {
 
       // Скраппинг
       console.log('🔄 Запуск скраппинга для поиска...');
-      const scrapedProducts = await this.scrapeProducts(query, marketplace, category);
+      const scrapedProducts = await this.scrapeProducts(query, _marketplace, _category);
 
       if (scrapedProducts.length > 0) {
         // Сохраняем локально
@@ -203,9 +203,9 @@ export class ProductStorageService {
    * Поиск на сервере (заглушка)
    */
   private static async searchOnServer(
-    query: string,
-    marketplace?: string,
-    category?: string
+    _query: string,
+    _marketplace?: string,
+    _category?: string
   ): Promise<Product[]> {
     // В будущем здесь будет реальный запрос к API
     // return await api.get('/products/search', { params: { query, marketplace, category } });

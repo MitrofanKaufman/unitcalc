@@ -16,14 +16,14 @@ import {
 } from '@mui/material';
 import {
   Edit as EditIcon,
-  Delete as DeleteIcon,
-  Visibility as ViewIcon,
+  // Delete as DeleteIcon,
+  // Visibility as ViewIcon,
 } from '@mui/icons-material';
 
 export interface TableColumn<T> {
   key: keyof T;
   label: string;
-  render?: (value: T[keyof T], item: T) => React.ReactNode;
+  render?: (value: any, item: T) => React.ReactNode;
   sortable?: boolean;
   width?: number | string;
   align?: 'left' | 'center' | 'right';
@@ -71,7 +71,7 @@ export interface DataTableProps<T> {
  * @param title - Заголовок таблицы
  * @returns JSX элемент таблицы данных
  */
-export function DataTable<T extends { id: string | number }>({
+export function DataTable<T extends { id: string | number } & Record<string, string | number | boolean | null | undefined>>({
   data,
   columns,
   loading = false,
@@ -118,7 +118,7 @@ export function DataTable<T extends { id: string | number }>({
   // Скелетон строки для загрузки
   const SkeletonRow = () => (
     <TableRow>
-      {columns.map((column, index) => (
+      {columns.map((_, index) => (
         <TableCell key={index}>
           <Skeleton variant="text" width="80%" />
         </TableCell>
@@ -206,7 +206,7 @@ export function DataTable<T extends { id: string | number }>({
                     <TableCell key={String(column.key)} align={column.align || 'left'}>
                       {column.render
                         ? column.render(item[column.key], item)
-                        : String(item[column.key] || '')
+                        : <span>{/* @ts-expect-error */ item[column.key]?.toString() ?? ''}</span>
                       }
                     </TableCell>
                   ))}
@@ -227,7 +227,7 @@ export function DataTable<T extends { id: string | number }>({
                               disabled={action.disabled && action.disabled(item)}
                               color={action.color}
                             >
-                              {action.icon}
+                              {React.isValidElement(action.icon) ? action.icon : <EditIcon />}
                             </IconButton>
                           );
                         })}
@@ -250,7 +250,7 @@ export function DataTable<T extends { id: string | number }>({
           rowsPerPage={pagination.pageSize}
           page={pagination.page}
           onPageChange={(e, page) => pagination.onChange(page, pagination.pageSize)}
-          onRowsPerPageChange={(e) => pagination.onChange(0, Number(e.target.value))}
+          onRowsPerPageChange={(_) => pagination.onChange(0, Number((document.querySelector('[name="rowsPerPage"]') as HTMLInputElement)?.value || 10))}
           labelRowsPerPage="Строк на странице:"
           labelDisplayedRows={({ from, to, count }) =>
             `${from}-${to} из ${count !== -1 ? count : `более ${to}`}`

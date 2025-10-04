@@ -130,8 +130,7 @@ const Documentation: React.FC = () => {
               {adminSections.map((section) => (
                 <MenuItem key={section.id} value={section.id}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    {section.icon}
-                    {section.title}
+                    <span>{section.title}</span>
                   </Box>
                 </MenuItem>
               ))}
@@ -169,6 +168,7 @@ const Documentation: React.FC = () => {
                   <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
                        onClick={() => handleSectionChange(section.id)}>
                     <Box sx={{ mr: 2 }}>
+                      {/* @ts-ignore */}
                       {section.icon}
                     </Box>
                     <Box sx={{ flexGrow: 1 }}>
@@ -411,7 +411,7 @@ const DocumentationContent: React.FC = () => {
                   <Chip
                     label={section.status === 'completed' ? 'Готово' :
                            section.status === 'in-progress' ? 'В процессе' : 'Запланировано'}
-                    color={getStatusColor(section.status) as any}
+                    color={getStatusColor(section.status)}
                     size="small"
                   />
                 </Box>

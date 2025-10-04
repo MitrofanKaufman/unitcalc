@@ -1,6 +1,12 @@
-import { error as logError } from '@wb-calc/logging';
-export const errorHandler = (err, req, res, next) => {
-    logError('API Error', {
+"use strict";
+// \services\api-gateway\src\middleware\error.middleware.ts
+// Централизованная обработка ошибок
+// Обеспечивает консистентный формат ответов об ошибках
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.errorHandler = void 0;
+const logging_1 = require("@wb-calc/logging");
+const errorHandler = (err, req, res, next) => {
+    (0, logging_1.error)('API Error', {
         message: err.message,
         stack: err.stack,
         url: req.url,
@@ -8,6 +14,7 @@ export const errorHandler = (err, req, res, next) => {
         ip: req.ip,
         userAgent: req.get('User-Agent')
     });
+    // Определение типа ошибки
     if (err.name === 'ValidationError') {
         res.status(400).json({
             error: 'Ошибка валидации',
@@ -22,8 +29,11 @@ export const errorHandler = (err, req, res, next) => {
         });
         return;
     }
+    // Общая ошибка сервера
     res.status(500).json({
         error: 'Внутренняя ошибка сервера',
         message: 'Произошла непредвиденная ошибка'
     });
 };
+exports.errorHandler = errorHandler;
+//# sourceMappingURL=error.middleware.js.map

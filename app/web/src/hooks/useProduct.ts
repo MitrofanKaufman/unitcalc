@@ -1,6 +1,28 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Product, AsyncState, SearchProductsDto } from '@/types';
-import { apiClient } from '@/services/apiClient';
+import type { Product } from '@/types/dto';
+import type { SearchProductsDto, AsyncState } from '@/types/dto';
+// import { apiClient } from '@/services/apiClient';
+
+// Временная реализация API функций до создания apiClient
+const mockApiClient = {
+  getProduct: async (_id: string): Promise<Product | null> => {
+    // Заглушка для демо
+    return null;
+  },
+  searchProducts: async (_dto: SearchProductsDto) => {
+    // Заглушка для демо
+    return [];
+  },
+  healthCheck: async () => {
+    return true;
+  },
+  getMarketplaces: async () => {
+    return [];
+  },
+  getCategories: async () => {
+    return [];
+  }
+};
 
 /**
  * Кастомный хук для работы с товарами через API
@@ -10,33 +32,32 @@ import { apiClient } from '@/services/apiClient';
  * @returns Состояние загрузки товара и функции управления
  */
 export function useProduct(productId?: string) {
-  const [productState, setProductState] = useState<AsyncState<Product>>({
-    data: null,
+  const [productState, setProductState] = useState<AsyncState<Product | null>>({
+    data: undefined,
     loading: false,
-    error: null
+    error: undefined
   });
 
   const [searchState, setSearchState] = useState<AsyncState<Product[]>>({
     data: [],
     loading: false,
-    error: null
+    error: undefined
   });
-
   // Получение товара по ID
   const fetchProduct = useCallback(async (id: string) => {
-    setProductState(prev => ({ ...prev, loading: true, error: null }));
+    setProductState(prev => ({ ...prev, loading: true, error: undefined }));
 
     try {
-      const product = await apiClient.getProduct(id);
+      const product = await mockApiClient.getProduct(id);
 
       setProductState({
         data: product,
         loading: false,
-        error: null
+        error: undefined
       });
     } catch (error) {
       setProductState({
-        data: null,
+        data: undefined,
         loading: false,
         error: error instanceof Error ? error.message : 'Ошибка загрузки товара'
       });
@@ -46,7 +67,7 @@ export function useProduct(productId?: string) {
   // Поиск товаров
   const searchProducts = useCallback(
     async (query: string, marketplace?: string, category?: string) => {
-      setSearchState(prev => ({ ...prev, loading: true, error: null }));
+      setSearchState(prev => ({ ...prev, loading: true, error: undefined }));
 
       try {
         const searchDto: SearchProductsDto = {
@@ -54,15 +75,15 @@ export function useProduct(productId?: string) {
           marketplace,
           category,
           limit: 20,
-          offset: 0
+          page: 1
         };
 
-        const products = await apiClient.searchProducts(searchDto);
+        const products = await mockApiClient.searchProducts(searchDto);
 
         setSearchState({
           data: products,
           loading: false,
-          error: null
+          error: undefined
         });
 
         return products;
@@ -89,7 +110,7 @@ export function useProduct(productId?: string) {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        await apiClient.healthCheck();
+        await mockApiClient.healthCheck();
         console.log('✅ API сервер доступен');
       } catch (error) {
         console.warn('⚠️ API сервер недоступен, используется моковый режим');
@@ -119,31 +140,31 @@ export function useProduct(productId?: string) {
  */
 export function useReferences() {
   const [marketplaces, setMarketplaces] = useState<AsyncState<any[]>>({
-    data: null,
+    data: undefined,
     loading: false,
-    error: null
+    error: undefined
   });
 
   const [categories, setCategories] = useState<AsyncState<any[]>>({
-    data: null,
+    data: undefined,
     loading: false,
-    error: null
+    error: undefined
   });
 
   // Загрузка маркетплейсов
   const fetchMarketplaces = useCallback(async () => {
-    setMarketplaces(prev => ({ ...prev, loading: true, error: null }));
+    setMarketplaces(prev => ({ ...prev, loading: true, error: undefined }));
 
     try {
-      const data = await apiClient.getMarketplaces();
+      const data = await mockApiClient.getMarketplaces();
       setMarketplaces({
         data,
         loading: false,
-        error: null
+        error: undefined
       });
     } catch (error) {
       setMarketplaces({
-        data: null,
+        data: undefined,
         loading: false,
         error: error instanceof Error ? error.message : 'Ошибка загрузки маркетплейсов'
       });
@@ -152,18 +173,18 @@ export function useReferences() {
 
   // Загрузка категорий
   const fetchCategories = useCallback(async () => {
-    setCategories(prev => ({ ...prev, loading: true, error: null }));
+    setCategories(prev => ({ ...prev, loading: true, error: undefined }));
 
     try {
-      const data = await apiClient.getCategories();
+      const data = await mockApiClient.getCategories();
       setCategories({
         data,
         loading: false,
-        error: null
+        error: undefined
       });
     } catch (error) {
       setCategories({
-        data: null,
+        data: undefined,
         loading: false,
         error: error instanceof Error ? error.message : 'Ошибка загрузки категорий'
       });

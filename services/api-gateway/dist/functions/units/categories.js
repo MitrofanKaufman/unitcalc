@@ -1,4 +1,14 @@
-export const getUnitCategories = async () => {
+"use strict";
+// \services\api-gateway\src\functions\units\categories.ts
+// Функция получения категорий единиц измерения
+// Отдельный модуль для работы с категориями
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getUnitCategories = void 0;
+/**
+ * Получение всех доступных категорий единиц измерения
+ * @returns Массив категорий с описаниями
+ */
+const getUnitCategories = async () => {
     return [
         {
             id: 'length',
@@ -32,3 +42,5 @@ export const getUnitCategories = async () => {
         }
     ];
 };
+exports.getUnitCategories = getUnitCategories;
+//# sourceMappingURL=categories.js.map

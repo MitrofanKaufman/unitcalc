@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 import { Search, X, Loader2, Check, ArrowUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import styles from './WbSearch.module.css';
@@ -221,7 +220,7 @@ export function WbSearch() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-6xl mx-auto shadow-lg">
         <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-t-lg">
-          <CardTitle className="flex flex-col sm:flex-row items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-center justify-between">
             <div className="flex items-center mb-4 sm:mb-0">
               <Search className="h-6 w-6 mr-2 text-white" />
               <span className="text-xl font-bold">Поиск товаров на Wildberries</span>
@@ -229,7 +228,7 @@ export function WbSearch() {
             <div className="text-sm text-blue-100">
               {displayResults.length > 0 && `Найдено: ${displayResults.length} товаров`}
             </div>
-          </CardTitle>
+          </div>
         </CardHeader>
         <CardContent className="p-6">
           <div className="space-y-6">
@@ -237,12 +236,12 @@ export function WbSearch() {
               <div className="relative flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1">
                   <div className="relative">
-                    <Input
-                      ref={inputRef}
+                    <TextField
+                      inputRef={inputRef}
                       type="text"
                       placeholder="Например: платье, смартфон, наушники..."
                       value={query}
-                      onChange={(e) => {
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setQuery(e.target.value);
                         setShowSuggestions(true);
                       }}
@@ -258,8 +257,8 @@ export function WbSearch() {
                     {query && (
                       <Button
                         type="button"
-                        variant="ghost"
-                        size="icon"
+                        variant="text"
+                        size="small"
                         className="h-10 w-10 absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
                         onClick={clearSearch}
                         title="Очистить поиск"
@@ -283,7 +282,6 @@ export function WbSearch() {
                           <div
                             key={`${suggestion.id}-${index}`}
                             role="option"
-                            aria-selected={selectedSuggestion === index}
                             className={cn(
                               'px-4 py-2.5 cursor-pointer flex items-center justify-between',
                               'hover:bg-gray-50 dark:hover:bg-gray-700/50',
@@ -480,7 +478,7 @@ export function WbSearch() {
               </div>
               
               <div className="flex justify-center mt-6">
-                <Button variant="outline" className="px-8">
+                <Button variant="outlined" className="px-8">
                   Показать еще
                 </Button>
               </div>

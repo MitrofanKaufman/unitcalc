@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test - No React</title>
+</head>
+<body>
+    <div style="padding: 20px; background: yellow; border: 2px solid red; margin: 40px;">
+        <h1>Simple HTML Test - No React</h1>
+        <p>This should be visible if basic HTML works.</p>
+        <p>Current time: <span id="time"></span></p>
+    </div>
+
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        console.log('Simple HTML loaded successfully');
+    </script>
+</body>
+</html>

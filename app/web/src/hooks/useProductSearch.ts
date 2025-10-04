@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { WildberriesService } from '@/services/wildberries';
-import type { Product } from '@/types';
+import type { Product } from '@/types/dto';
 
 const ITEMS_PER_PAGE = 10;
 

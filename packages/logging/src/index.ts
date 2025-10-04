@@ -4,5 +4,5 @@ export const log = (message: string) => {
 };
 
 export const error = (message: string, error?: Error) => {
-  console.error(, error || '');
+  console.error(message, error || '');
 };
