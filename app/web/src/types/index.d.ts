@@ -150,13 +150,23 @@ export declare const MARKETPLACES: Marketplace[];
 export declare const PRODUCT_CATEGORIES: ProductCategory[];
 export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
 export interface AsyncState<T> {
-    data: T | null;
     loading: boolean;
     error: string | null;
 }
 export type OperationStatus = 'pending' | 'in_progress' | 'completed' | 'failed';
 export interface OperationResult {
-    success: boolean;
-    message?: string;
-    data?: unknown;
+  success: boolean;
+  message?: string;
+  data?: unknown;
+}
+
+// CSS Modules support
+declare module '*.module.css' {
+  const classes: { [key: string]: string };
+  export default classes;
+}
+
+declare module '*.module.scss' {
+  const classes: { [key: string]: string };
+  export default classes;
 }

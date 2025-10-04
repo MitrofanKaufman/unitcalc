@@ -131,11 +131,13 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
     }
   };
 
-  const handleThemeToggle = () => {
-    const newDarkMode = !internalDarkMode;
-    if (onThemeChange) {
-      onThemeChange();
+  const handleLogout = () => {
+    setInternalAuthenticated(false);
+    setInternalUser(null);
+    if (onLogout) {
+      onLogout();
     }
+    navigate('/');
   };
 
   const handleCalculatorToggle = () => {
