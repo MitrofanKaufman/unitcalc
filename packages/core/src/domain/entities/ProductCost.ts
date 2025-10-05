@@ -1,24 +1,155 @@
 // \packages\core\src\domain\entities\ProductCost.ts
 // Сущность для затрат на товар
 
-import { Money } from '../value-objects/Money'
-import { Currency } from '../value-objects/Currency'
-import { Weight } from '../value-objects/Weight'
+import { z } from 'zod';
+import { Money, MoneySchema } from '../value-objects/Money';
+import { Currency } from '../value-objects/Currency';
+import { Weight, WeightSchema } from '../value-objects/Weight';
 
 /**
- * Структура затрат на товар
+ * Интерфейс для ProductCost
  */
-export interface ProductCost {
-  purchasePrice: Money        // Цена закупки
-  sellingPrice: Money         // Цена продажи
-  shippingCost: Money         // Стоимость доставки
-  customsDuty: Money          // Таможенная пошлина
-  marketplaceCommission: Money // Комиссия маркетплейса
-  marketingCosts: Money       // Затраты на маркетинг
-  photographyCosts: Money     // Затраты на фото/видео
-  packagingCosts: Money       // Затраты на упаковку
-  otherCosts: Money          // Другие затраты
-  weight: Weight             // Вес товара
+interface IProductCost {
+  purchasePrice: Money;
+  sellingPrice: Money;
+  shippingCost: Money;
+  customsDuty: Money;
+  marketplaceCommission: Money;
+  marketingCosts: Money;
+  photographyCosts: Money;
+  packagingCosts: Money;
+  otherCosts: Money;
+  weight: Weight;
+}
+
+/**
+ * Схема валидации для ProductCost
+ */
+export const ProductCostSchema = z.object({
+  purchasePrice: MoneySchema,
+  sellingPrice: MoneySchema,
+  shippingCost: MoneySchema,
+  customsDuty: MoneySchema,
+  marketplaceCommission: MoneySchema,
+  marketingCosts: MoneySchema,
+  photographyCosts: MoneySchema,
+  packagingCosts: MoneySchema,
+  otherCosts: MoneySchema,
+  weight: WeightSchema
+}).transform((data) => new ProductCost({
+  purchasePrice: data.purchasePrice,
+  sellingPrice: data.sellingPrice,
+  weight: data.weight,
+  shippingCost: data.shippingCost,
+  customsDuty: data.customsDuty,
+  marketplaceCommission: data.marketplaceCommission,
+  marketingCosts: data.marketingCosts,
+  photographyCosts: data.photographyCosts,
+  packagingCosts: data.packagingCosts,
+  otherCosts: data.otherCosts
+}));
+
+/**
+ * Параметры для создания ProductCost
+ */
+interface ProductCostParams {
+  purchasePrice: Money;
+  sellingPrice: Money;
+  weight: Weight;
+  shippingCost?: Money;
+  customsDuty?: Money;
+  marketplaceCommission?: Money;
+  marketingCosts?: Money;
+  photographyCosts?: Money;
+  packagingCosts?: Money;
+  otherCosts?: Money;
+}
+
+/**
+ * Класс для представления затрат на товар
+ */
+export class ProductCost implements IProductCost {
+  public readonly purchasePrice: Money;
+  public readonly sellingPrice: Money;
+  public readonly weight: Weight;
+  public readonly shippingCost: Money;
+  public readonly customsDuty: Money;
+  public readonly marketplaceCommission: Money;
+  public readonly marketingCosts: Money;
+  public readonly photographyCosts: Money;
+  public readonly packagingCosts: Money;
+  public readonly otherCosts: Money;
+
+  constructor({
+    purchasePrice,
+    sellingPrice,
+    weight,
+    shippingCost = new Money(0, purchasePrice.currency),
+    customsDuty = new Money(0, purchasePrice.currency),
+    marketplaceCommission = new Money(0, purchasePrice.currency),
+    marketingCosts = new Money(0, purchasePrice.currency),
+    photographyCosts = new Money(0, purchasePrice.currency),
+    packagingCosts = new Money(0, purchasePrice.currency),
+    otherCosts = new Money(0, purchasePrice.currency)
+  }: ProductCostParams) {
+    this.purchasePrice = purchasePrice;
+    this.sellingPrice = sellingPrice;
+    this.weight = weight;
+    this.shippingCost = shippingCost;
+    this.customsDuty = customsDuty;
+    this.marketplaceCommission = marketplaceCommission;
+    this.marketingCosts = marketingCosts;
+    this.photographyCosts = photographyCosts;
+    this.packagingCosts = packagingCosts;
+    this.otherCosts = otherCosts;
+  }
+
+  /**
+   * Получение общей стоимости закупки
+   */
+  getTotalPurchaseCost(): Money {
+    return this.purchasePrice
+      .add(this.shippingCost)
+      .add(this.customsDuty)
+      .add(this.packagingCosts);
+  }
+
+  /**
+   * Получение общей стоимости продажи
+   */
+  getTotalSellingCost(): Money {
+    return this.sellingPrice
+      .subtract(this.marketplaceCommission)
+      .subtract(this.marketingCosts)
+      .subtract(this.photographyCosts);
+  }
+
+  /**
+   * Расчет прибыли
+   */
+  calculateProfit(): Money {
+    return this.getTotalSellingCost().subtract(this.getTotalPurchaseCost());
+  }
+
+  /**
+   * Расчет маржи (%)
+   */
+  calculateMargin(): number {
+    const revenue = this.getTotalSellingCost().amount;
+    const profit = this.calculateProfit().amount;
+    return revenue > 0 ? (profit / revenue) * 100 : 0;
+  }
+
+  /**
+   * Расчет рентабельности (ROI %)
+   */
+  calculateROI(salesCount = 1): number {
+    const totalCost = this.getTotalPurchaseCost().amount * salesCount;
+    const totalRevenue = this.getTotalSellingCost().amount * salesCount;
+    const profit = totalRevenue - totalCost;
+    
+    return totalCost > 0 ? (profit / totalCost) * 100 : 0;
+  }
 }
 
 /**
@@ -39,7 +170,7 @@ export class ProductCostFactory {
       otherCosts?: Money
     } = {}
   ): ProductCost {
-    return {
+    return new ProductCost({
       purchasePrice,
       sellingPrice,
       shippingCost: options.shippingCost || new Money(0, purchasePrice.currency),
@@ -50,7 +181,7 @@ export class ProductCostFactory {
       packagingCosts: options.packagingCosts || new Money(0, purchasePrice.currency),
       otherCosts: options.otherCosts || new Money(0, purchasePrice.currency),
       weight
-    }
+    })
   }
 }
 

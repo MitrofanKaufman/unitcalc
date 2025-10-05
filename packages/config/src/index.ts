@@ -17,7 +17,10 @@ export const configSchemas = {
     rateLimit: z.object({
       windowMs: z.number().min(60000).default(900000), // 15 минут
       maxRequests: z.number().min(1).max(1000).default(100)
-    }).default({})
+    }).default({
+      windowMs: 900000,
+      maxRequests: 100
+    })
   }),
 
   // UI настройки
@@ -30,7 +33,11 @@ export const configSchemas = {
       enabled: z.boolean().default(true),
       cacheStrategy: z.enum(['cache-first', 'network-first']).default('cache-first'),
       offlineSupport: z.boolean().default(true)
-    }).default({})
+    }).default({
+      enabled: true,
+      cacheStrategy: 'cache-first' as const,
+      offlineSupport: true
+    })
   }),
 
   // Бизнес настройки для расчета доходности
@@ -102,8 +109,78 @@ export const configSchemas = {
         apiUrl: z.string().default('https://api.wildberries.ru'),
         searchDelay: z.number().min(500).default(1000)
       })
-    }).default({})
+    }).default(() => ({
+      alibaba: {
+        enabled: true,
+        baseUrl: 'https://www.alibaba.com',
+        searchDelay: 2000
+      },
+      taobao: {
+        enabled: true,
+        baseUrl: 'https://world.taobao.com',
+        searchDelay: 3000
+      },
+      wildberries: {
+        enabled: true,
+        baseUrl: 'https://www.wildberries.ru',
+        apiUrl: 'https://api.wildberries.ru',
+        searchDelay: 1000
+      }
+    }))
   }),
+
+  // Маркетплейсы
+  marketplaces: z.object({
+    wb: z.object({
+      base: z.number().min(0).max(50).default(15),
+      categoryMultiplier: z.record(z.string(), z.number()).default({
+        "electronics": 0.05,
+        "clothing": 0.15,
+        "home": 0.10
+      })
+    }),
+    ozon: z.object({
+      base: z.number().min(0).max(50).default(12),
+      categoryMultiplier: z.record(z.string(), z.number()).default({
+        "electronics": 0.08,
+        "books": 0.12,
+        "toys": 0.15
+      })
+    }),
+    yandex: z.object({
+      base: z.number().min(0).max(50).default(8),
+      categoryMultiplier: z.record(z.string(), z.number()).default({
+        "electronics": 0.05,
+        "fashion": 0.12,
+        "food": 0.08
+      })
+    })
+  }).default(() => ({
+    wb: {
+      base: 15,
+      categoryMultiplier: {
+        "electronics": 0.05,
+        "clothing": 0.15,
+        "home": 0.10
+      }
+    },
+    ozon: {
+      base: 12,
+      categoryMultiplier: {
+        "electronics": 0.08,
+        "books": 0.12,
+        "toys": 0.15
+      }
+    },
+    yandex: {
+      base: 8,
+      categoryMultiplier: {
+        "electronics": 0.05,
+        "fashion": 0.12,
+        "food": 0.08
+      }
+    }
+  })),
 
   // AI ассистент
   ai: z.object({
@@ -125,7 +202,12 @@ export const configSchemas = {
       questionGeneration: z.boolean().default(true),
       productDescription: z.boolean().default(true),
       priceOptimization: z.boolean().default(false)
-    }).default({})
+    }).default({
+      reviewAnalysis: true,
+      questionGeneration: true,
+      productDescription: true,
+      priceOptimization: false
+    })
   }),
 
   // Самовыкупы
@@ -150,7 +232,12 @@ export const configSchemas = {
       performance: z.boolean().default(true),
       errors: z.boolean().default(true),
       businessMetrics: z.boolean().default(true)
-    }).default({})
+    }).default({
+      userActions: true,
+      performance: true,
+      errors: true,
+      businessMetrics: true
+    })
   }),
 
   // Оффлайн режим
@@ -170,13 +257,23 @@ export const configSchemas = {
       competitorUpdates: z.boolean().default(true),
       systemUpdates: z.boolean().default(true),
       aiInsights: z.boolean().default(false)
-    }).default({}),
+    }).default(() => ({
+      profitAlerts: true,
+      competitorUpdates: true,
+      systemUpdates: true,
+      aiInsights: false
+    })),
     channels: z.object({
       browser: z.boolean().default(true),
       email: z.boolean().default(false),
       telegram: z.boolean().default(false),
       push: z.boolean().default(true)
-    }).default({})
+    }).default(() => ({
+      browser: true,
+      email: false,
+      telegram: false,
+      push: true
+    }))
   })
 }
 
@@ -185,6 +282,7 @@ export type ApiConfig = z.infer<typeof configSchemas.api>
 export type UiConfig = z.infer<typeof configSchemas.ui>
 export type BusinessConfig = z.infer<typeof configSchemas.business>
 export type ScrapingConfig = z.infer<typeof configSchemas.scraping>
+export type MarketplacesConfig = z.infer<typeof configSchemas.marketplaces>
 export type AiConfig = z.infer<typeof configSchemas.ai>
 export type SelfBuyoutConfig = z.infer<typeof configSchemas.selfBuyout>
 export type AnalyticsConfig = z.infer<typeof configSchemas.analytics>
@@ -197,6 +295,7 @@ export type AppConfig = {
   ui: UiConfig
   business: BusinessConfig
   scraping: ScrapingConfig
+  marketplaces: MarketplacesConfig
   ai: AiConfig
   selfBuyout: SelfBuyoutConfig
   analytics: AnalyticsConfig
@@ -240,6 +339,7 @@ export class ConfigLoader {
       const ui = this.loadUiConfig()
       const business = this.loadBusinessConfig()
       const scraping = this.loadScrapingConfig()
+      const marketplaces = this.loadMarketplacesConfig()
       const ai = this.loadAiConfig()
       const selfBuyout = this.loadSelfBuyoutConfig()
       const analytics = this.loadAnalyticsConfig()
@@ -252,6 +352,7 @@ export class ConfigLoader {
         ui,
         business,
         scraping,
+        marketplaces,
         ai,
         selfBuyout,
         analytics,
@@ -429,6 +530,40 @@ export class ConfigLoader {
     }
 
     return configSchemas.scraping.parse(config)
+  }
+
+  /**
+   * Загрузка конфигурации маркетплейсов
+   */
+  private loadMarketplacesConfig(): MarketplacesConfig {
+    const config = {
+      wb: {
+        base: this.getEnvNumber('MARKETPLACE_WB_BASE_COMMISSION', 15),
+        categoryMultiplier: {
+          'electronics': this.getEnvNumber('MARKETPLACE_WB_ELECTRONICS_MULTIPLIER', 0.05),
+          'clothing': this.getEnvNumber('MARKETPLACE_WB_CLOTHING_MULTIPLIER', 0.15),
+          'home': this.getEnvNumber('MARKETPLACE_WB_HOME_MULTIPLIER', 0.10)
+        }
+      },
+      ozon: {
+        base: this.getEnvNumber('MARKETPLACE_OZON_BASE_COMMISSION', 12),
+        categoryMultiplier: {
+          'electronics': this.getEnvNumber('MARKETPLACE_OZON_ELECTRONICS_MULTIPLIER', 0.08),
+          'books': this.getEnvNumber('MARKETPLACE_OZON_BOOKS_MULTIPLIER', 0.12),
+          'toys': this.getEnvNumber('MARKETPLACE_OZON_TOYS_MULTIPLIER', 0.15)
+        }
+      },
+      yandex: {
+        base: this.getEnvNumber('MARKETPLACE_YANDEX_BASE_COMMISSION', 8),
+        categoryMultiplier: {
+          'electronics': this.getEnvNumber('MARKETPLACE_YANDEX_ELECTRONICS_MULTIPLIER', 0.05),
+          'fashion': this.getEnvNumber('MARKETPLACE_YANDEX_FASHION_MULTIPLIER', 0.12),
+          'food': this.getEnvNumber('MARKETPLACE_YANDEX_FOOD_MULTIPLIER', 0.08)
+        }
+      }
+    }
+
+    return configSchemas.marketplaces.parse(config)
   }
 
   /**

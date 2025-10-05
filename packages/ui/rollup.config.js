@@ -41,9 +41,10 @@ export default [
     external: ['react', 'react-dom', '@emotion/react', '@emotion/styled'],
   },
   // TypeScript type definitions
-  {
-    input: 'dist/types/index.d.ts',
-    output: [{ file: 'dist/index.d.ts', format: 'es' }],
-    plugins: [dts()],
-  },
+  // Убираем отдельную сборку типов, так как они генерируются TypeScript
+  // {
+  //   input: 'dist/types/src/index.d.ts',
+  //   output: [{ file: 'dist/index.d.ts', format: 'es' }],
+  //   plugins: [dts()],
+  // },
 ];

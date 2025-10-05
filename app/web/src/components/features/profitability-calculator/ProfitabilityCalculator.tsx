@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { Card, CardContent, Typography, TextField, Box } from '@mui/material';
 import FeaturesLayout from '../FeaturesLayout';
 
+/**
+ * A component that calculates the profitability of a product based on its cost price, shipping cost, and commission.
+ * It renders a form with four input fields for the cost price, shipping cost, commission, and product price.
+ * The component also renders a box with the results of the calculation, including the total cost, profit, and margin.
+ */
 export function ProfitabilityCalculator() {
   const [formData, setFormData] = useState({
     productPrice: '',
@@ -10,6 +15,11 @@ export function ProfitabilityCalculator() {
     commission: ''
   });
 
+  /**
+   * Returns a function that updates the state of the given field in the formData state.
+   * @param {string} field - The name of the field to update.
+   * @returns {(event: React.ChangeEvent<HTMLInputElement>) => void} - A function that updates the state of the given field.
+   */
   const handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
@@ -17,6 +27,14 @@ export function ProfitabilityCalculator() {
     }));
   };
 
+  /**
+   * Calculates the profitability of a product based on its cost price, shipping cost, and commission.
+   *
+   * @returns {Object} An object containing the total cost, profit, and margin of the product.
+   * @property {number} totalCost - The total cost of the product, including the cost price, shipping cost, and commission.
+   * @property {number} profit - The profit of the product, calculated as the product price minus the total cost.
+   * @property {number} margin - The margin of the product, calculated as the profit divided by the product price, multiplied by 100.
+   */
   const calculateProfit = () => {
     const productPrice = parseFloat(formData.productPrice) || 0;
     const costPrice = parseFloat(formData.costPrice) || 0;

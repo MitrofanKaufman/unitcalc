@@ -74,9 +74,8 @@ exports.authRateLimit = (0, exports.rateLimit)({
     maxRequests: 5, // 5 попыток входа
     message: 'Слишком много попыток входа. Попробуйте через 15 минут.',
     keyGenerator: (req) => {
-        var _a;
         // Для аутентификации используем комбинацию IP и email
-        const email = ((_a = req.body) === null || _a === void 0 ? void 0 : _a.email) || 'unknown';
+        const email = req.body?.email || 'unknown';
         return `${req.ip || 'unknown'}:${email}`;
     }
 });

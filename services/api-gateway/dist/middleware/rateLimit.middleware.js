@@ -19,11 +19,10 @@ exports.rateLimitMiddleware = (0, express_rate_limit_1.default)({
     standardHeaders: true, // Возвращать rate limit info в заголовках `RateLimit-*`
     legacyHeaders: false, // Отключить заголовки `X-RateLimit-*`
     handler: (req, res) => {
-        var _a;
         res.status(429).json({
             error: 'Слишком много запросов',
             message: 'Превышен лимит запросов. Попробуйте через 15 минут.',
-            retryAfter: Math.ceil((((_a = req.rateLimit) === null || _a === void 0 ? void 0 : _a.resetTime) ? (req.rateLimit.resetTime - Date.now()) / 1000 / 60 : 15))
+            retryAfter: Math.ceil((req.rateLimit?.resetTime ? (req.rateLimit.resetTime - Date.now()) / 1000 / 60 : 15))
         });
     },
     // Пропускать rate limiting для health check

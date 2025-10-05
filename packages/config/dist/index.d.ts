@@ -327,6 +327,64 @@ export declare const configSchemas: {
             };
         } | undefined;
     }>;
+    marketplaces: z.ZodDefault<z.ZodObject<{
+        wb: z.ZodObject<{
+            base: z.ZodDefault<z.ZodNumber>;
+            categoryMultiplier: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
+        }, "strip", z.ZodTypeAny, {
+            base: number;
+            categoryMultiplier: Record<string, number>;
+        }, {
+            base?: number | undefined;
+            categoryMultiplier?: Record<string, number> | undefined;
+        }>;
+        ozon: z.ZodObject<{
+            base: z.ZodDefault<z.ZodNumber>;
+            categoryMultiplier: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
+        }, "strip", z.ZodTypeAny, {
+            base: number;
+            categoryMultiplier: Record<string, number>;
+        }, {
+            base?: number | undefined;
+            categoryMultiplier?: Record<string, number> | undefined;
+        }>;
+        yandex: z.ZodObject<{
+            base: z.ZodDefault<z.ZodNumber>;
+            categoryMultiplier: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
+        }, "strip", z.ZodTypeAny, {
+            base: number;
+            categoryMultiplier: Record<string, number>;
+        }, {
+            base?: number | undefined;
+            categoryMultiplier?: Record<string, number> | undefined;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        wb: {
+            base: number;
+            categoryMultiplier: Record<string, number>;
+        };
+        ozon: {
+            base: number;
+            categoryMultiplier: Record<string, number>;
+        };
+        yandex: {
+            base: number;
+            categoryMultiplier: Record<string, number>;
+        };
+    }, {
+        wb: {
+            base?: number | undefined;
+            categoryMultiplier?: Record<string, number> | undefined;
+        };
+        ozon: {
+            base?: number | undefined;
+            categoryMultiplier?: Record<string, number> | undefined;
+        };
+        yandex: {
+            base?: number | undefined;
+            categoryMultiplier?: Record<string, number> | undefined;
+        };
+    }>>;
     ai: z.ZodObject<{
         enabled: z.ZodDefault<z.ZodBoolean>;
         provider: z.ZodDefault<z.ZodEnum<["openai", "yandex", "local"]>>;
@@ -377,38 +435,38 @@ export declare const configSchemas: {
         }>>;
     }, "strip", z.ZodTypeAny, {
         enabled: boolean;
-        provider: "openai" | "yandex" | "local";
+        provider: "yandex" | "openai" | "local";
         features: {
             reviewAnalysis: boolean;
             questionGeneration: boolean;
             productDescription: boolean;
             priceOptimization: boolean;
         };
+        yandex?: {
+            apiKey: string;
+            model: string;
+            catalogId: string;
+        } | undefined;
         openai?: {
             apiKey: string;
             model: string;
             maxTokens: number;
             temperature: number;
         } | undefined;
-        yandex?: {
-            apiKey: string;
-            model: string;
-            catalogId: string;
-        } | undefined;
     }, {
         enabled?: boolean | undefined;
+        yandex?: {
+            apiKey: string;
+            catalogId: string;
+            model?: string | undefined;
+        } | undefined;
         openai?: {
             apiKey: string;
             model?: string | undefined;
             maxTokens?: number | undefined;
             temperature?: number | undefined;
         } | undefined;
-        yandex?: {
-            apiKey: string;
-            catalogId: string;
-            model?: string | undefined;
-        } | undefined;
-        provider?: "openai" | "yandex" | "local" | undefined;
+        provider?: "yandex" | "openai" | "local" | undefined;
         features?: {
             reviewAnalysis?: boolean | undefined;
             questionGeneration?: boolean | undefined;
@@ -578,6 +636,7 @@ export type ApiConfig = z.infer<typeof configSchemas.api>;
 export type UiConfig = z.infer<typeof configSchemas.ui>;
 export type BusinessConfig = z.infer<typeof configSchemas.business>;
 export type ScrapingConfig = z.infer<typeof configSchemas.scraping>;
+export type MarketplacesConfig = z.infer<typeof configSchemas.marketplaces>;
 export type AiConfig = z.infer<typeof configSchemas.ai>;
 export type SelfBuyoutConfig = z.infer<typeof configSchemas.selfBuyout>;
 export type AnalyticsConfig = z.infer<typeof configSchemas.analytics>;
@@ -588,6 +647,7 @@ export type AppConfig = {
     ui: UiConfig;
     business: BusinessConfig;
     scraping: ScrapingConfig;
+    marketplaces: MarketplacesConfig;
     ai: AiConfig;
     selfBuyout: SelfBuyoutConfig;
     analytics: AnalyticsConfig;
@@ -645,6 +705,10 @@ export declare class ConfigLoader {
      * Загрузка конфигурации парсинга
      */
     private loadScrapingConfig;
+    /**
+     * Загрузка конфигурации маркетплейсов
+     */
+    private loadMarketplacesConfig;
     /**
      * Загрузка AI конфигурации
      */

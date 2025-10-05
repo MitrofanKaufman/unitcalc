@@ -19,7 +19,6 @@ const addCorsHeaders = (req, res, next) => {
  * GET /api/wildberries/suggest?query=текст
  */
 router.get('/suggest', addCorsHeaders, async (req, res) => {
-    var _a, _b, _c, _d;
     try {
         const { query } = req.query;
         if (!query || typeof query !== 'string') {
@@ -61,10 +60,10 @@ router.get('/suggest', addCorsHeaders, async (req, res) => {
             });
             // Extract suggestions from response
             let suggestions = [];
-            if (((_b = (_a = response.data) === null || _a === void 0 ? void 0 : _a.queries) === null || _b === void 0 ? void 0 : _b.length) > 0) {
+            if (response.data?.queries?.length > 0) {
                 suggestions = response.data.queries.map((item) => item.value.trim());
             }
-            else if (((_d = (_c = response.data) === null || _c === void 0 ? void 0 : _c.suggestions) === null || _d === void 0 ? void 0 : _d.length) > 0) {
+            else if (response.data?.suggestions?.length > 0) {
                 // Alternative response format
                 suggestions = response.data.suggestions.map((item) => item.trim());
             }

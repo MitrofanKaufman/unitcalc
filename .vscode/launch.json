@@ -23,12 +23,91 @@
       "sourceMaps": true,
       "smartStep": true,
       "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build Web App",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "build"],
+      "cwd": "${workspaceFolder}/app/web",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Install Packages",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["install"],
+      "cwd": "${workspaceFolder}/app/web",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Update Packages",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["update"],
+      "cwd": "${workspaceFolder}/app/web",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Clear Cache",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["cache", "clean", "--force"],
+      "cwd": "${workspaceFolder}/app/web",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Kill Ports",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["kill-port", "3000", "4173", "5173"],
+      "cwd": "${workspaceFolder}/app/web",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": ["<node_internals>/**"]
     }
   ],
   "compounds": [
     {
       "name": "Full Stack",
       "configurations": ["Launch Chrome against localhost", "Debug Server"]
+    },
+    {
+      "name": "Web Development",
+      "configurations": ["Build Web App", "Kill Ports"]
+    },
+    {
+      "name": "Build Only",
+      "configurations": ["Build Web App"]
+    },
+    {
+      "name": "Preview Only",
+      "configurations": ["Kill Ports"]
+    },
+    {
+      "name": "Package Management",
+      "configurations": ["Install Packages", "Update Packages"]
+    },
+    {
+      "name": "Clean & Setup",
+      "configurations": ["Clear Cache", "Install Packages"]
+    },
+    {
+      "name": "Full Workflow",
+      "configurations": ["Kill Ports", "Clear Cache", "Install Packages", "Build Web App", "Kill Ports"]
     }
   ]
 }

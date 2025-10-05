@@ -78,6 +78,10 @@ export function WbSearch() {
     }
   }, []);
 
+  /**
+   * Handles click outside of search input and dropdown by closing the dropdown.
+   * This is done by adding a global event listener for 'mousedown' events and removing it when the component is unmounted.
+   */
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);

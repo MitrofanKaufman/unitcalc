@@ -1,51 +1,27 @@
-import { useNotifications } from './NotificationSystem';
+import { useNotifications } from './NotificationProvider';
+import type { Notification } from './NotificationProvider';
 
 export const useNotificationActions = () => {
-  const { showNotification } = useNotifications();
+  const { addNotification } = useNotifications();
 
-  const showSuccess = (title: string, message?: string, duration?: number) => {
-    showNotification({
-      type: 'success',
-      title,
-      message,
-      duration
-    });
+  const showSuccess = (title: string, _message?: string, duration?: number) => {
+    addNotification(title, 'success', duration);
   };
 
-  const showError = (title: string, message?: string, duration?: number) => {
-    showNotification({
-      type: 'error',
-      title,
-      message,
-      duration: duration || 8000 // Ошибки показываем дольше
-    });
+  const showError = (title: string, _message?: string, duration?: number) => {
+    addNotification(title, 'error', duration || 8000);
   };
 
-  const showWarning = (title: string, message?: string, duration?: number) => {
-    showNotification({
-      type: 'warning',
-      title,
-      message,
-      duration
-    });
+  const showWarning = (title: string, _message?: string, duration?: number) => {
+    addNotification(title, 'warning', duration);
   };
 
-  const showInfo = (title: string, message?: string, duration?: number) => {
-    showNotification({
-      type: 'info',
-      title,
-      message,
-      duration
-    });
+  const showInfo = (title: string, _message?: string, duration?: number) => {
+    addNotification(title, 'info', duration);
   };
 
-  const showPersistent = (title: string, message?: string, type: Notification['type'] = 'info') => {
-    showNotification({
-      type,
-      title,
-      message,
-      persistent: true // Не исчезает автоматически
-    });
+  const showPersistent = (title: string, _message?: string, type: Notification['type'] = 'info') => {
+    addNotification(title, type, 0); // Duration 0 means persistent
   };
 
   return {

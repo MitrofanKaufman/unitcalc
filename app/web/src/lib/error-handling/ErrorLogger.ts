@@ -1,7 +1,7 @@
 // \apps\web\src\lib\error-handling\ErrorLogger.ts
 // Система отправки логов ошибок на сервер
 
-import { configLoader } from '@wb-calc/config'
+import configLoader from '@wb-calc/config'
 
 /**
  * Типы логов ошибок

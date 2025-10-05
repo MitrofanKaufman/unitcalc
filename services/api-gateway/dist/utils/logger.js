@@ -94,8 +94,8 @@ exports.expressLogger = winston_1.default.createLogger({
 // Функции-обертки для удобства
 const logError = (message, error, meta) => {
     exports.logger.error(message, {
-        error: error === null || error === void 0 ? void 0 : error.message,
-        stack: error === null || error === void 0 ? void 0 : error.stack,
+        error: error?.message,
+        stack: error?.stack,
         ...meta
     });
 };

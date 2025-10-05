@@ -1,20 +1,51 @@
+import { z } from 'zod';
+import { Currency } from './Currency';
 /**
- * Валюты поддерживаемые системой
+ * Интерфейс для объекта Money
  */
-export declare enum Currency {
-    RUB = "RUB",
-    USD = "USD",
-    CNY = "CNY",
-    EUR = "EUR"
+interface IMoney {
+    amount: number;
+    currency: Currency;
+    convertTo(targetCurrency: Currency, exchangeRate?: number): Money;
+    add(other: Money): Money;
+    subtract(other: Money): Money;
+    multiply(factor: number): Money;
+    divide(divisor: number): Money;
+    equals(other: Money): boolean;
+    isGreaterThan(other: Money): boolean;
+    isLessThan(other: Money): boolean;
+    format(locale?: string): string;
+    getMinorUnits(): number;
 }
 /**
- * Курсы валют (базовые значения)
+ * Схема валидации для Money
  */
-export declare const DEFAULT_EXCHANGE_RATES: Record<string, number>;
+export declare const MoneySchema: z.ZodEffects<z.ZodObject<{
+    amount: z.ZodNumber;
+    currency: z.ZodNativeEnum<{
+        readonly RUB: "RUB";
+        readonly USD: "USD";
+        readonly EUR: "EUR";
+        readonly CNY: "CNY";
+        readonly GBP: "GBP";
+        readonly JPY: "JPY";
+        readonly KZT: "KZT";
+        readonly TRY: "TRY";
+    }>;
+}, "strip", z.ZodTypeAny, {
+    amount: number;
+    currency: "RUB" | "USD" | "EUR" | "CNY" | "GBP" | "JPY" | "KZT" | "TRY";
+}, {
+    amount: number;
+    currency: "RUB" | "USD" | "EUR" | "CNY" | "GBP" | "JPY" | "KZT" | "TRY";
+}>, Money, {
+    amount: number;
+    currency: "RUB" | "USD" | "EUR" | "CNY" | "GBP" | "JPY" | "KZT" | "TRY";
+}>;
 /**
  * Value Object для представления денег
  */
-export declare class Money {
+export declare class Money implements IMoney {
     readonly amount: number;
     readonly currency: Currency;
     constructor(amount: number, currency: Currency);
@@ -30,6 +61,10 @@ export declare class Money {
      * Получение курса обмена
      */
     private getExchangeRate;
+    /**
+     * Получение курсов валют
+     */
+    private getExchangeRates;
     /**
      * Сложение денег (только одинаковая валюта)
      */
@@ -51,17 +86,17 @@ export declare class Money {
      */
     equals(other: Money): boolean;
     /**
-     * Проверка больше ли сумма
+     * Проверка, больше ли сумма
      */
     isGreaterThan(other: Money): boolean;
     /**
-     * Проверка меньше ли сумма
+     * Проверка, меньше ли сумма
      */
     isLessThan(other: Money): boolean;
     /**
      * Форматирование для отображения
      */
-    format(): string;
+    format(locale?: string): string;
     /**
      * Получение суммы в копейках/центах
      */
@@ -71,4 +106,5 @@ export declare class Money {
      */
     static fromMinorUnits(minorUnits: number, currency: Currency): Money;
 }
+export {};
 //# sourceMappingURL=Money.d.ts.map

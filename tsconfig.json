@@ -11,12 +11,12 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": false,
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "declaration": true,
-    "declarationMap": true,
-    "composite": true,
+    "declarationMap": false,
+    "composite": false,
     
     /* Paths */
     "baseUrl": ".",
@@ -34,21 +34,11 @@
   "include": [
     "app/**/*.ts",
     "app/**/*.tsx",
-    "packages/**/*.ts",
+    "packages/core/**/*.ts",
+    "packages/config/**/*.ts",
+    "packages/logging/**/*.ts",
     "services/**/*.ts",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
-  
-  /* Exclude node_modules and build directories */
-  "exclude": ["node_modules", "**/node_modules/*", "**/dist", "**/build"],
-  
-  /* Project references */
-  "references": [
-    { "path": "./app/web/tsconfig.app.json" },
-    { "path": "./services/api-gateway/tsconfig.json" },
-    { "path": "./packages/config/tsconfig.json" },
-    { "path": "./packages/core/tsconfig.json" },
-    { "path": "./packages/ui/tsconfig.json" }
   ]
 }

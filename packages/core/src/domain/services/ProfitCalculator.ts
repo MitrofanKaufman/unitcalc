@@ -1,33 +1,34 @@
 // \packages\core\src\domain\services\ProfitCalculator.ts
 // Сервис расчета доходности товаров
 
-import { Product } from '../entities/Product'
-import { ProductCost, CostCalculator } from '../entities/ProductCost'
-import { Money } from '../value-objects/Money'
+import { Product } from '../entities/Product';
+import { ProductCost } from '../entities/ProductCost';
+import { Money } from '../value-objects/Money';
+import { CostCalculator } from './CostCalculator';
 
 /**
  * Результат расчета доходности
  */
 export interface ProfitabilityResult {
-  product: Product
-  costPrice: Money           // Себестоимость
-  sellingPrice: Money        // Цена продажи
-  netProfit: Money          // Чистая прибыль
-  margin: number            // Маржинальность (%)
-  breakEvenPoint: number    // Точка безубыточности
-  roi: number              // ROI (%)
-  profitabilityScore: number // Балл доходности (0-100)
-  recommendations: string[]  // Рекомендации
+  product: Product;
+  costPrice: Money;            // Себестоимость
+  sellingPrice: Money;         // Цена продажи
+  netProfit: Money;            // Чистая прибыль
+  margin: number;              // Маржинальность (%)
+  breakEvenPoint: number;      // Точка безубыточности
+  roi: number;                 // ROI (%)
+  profitabilityScore: number;  // Балл доходности (0-100)
+  recommendations: string[];   // Рекомендации
 }
 
 /**
  * Параметры для расчета доходности
  */
 export interface ProfitabilityParams {
-  salesCount?: number        // Количество продаж
-  timePeriod?: number       // Период в днях
-  competitorPrices?: Money[] // Цены конкурентов
-  marketDemand?: 'low' | 'medium' | 'high' // Спрос на рынке
+  salesCount?: number;              // Количество продаж
+  timePeriod?: number;              // Период в днях
+  competitorPrices?: Money[];       // Цены конкурентов
+  marketDemand?: 'low' | 'medium' | 'high'; // Спрос на рынке
 }
 
 /**
@@ -46,14 +47,14 @@ export class ProfitCalculator {
       timePeriod = 30,
       competitorPrices = [],
       marketDemand = 'medium'
-    } = params
+    } = params;
 
     // Расчет базовых метрик
-    const costPrice = CostCalculator.calculateCostPrice(product.cost)
-    const netProfit = CostCalculator.calculateNetProfit(product.cost)
-    const margin = CostCalculator.calculateMargin(product.cost)
-    const breakEvenPoint = CostCalculator.calculateBreakEvenPoint(product.cost)
-    const roi = CostCalculator.calculateROI(product.cost, salesCount)
+    const costPrice = CostCalculator.calculateCostPrice(product.cost);
+    const netProfit = CostCalculator.calculateNetProfit(product.cost);
+    const margin = CostCalculator.calculateMargin(product.cost);
+    const breakEvenPoint = CostCalculator.calculateBreakEvenPoint(product.cost);
+    const roi = CostCalculator.calculateROI(product.cost, salesCount);
 
     // Расчет балла доходности
     const profitabilityScore = this.calculateProfitabilityScore({
@@ -64,7 +65,7 @@ export class ProfitCalculator {
       timePeriod,
       marketDemand,
       competitorPrices
-    })
+    });
 
     // Генерация рекомендаций
     const recommendations = this.generateRecommendations({
@@ -73,7 +74,7 @@ export class ProfitCalculator {
       breakEvenPoint,
       profitabilityScore,
       competitorPrices
-    })
+    });
 
     return {
       product,
@@ -85,7 +86,7 @@ export class ProfitCalculator {
       roi,
       profitabilityScore,
       recommendations
-    }
+    };
   }
 
   /**

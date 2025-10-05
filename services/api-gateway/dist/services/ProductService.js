@@ -121,11 +121,8 @@ class ProductService {
         let results = Array.from(this.products.values());
         // Фильтрация по поисковому запросу
         if (query) {
-            results = results.filter(product => {
-                var _a, _b;
-                return product.name.toLowerCase().includes(query.toLowerCase()) ||
-                    ((_b = (_a = product.characteristics) === null || _a === void 0 ? void 0 : _a.brand) === null || _b === void 0 ? void 0 : _b.toLowerCase().includes(query.toLowerCase()));
-            });
+            results = results.filter(product => product.name.toLowerCase().includes(query.toLowerCase()) ||
+                product.characteristics?.brand?.toLowerCase().includes(query.toLowerCase()));
         }
         // Фильтрация по маркетплейсу
         if (marketplace) {

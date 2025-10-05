@@ -15,6 +15,9 @@ class CalculationService {
      */
     async calculateProfitability(dto) {
         const { productId, purchasePrice, sellingPrice, logisticsCost, otherCosts, marketplaceId, categoryId } = dto;
+        if (!marketplaceId || !categoryId) {
+            throw new Error('marketplaceId and categoryId are required');
+        }
         // Получение комиссии маркетплейса
         const commission = this.calculateCommission(sellingPrice, marketplaceId, categoryId);
         // Расчет показателей
@@ -34,13 +37,13 @@ class CalculationService {
         };
         const calculation = {
             id: `calc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            productId,
-            purchasePrice,
-            sellingPrice,
+            productId: productId || '',
+            purchasePrice: purchasePrice || 0,
+            sellingPrice: sellingPrice || 0,
             logisticsCost,
             otherCosts,
-            marketplaceId,
-            categoryId,
+            marketplaceId: marketplaceId || '',
+            categoryId: categoryId || '',
             result,
             createdAt: new Date().toISOString()
         };
@@ -65,26 +68,24 @@ class CalculationService {
      * Расчет комиссии маркетплейса
      */
     calculateCommission(sellingPrice, marketplaceId, categoryId) {
-        var _a;
         const marketplace = types_1.MARKETPLACE_COMMISSIONS[marketplaceId];
         if (!marketplace) {
             throw new Error(`Неизвестный маркетплейс: ${marketplaceId}`);
         }
         const baseCommission = marketplace.base;
-        const categoryMultiplier = ((_a = marketplace.categoryMultiplier) === null || _a === void 0 ? void 0 : _a[categoryId]) || 0;
+        const categoryMultiplier = marketplace.categoryMultiplier?.[categoryId] || 0;
         return sellingPrice * (baseCommission / 100) * (1 + categoryMultiplier);
     }
     /**
      * Расчет оптимальной цены продажи
      */
     async calculateOptimalSellingPrice(productId, purchasePrice, logisticsCost, otherCosts, targetProfitability, marketplaceId, categoryId) {
-        var _a;
         const marketplace = types_1.MARKETPLACE_COMMISSIONS[marketplaceId];
         if (!marketplace) {
             throw new Error(`Неизвестный маркетплейс: ${marketplaceId}`);
         }
         const baseCommission = marketplace.base;
-        const categoryMultiplier = ((_a = marketplace.categoryMultiplier) === null || _a === void 0 ? void 0 : _a[categoryId]) || 0;
+        const categoryMultiplier = marketplace.categoryMultiplier?.[categoryId] || 0;
         // Формула: Цена продажи = (Закупка + Логистика + Другие затраты + Целевая прибыль) / (1 - Комиссия)
         const totalCosts = purchasePrice + logisticsCost + otherCosts;
         const commissionRate = (baseCommission / 100) * (1 + categoryMultiplier);
@@ -113,14 +114,17 @@ class CalculationService {
     /**
      * Расчет точки безубыточности
      */
-    async calculateBreakEvenPoint(productId, purchasePrice, logisticsCost, otherCosts, marketplaceId, categoryId) {
-        var _a;
+    async calculateOptimalPrice(productId, purchasePrice, targetProfitability, logisticsCost, otherCosts, marketplaceId, categoryId) {
+        // Add input validation
+        if (targetProfitability <= 0) {
+            throw new Error('Target profitability must be greater than 0');
+        }
         const marketplace = types_1.MARKETPLACE_COMMISSIONS[marketplaceId];
         if (!marketplace) {
             throw new Error(`Неизвестный маркетплейс: ${marketplaceId}`);
         }
         const baseCommission = marketplace.base;
-        const categoryMultiplier = ((_a = marketplace.categoryMultiplier) === null || _a === void 0 ? void 0 : _a[categoryId]) || 0;
+        const categoryMultiplier = marketplace.categoryMultiplier?.[categoryId] || 0;
         const commissionRate = (baseCommission / 100) * (1 + categoryMultiplier);
         // Точка безубыточности: Закупка + Логистика + Другие затраты / (1 - Комиссия)
         const totalFixedCosts = purchasePrice + logisticsCost + otherCosts;
@@ -130,22 +134,22 @@ class CalculationService {
      * Сравнение доходности между маркетплейсами
      */
     async compareMarketplaces(productId, purchasePrice, logisticsCost, otherCosts, sellingPrice, categoryId) {
-        var _a;
         const results = [];
         for (const [marketplaceId, commission] of Object.entries(types_1.MARKETPLACE_COMMISSIONS)) {
-            const categoryMultiplier = ((_a = commission.categoryMultiplier) === null || _a === void 0 ? void 0 : _a[categoryId]) || 0;
-            const commissionAmount = sellingPrice * (commission.base / 100) * (1 + categoryMultiplier);
-            const revenue = sellingPrice - commissionAmount - logisticsCost - otherCosts;
-            const profit = revenue - purchasePrice;
+            const commissionConfig = commission;
+            const categoryMultiplier = commissionConfig.categoryMultiplier?.[categoryId] || 0;
+            const commissionAmount = sellingPrice * (commissionConfig.base / 100) * (1 + categoryMultiplier);
+            const totalCosts = purchasePrice + logisticsCost + otherCosts + commissionAmount;
+            const profit = sellingPrice - totalCosts;
             const profitability = (profit / sellingPrice) * 100;
-            const roi = (profit / purchasePrice) * 100;
+            const roi = (profit / totalCosts) * 100;
             results.push({
                 marketplaceId,
-                marketplaceName: this.getMarketplaceName(marketplaceId),
-                commission: Number(commissionAmount.toFixed(2)),
-                profit: Number(profit.toFixed(2)),
-                profitability: Number(profitability.toFixed(2)),
-                roi: Number(roi.toFixed(2))
+                marketplaceName: commissionConfig.name || marketplaceId,
+                commission: commissionAmount,
+                profit,
+                profitability,
+                roi
             });
         }
         return results;

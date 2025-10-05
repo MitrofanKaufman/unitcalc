@@ -1,18 +1,21 @@
 import React, { createContext, useContext, ReactNode, useCallback, useState } from 'react';
 
-type NotificationType = 'success' | 'error' | 'info' | 'warning';
+export type NotificationType = 'success' | 'error' | 'info' | 'warning';
 
-interface Notification {
+export interface Notification {
   id: string;
   type: NotificationType;
   message: string;
   duration?: number;
+  title?: string;
+  persistent?: boolean;
 }
 
 interface NotificationContextType {
   notifications: Notification[];
   addNotification: (message: string, type?: NotificationType, duration?: number) => void;
   removeNotification: (id: string) => void;
+  showNotification: (notification: Omit<Notification, 'id'>) => void;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
@@ -40,8 +43,8 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     (message: string, type: NotificationType = 'info', duration: number = defaultDuration) => {
       const id = Math.random().toString(36).substr(2, 9);
       const notification: Notification = { id, message, type, duration };
-      
-      setNotifications((prev) => [...prev, notification]);
+
+      setNotifications((prev: Notification[]) => [...prev, notification]);
 
       if (duration > 0) {
         setTimeout(() => {
@@ -53,13 +56,27 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   );
 
   const removeNotification = useCallback((id: string) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
+    setNotifications((prev: Notification[]) => prev.filter((n: Notification) => n.id !== id));
   }, []);
 
-  const contextValue = {
+  const showNotification = useCallback((notificationData: Omit<Notification, 'id'>) => {
+    const id = Math.random().toString(36).substr(2, 9);
+    const notification: Notification = { id, ...notificationData };
+
+    setNotifications((prev: Notification[]) => [...prev, notification]);
+
+    if (notification.duration && notification.duration > 0) {
+      setTimeout(() => {
+        removeNotification(id);
+      }, notification.duration);
+    }
+  }, []);
+
+  const contextValue: NotificationContextType = {
     notifications,
     addNotification,
     removeNotification,
+    showNotification,
   };
 
   return (

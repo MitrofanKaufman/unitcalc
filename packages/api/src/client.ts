@@ -16,8 +16,11 @@ class ApiClient {
   private client: AxiosInstance
 
   constructor() {
+    // Определяем базовый URL в зависимости от окружения
+    const baseURL = process.env.VITE_API_URL || process.env.API_URL || 'http://localhost:3001/api';
+
     this.client = axios.create({
-      baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api',
+      baseURL,
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json',

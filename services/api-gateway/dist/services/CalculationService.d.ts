@@ -41,7 +41,7 @@ export declare class CalculationService {
     /**
      * Расчет точки безубыточности
      */
-    calculateBreakEvenPoint(productId: string, purchasePrice: number, logisticsCost: number, otherCosts: number, marketplaceId: string, categoryId: string): Promise<number>;
+    calculateOptimalPrice(productId: string, purchasePrice: number, targetProfitability: number, logisticsCost: number, otherCosts: number, marketplaceId: string, categoryId?: string): Promise<number>;
     /**
      * Сравнение доходности между маркетплейсами
      */

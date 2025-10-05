@@ -2,29 +2,39 @@
 
 import { z } from 'zod';
 
-export const CurrencySchema = z.enum([
-  'RUB', // Russian Ruble
-  'USD', // US Dollar
-  'EUR', // Euro
-  'CNY', // Chinese Yuan
-  'GBP', // British Pound
-  'JPY', // Japanese Yen
-  'KZT', // Kazakhstani Tenge
-  'TRY'  // Turkish Lira
-]);
+/**
+ * Поддерживаемые валюты
+ */
+export const Currency = {
+  RUB: 'RUB', // Russian Ruble
+  USD: 'USD', // US Dollar
+  EUR: 'EUR', // Euro
+  CNY: 'CNY', // Chinese Yuan
+  GBP: 'GBP', // British Pound
+  JPY: 'JPY', // Japanese Yen
+  KZT: 'KZT', // Kazakhstani Tenge
+  TRY: 'TRY'  // Turkish Lira
+} as const;
 
-export type Currency = z.infer<typeof CurrencySchema>;
+export type Currency = keyof typeof Currency;
+
+/**
+ * Схема валидации для валюты
+ */
+export const CurrencySchema = z.nativeEnum(Currency, {
+  errorMap: () => ({ message: 'Неподдерживаемая валюта' })
+});
 
 // Exchange rates relative to RUB (as of knowledge cutoff)
 const EXCHANGE_RATES: Record<Currency, number> = {
-  RUB: 1,
-  USD: 90,    // 1 USD = 90 RUB
-  EUR: 95,    // 1 EUR = 95 RUB
-  CNY: 12.5,  // 1 CNY = 12.5 RUB
-  GBP: 110,   // 1 GBP = 110 RUB
-  JPY: 0.6,   // 1 JPY = 0.6 RUB
-  KZT: 0.2,   // 1 KZT = 0.2 RUB
-  TRY: 3.0    // 1 TRY = 3.0 RUB
+  [Currency.RUB]: 1,
+  [Currency.USD]: 90,    // 1 USD = 90 RUB
+  [Currency.EUR]: 95,    // 1 EUR = 95 RUB
+  [Currency.CNY]: 12.5,  // 1 CNY = 12.5 RUB
+  [Currency.GBP]: 110,   // 1 GBP = 110 RUB
+  [Currency.JPY]: 0.6,   // 1 JPY = 0.6 RUB
+  [Currency.KZT]: 0.2,   // 1 KZT = 0.2 RUB
+  [Currency.TRY]: 3.0    // 1 TRY = 3.0 RUB
 };
 
 export const CurrencyUtils = {
@@ -49,5 +59,5 @@ export const CurrencyUtils = {
     } catch (e) {
       return `${amount.toFixed(2)} ${currency}`;
     }
+    }
   }
-};

@@ -1,6 +1,6 @@
 {
   "name": "wb-calc",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Unit Calculator Application",
   "private": true,
   "workspaces": [
@@ -15,6 +15,8 @@
     "build:services": "yarn workspace @wb-calc/api-gateway build",
     "build:app": "cd app/web && npm run build",
     "build": "yarn clean && yarn build:types && yarn build:packages && yarn build:services && yarn build:app",
+    "docs": "typedoc",
+    "docs:build": "yarn docs && yarn build",
     "type-check": "tsc --noEmit",
     "dev": "concurrently \"yarn dev:web\" \"yarn dev:api\"",
     "dev:web": "cd app/web && npm run dev",
@@ -41,13 +43,15 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "@vitejs/plugin-react": "^4.7.0",
-    "concurrently": "^8.0.0",
+    "concurrently": "^9.2.1",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^8.0.0",
     "eslint-plugin-react": "^7.0.0",
     "eslint-plugin-react-hooks": "^4.0.0",
     "husky": "^8.0.0",
     "prettier": "^2.0.0",
+    "typedoc": "^0.28.13",
+    "typedoc-plugin-markdown": "^4.9.0",
     "typescript": "^5.0.0"
   },
   "engines": {
@@ -63,5 +67,6 @@
     "express-rate-limit": "^8.1.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.9.3"
-  }
+  },
+  "packageManager": "yarn@4.10.3"
 }

@@ -5,12 +5,53 @@
       "type": "typescript",
       "tsconfig": "server/tsconfig.json",
       "option": "watch",
-      "problemMatcher": ["$tsc-watch"],
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
       "group": {
         "kind": "build",
         "isDefault": true
       },
       "label": "tsc: build - server/tsconfig.json"
+    },
+    {
+      "type": "shell",
+      "command": "cd",
+      "args": ["app/web", "&&", "npm", "run", "preview"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "label": "preview: web app",
+      "detail": "Запуск сервера предварительного просмотра веб-приложения"
+    },
+    {
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "preview"],
+      "options": {
+        "cwd": "${workspaceFolder}/app/web"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "label": "npm run preview",
+      "detail": "Запуск сервера предварительного просмотра веб-приложения (альтернативный способ)"
+    },
+    {
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "build"],
+      "options": {
+        "cwd": "${workspaceFolder}/app/web"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "label": "npm run build",
+      "detail": "Сборка веб-приложения для продакшена"
     }
   ]
 }

@@ -1,9 +1,9 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Box, CssBaseline, ThemeProvider, createTheme, Typography } from '@mui/material';
 import { useNavigate, Outlet } from 'react-router-dom';
 import ResponsiveHeader, { type UserData, type MenuItem } from './ResponsiveHeader';
 import Footer from './Footer';
-import { getMenuItems } from '../../config/menuConfig';
+import { getMenuItems } from '@/config/menuConfig';
 
 // AnimatedHeading component
 export const AnimatedHeading: React.FC<React.ComponentProps<typeof Typography>> = (props) => {
@@ -106,5 +106,6 @@ const MainLayout: React.FC = () => {
     </ThemeProvider>
   );
 };
-
 export default MainLayout;
+
+

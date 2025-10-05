@@ -144,6 +144,14 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
     setShowCalculator(!showCalculator);
   };
 
+  const handleThemeToggle = () => {
+    const newDarkMode = !internalDarkMode;
+    setInternalDarkMode(newDarkMode);
+    if (onThemeChange) {
+      onThemeChange();
+    }
+  };
+
   const handleDesktopMenuToggle = () => {
     setDesktopMenuOpen(!desktopMenuOpen);
   };

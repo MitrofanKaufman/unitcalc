@@ -26,6 +26,10 @@ export class CalculationService {
       categoryId
     } = dto;
 
+    if (!marketplaceId || !categoryId) {
+      throw new Error('marketplaceId and categoryId are required');
+    }
+
     // Получение комиссии маркетплейса
     const commission = this.calculateCommission(
       sellingPrice,
@@ -52,13 +56,13 @@ export class CalculationService {
 
     const calculation: ProfitabilityCalculationEntity = {
       id: `calc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      productId,
-      purchasePrice,
-      sellingPrice,
+      productId: productId || '',
+      purchasePrice: purchasePrice || 0,
+      sellingPrice: sellingPrice || 0,
       logisticsCost,
       otherCosts,
-      marketplaceId,
-      categoryId,
+      marketplaceId: marketplaceId || '',
+      categoryId: categoryId || '',
       result,
       createdAt: new Date().toISOString()
     };
@@ -97,7 +101,7 @@ export class CalculationService {
     }
 
     const baseCommission = marketplace.base;
-    const categoryMultiplier = marketplace.categoryMultiplier?.[categoryId] || 0;
+    const categoryMultiplier = marketplace.categoryMultiplier?.[categoryId as keyof typeof marketplace.categoryMultiplier] || 0;
 
     return sellingPrice * (baseCommission / 100) * (1 + categoryMultiplier);
   }
@@ -120,7 +124,7 @@ export class CalculationService {
     }
 
     const baseCommission = marketplace.base;
-    const categoryMultiplier = marketplace.categoryMultiplier?.[categoryId] || 0;
+    const categoryMultiplier = marketplace.categoryMultiplier?.[categoryId as keyof typeof marketplace.categoryMultiplier] || 0;
 
     // Формула: Цена продажи = (Закупка + Логистика + Другие затраты + Целевая прибыль) / (1 - Комиссия)
     const totalCosts = purchasePrice + logisticsCost + otherCosts;
@@ -164,6 +168,7 @@ export class CalculationService {
       });
     }
 
+    return results;
   }
 
   /**
@@ -177,7 +182,7 @@ export class CalculationService {
     otherCosts: number,
     marketplaceId: string,
     categoryId?: string
-  ): Promise<ProfitabilityCalculationEntity> {
+  ): Promise<number> {
     // Add input validation
     if (targetProfitability <= 0) {
       throw new Error('Target profitability must be greater than 0');
@@ -186,6 +191,10 @@ export class CalculationService {
     const marketplace = MARKETPLACE_COMMISSIONS[marketplaceId as keyof typeof MARKETPLACE_COMMISSIONS];
     if (!marketplace) {
       throw new Error(`Неизвестный маркетплейс: ${marketplaceId}`);
+    }
+
+    const baseCommission = marketplace.base;
+    const categoryMultiplier = marketplace.categoryMultiplier?.[categoryId as keyof typeof marketplace.categoryMultiplier] || 0;
     const commissionRate = (baseCommission / 100) * (1 + categoryMultiplier);
 
     // Точка безубыточности: Закупка + Логистика + Другие затраты / (1 - Комиссия)
