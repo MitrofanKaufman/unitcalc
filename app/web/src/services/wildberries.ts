@@ -1,3 +1,5 @@
+import { generateImageUrl } from '@/core/services/generateImageUrl';
+
 /**
  * Сервис для интеграции с API Wildberries
  *
@@ -10,8 +12,6 @@
  * @example
  * ```typescript
  * // Поиск товаров
- * const products = await WildberriesService.fetchProducts('смартфон');
- *
  * // Получение подсказок
  * const suggestions = await WildberriesService.fetchSuggestions('смартф');
  *
@@ -20,169 +20,142 @@
  * ```
  */
 class WildberriesService {
-  /**
-   * Моковые данные для демонстрации поиска
-   */
-  private static mockProducts = [
-    {
-      id: 123456,
-      name: 'Смартфон Samsung Galaxy A54 5G 8/256GB Black',
-      price: 35990,
-      rating: 4.5,
-      brand: 'Samsung',
-      seller: { id: 1, name: 'Samsung', rating: 4.8 },
-      feedbacks: 1247,
-      inStock: true,
-    },
-    {
-      id: 123457,
-      name: 'Смартфон Xiaomi 13T 12/256GB Black',
-      price: 42990,
-      rating: 4.7,
-      brand: 'Xiaomi',
-      seller: { id: 2, name: 'Xiaomi', rating: 4.6 },
-      feedbacks: 892,
-      inStock: true,
-    },
-    {
-      id: 123458,
-      name: 'Смартфон Apple iPhone 15 128GB Black',
-      price: 89990,
-      rating: 4.9,
-      brand: 'Apple',
-      seller: { id: 3, name: 'Apple', rating: 4.9 },
-      feedbacks: 2156,
-      inStock: true,
-    },
-    {
-      id: 123459,
-      name: 'Смартфон OnePlus 11 16/256GB Black',
-      price: 54990,
-      rating: 4.6,
-      brand: 'OnePlus',
-      seller: { id: 4, name: 'OnePlus', rating: 4.7 },
-      feedbacks: 634,
-      inStock: false,
-    },
-    {
-      id: 123460,
-      name: 'Смартфон Google Pixel 8 8/128GB Obsidian',
-      price: 61990,
-      rating: 4.8,
-      brand: 'Google',
-      seller: { id: 5, name: 'Google', rating: 4.8 },
-      feedbacks: 423,
-      inStock: true,
-    },
-  ];
+    static async fetchSuggestions(query: string): Promise<string[]> {
+        const res = await fetch(`https://suggests.wb.ru/suggests/api/v7/hint?ab_testing=false&query=${encodeURIComponent(query)}&gender=common&locale=kz&lang=ru&appType=1` );
+        if (!res.ok)
+            throw new Error("WB suggestions error");
+        const data = await res.json();
+        return Array.isArray(data.suggests)
+            ? data.suggests.map((s: any) => s.name)
+            : [];
+    }
 
-  /**
-   * Получает список товаров по запросу с отслеживанием прогресса
-   * @param query Поисковый запрос (название товара)
-   * @param onProgressCallback Колбек для отслеживания прогресса (текущий шаг, всего шагов)
-   * @returns Promise с массивом товаров или пустым массивом в случае ошибки
-   * @throws {Error} При ошибке сети или некорректном ответе API
-   */
-  static async fetchProducts(query: string, onProgressCallback?: (current: number, total: number) => void) {
-    // Симуляция задержки сети
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    /**
+     * Получает список товаров по запросу с отслеживанием прогресса
+     * @param query Поисковый запрос
+     * @param onProgressCallback Колбек для отслеживания прогресса (текущий шаг, всего шагов)
+     */
+    static async fetchProducts(query: string, onProgressCallback?: (current: number, total: number) => void): Promise<any[]> {
+        const base = "https://search.wb.ru/exactmatch/sng/common/v14/search";
+        const params = new URLSearchParams({
+            appType: "1",
+            curr: "rub",
+            dest: "233",
+            hide_dtype: "13;14",
+            lang: "ru",
+            page: "1",
+            query,
+            q1: query,
+            resultset: "catalog",
+            sort: "popular",
+            spp: "30",
+            suppressSpellcheck: "false",
+        });
 
-    if (onProgressCallback) onProgressCallback(1, 10);
+        try {
+            // Уведомление о начале загрузки
+            if (onProgressCallback)
+                onProgressCallback(1, 10);
 
-    try {
-      // Фильтрация моковых данных по запросу
-      const filteredProducts = this.mockProducts.filter(product =>
-        product.name.toLowerCase().includes(query.toLowerCase())
-      );
+            // Получение данных с WB
+            const res = await fetch(`${base}?${params.toString()}` );
+            if (!res.ok)
+                throw new Error("WB fetch error");
 
-      if (onProgressCallback) onProgressCallback(5, 10);
+            // Обработка ответа
+            if (onProgressCallback)
+                onProgressCallback(3, 10);
 
-      const processedProducts = filteredProducts.map((product, index) => {
-        if (onProgressCallback) {
-          const progress = 5 + Math.floor((index / filteredProducts.length) * 5);
-          onProgressCallback(progress, 10);
+            const data = await res.json();
+
+            // Извлечение списка товаров
+            if (onProgressCallback)
+                onProgressCallback(5, 10);
+
+            const rawProducts = Array.isArray(data.data?.products)
+                ? data.data.products
+                : Array.isArray(data.products)
+                    ? data.products
+                    : [];
+            // Уведомление о количестве найденных товаров
+            if (onProgressCallback)
+                onProgressCallback(7, 10);
+
+            // Обработка каждого товара с обновлением прогресса
+            const processedProducts = rawProducts.map((p: any, index: number) => {
+                // Обновление прогресса для каждого товара
+                if (onProgressCallback) {
+                    const progress = 7 + Math.floor((index / rawProducts.length) * 3);
+                    onProgressCallback(progress, 10);
+                }
+
+                return {
+                    id: p.id,
+                    name: p.name,
+                    price: p.sizes?.[0]?.price?.product || 0,
+                    rating: p.reviewRating ?? null,
+                    image: generateImageUrl(p.id),
+                    images: p.pics > 0 ? [generateImageUrl(p.id)] : [],
+                    brand: p.brand || 'Неизвестно',
+                    seller: {
+                        id: p.sellerId,
+                        name: p.brand || 'Неизвестный продавец',
+                        rating: p.supplierRating || 0,
+                    },
+                    feedbacks: p.feedbacks || 0,
+                    inStock: p.sizes?.[0]?.stocks?.some((s: any) => s.qty > 0) || false,
+                };
+            });
+
+            // Уведомление о завершении обработки
+            if (onProgressCallback)
+                onProgressCallback(10, 10);
+
+            return processedProducts;
+
+        } catch (error) {
+            console.error("WB fetchProducts error:", error);
+            return [];
         }
-
-        return {
-          id: product.id,
-          name: product.name,
-          price: product.price * 100, // Цена в копейках
-          rating: product.rating,
-          image: this.getImageUrl(product.id),
-          images: [this.getImageUrl(product.id)],
-          brand: product.brand,
-          seller: product.seller,
-          feedbacks: product.feedbacks,
-          inStock: product.inStock,
-        };
-      });
-
-      if (onProgressCallback) onProgressCallback(10, 10);
-      return processedProducts;
-
-    } catch (error) {
-      console.error("WB fetchProducts error:", error);
-      return [];
     }
-  }
 
-  /**
-   * Получает подсказки поиска для автодополнения
-   * @param query Начало поискового запроса
-   * @returns Promise с массивом строк подсказок
-   */
-  static async fetchSuggestions(query: string): Promise<string[]> {
-    // Симуляция задержки сети
-    await new Promise(resolve => setTimeout(resolve, 300));
-
-    try {
-      const allSuggestions = [
-        'смартфон Samsung',
-        'смартфон Xiaomi',
-        'смартфон Apple iPhone',
-        'смартфон OnePlus',
-        'смартфон Google Pixel',
-        'наушники беспроводные',
-        'часы умные',
-        'планшет Samsung',
-        'ноутбук Apple MacBook',
-        'телевизор 4K',
-      ];
-
-      return allSuggestions
-        .filter(suggestion => suggestion.toLowerCase().includes(query.toLowerCase()))
-        .slice(0, 8);
-
-    } catch (error) {
-      console.error("WB fetchSuggestions error:", error);
-      return [];
+    static getImageUrl(productId: number): string {
+        const idStr = productId.toString();
+        return `https://basket-${idStr.slice(0, 3)}.wb.ru/vol${idStr.slice(0, 4)}/part${idStr.slice(0, 6)}/${productId}/images/c516x688/1.webp` ;
     }
-  }
 
-  /**
-   * Генерирует URL изображения товара по его ID
-   * @param productId ID товара
-   * @returns URL изображения товара в формате WebP
-   */
-  static getImageUrl(productId: number) {
-    // Для моковых данных используем placeholder изображения
-    return `https://picsum.photos/400/400?random=${productId}`;
-  }
+    static async getProductById(id: number): Promise<any | null> {
+        try {
+            const products = await this.fetchProducts(id.toString(), undefined);
+            const product = products.find((p: any) => p.id === id);
 
-  /**
-   * Получает детальную информацию о товаре по ID
-   * @param id ID товара
-   * @returns Promise с объектом товара или null в случае ошибки
-   */
-  static async getProductById(id: number) {
-    try {
-      const products = await this.fetchProducts(id.toString(), undefined);
-      return products.find((p: any) => p.id === id) || null;
-    } catch (error) {
-      console.error('Error fetching product by ID:', error);
-      return null;
+            if (product)
+                return product;
+
+            const res = await fetch(`https://card.wb.ru/cards/detail?nm=${id}` );
+            if (!res.ok)
+                return null;
+
+            const data = await res.json();
+            const wbProduct = data.data?.products?.[0];
+
+            if (!wbProduct)
+                return null;
+
+            return {
+                id: wbProduct.id,
+                name: wbProduct.name,
+                price: wbProduct.salePriceU ? wbProduct.salePriceU / 100 : 0,
+                rating: wbProduct.rating ?? null,
+                image: generateImageUrl(Number(wbProduct.id)),
+                images: wbProduct.pics > 0 ? [generateImageUrl(Number(wbProduct.id))] : [],
+            };
+
+        } catch (error) {
+            console.error('Error fetching product by ID:', error);
+            return null;
+        }
     }
-  }
 }
 
 export { WildberriesService };
