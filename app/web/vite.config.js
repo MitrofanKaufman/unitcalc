@@ -6,6 +6,22 @@ export default defineConfig({
     plugins: [react()],
     server: {
         port: 5173,
+        proxy: {
+            // Прокси для API поиска Wildberries
+            '/api/wb': {
+                target: 'https://search.wb.ru',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api\/wb/, ''),
+                secure: false,
+            },
+            // Прокси для изображений Wildberries
+            '/wb-images': {
+                target: 'https://basket-01.wb.ru',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/wb-images\//, ''),
+            },
+        },
+        cors: true,
     },
     resolve: {
         alias: {

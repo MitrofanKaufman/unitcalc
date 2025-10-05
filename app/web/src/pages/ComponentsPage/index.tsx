@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { WbSearch } from '../components/features/wb-search/WbSearch';
-import { useNotificationActions } from '../lib/notifications/useNotificationActions';
+import { WbSearch } from '@/components/features/wb-search';
+import { useNotificationActions } from '@/lib/notifications/useNotificationActions';
 
 // Компонент страницы компонентов
 const ComponentsPage: React.FC = () => {

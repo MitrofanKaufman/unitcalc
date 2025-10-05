@@ -1,33 +1,34 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { DebugProvider } from './components/common/DebugPanel';
+import DebugPanel from './components/layout/Debug/DebugPanel';
 import { NotificationProvider } from './components/common/NotificationProvider';
 import MainLayout from './components/layout/MainLayout';
-import ComponentsPage from './components/ComponentsPage';
-import { HomePage } from './components/HomePage';
-import ProductSearchPage from './components/ProductSearchPage';
-import { AnalyticsPage } from './components/AnalyticsPage';
-import { DocumentationPage } from './components/DocumentationPage';
 
-// Основной компонент приложения
+// Импорты страниц
+import { 
+  HomePage, 
+  ProductSearchPage, 
+  DocumentationPage, 
+  ComponentsPage 
+} from './pages';
+
+/**
+ * Основной компонент приложения
+ * @returns {JSX.Element} Корневой компонент приложения
+ */
 function App() {
   return (
-    <DebugProvider enabled={true}>
-      <NotificationProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<MainLayout />}>
-              <Route index element={<HomePage />} />
-              <Route path="search" element={<ProductSearchPage />} />
-              <Route path="wb-search" element={<ProductSearchPage />} />
-              <Route path="analytics" element={<AnalyticsPage />} />
-              <Route path="components" element={<ComponentsPage />} />
-              <Route path="admin/documentation" element={<DocumentationPage />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </NotificationProvider>
-    </DebugProvider>
+    <NotificationProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainLayout><HomePage /></MainLayout>} />
+          <Route path="/search" element={<MainLayout><ProductSearchPage /></MainLayout>} />
+          <Route path="/documentation" element={<MainLayout><DocumentationPage /></MainLayout>} />
+          <Route path="/components" element={<MainLayout><ComponentsPage /></MainLayout>} />
+        </Routes>
+        <DebugPanel position="bottom-right" />
+      </BrowserRouter>
+    </NotificationProvider>
   );
 }
 

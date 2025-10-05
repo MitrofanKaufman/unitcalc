@@ -5,18 +5,26 @@
 │   ├── web/                         # 🌐 PWA веб-приложение
 │   │   ├── public/                  # 🖼️  Статические файлы
 │   │   ├── src/                     # 📝 Исходный код веб-приложения
-│   │   │   ├── components/          # 🧩 React компоненты
+│   │   │   ├── components/          # 🧩 Общие React компоненты
 │   │   │   │   ├── layout/          # 🏗️  Layout компоненты
 │   │   │   │   │   ├── MainLayout.tsx    # Основной лейаут
 │   │   │   │   │   └── ResponsiveHeader.tsx # Адаптивный хедер
-│   │   │   │   ├── common/          # 🤝 Общие компоненты
-│   │   │   │   │   ├── DebugPanel.tsx    # Панель отладки
-│   │   │   │   │   └── NotificationProvider.tsx # Провайдер уведомлений
-│   │   │   │   ├── HomePage.tsx     # Главная страница
-│   │   │   │   ├── ProductSearchPage.tsx # Страница поиска товаров
-│   │   │   │   ├── AnalyticsPage.tsx # Страница аналитики
-│   │   │   │   ├── ProductCard.tsx  # Карточка товара
-│   │   │   │   └── ProgressBar.tsx  # Индикатор прогресса
+│   │   │   │   └── common/          # 🤝 Общие компоненты
+│   │   │   │       ├── DebugPanel.tsx    # Панель отладки
+│   │   │   │       └── NotificationProvider.tsx # Провайдер уведомлений
+│   │   │   ├── pages/               # 📄 Страницы приложения
+│   │   │   │   ├── HomePage/        # 🏠 Главная страница
+│   │   │   │   │   └── index.tsx    # Компонент страницы
+│   │   │   │   ├── ProductSearchPage/ # 🔍 Поиск товаров
+│   │   │   │   │   └── index.tsx    # Компонент страницы
+│   │   │   │   ├── AnalyticsPage/   # 📊 Аналитика
+│   │   │   │   │   └── index.tsx    # Компонент страницы
+│   │   │   │   ├── ComponentsPage/  # 🧩 Демо компонентов
+│   │   │   │   │   └── index.tsx    # Компонент страницы
+│   │   │   │   ├── DocumentationPage/ # 📚 Документация
+│   │   │   │   │   └── index.tsx    # Компонент страницы
+│   │   │   │   ├── index.ts         # Реэкспорт всех страниц
+│   │   │   │   └── types.ts         # Типы для страниц
 │   │   │   ├── hooks/               # 🪝 React хуки
 │   │   │   │   └── useWildberriesSearch.ts # Хук для поиска WB
 │   │   │   ├── services/            # 🔧 Сервисы API

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const AnalyticsPage: React.FC = () => {
+const AnalyticsPage: React.FC = () => {
   return (
     <main className="analytics-page">
       <div className="analytics-container">
@@ -17,3 +17,5 @@ export const AnalyticsPage: React.FC = () => {
     </main>
   );
 };
+
+export default AnalyticsPage;

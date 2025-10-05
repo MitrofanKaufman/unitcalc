@@ -40,7 +40,7 @@ const generateMockProducts = (count: number) => {
 */
 
 
-interface Product {
+export interface Product {
   id: number;
   name: string;
   brand: string;
@@ -53,7 +53,7 @@ interface Product {
   url?: string;
 }
 
-interface SearchSuggestion {
+export interface SearchSuggestion {
   name: string;
   id: number;
   brand?: string;

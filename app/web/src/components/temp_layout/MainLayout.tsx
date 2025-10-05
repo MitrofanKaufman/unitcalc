@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Box, CssBaseline, ThemeProvider, createTheme, Typography } from '@mui/material';
 import { useNavigate, Outlet } from 'react-router-dom';
-import ResponsiveHeader, { type UserData, type MenuItem } from './Header/ResponsiveHeader';
-import Footer from './Footer/Footer';
+import ResponsiveHeader, { type UserData, type MenuItem } from './ResponsiveHeader';
+import Footer from './Footer';
 import { getMenuItems } from '@/config/menuConfig';
 
 // AnimatedHeading component
@@ -32,20 +32,14 @@ export const AnimatedHeading: React.FC<React.ComponentProps<typeof Typography>> 
   );
 };
 
-interface MainLayoutProps {
-  children?: React.ReactNode;
-}
-
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+const MainLayout: React.FC = () => {
   const [darkMode, setDarkMode] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
 
   // Mock authentication state - replace with your actual auth logic
   const isAuthenticated = true; // Set to true to see the menu items
   const user: UserData | null = isAuthenticated ? {
     name: 'Test User',
-    email: 'test@example.com',
     avatar: '',
     role: 'admin' // Set to 'admin' to see all menu items including admin ones
   } : null;
@@ -63,10 +57,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
   const toggleTheme = () => {
     setDarkMode(!darkMode);
-  };
-
-  const handleMenuToggle = (open: boolean) => {
-    setMobileOpen(open);
   };
 
   const theme = useMemo(
@@ -90,22 +80,25 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           onLogout={handleLogout}
           darkMode={darkMode}
           onThemeChange={toggleTheme}
-          onMenuToggle={handleMenuToggle}
         />
         <Box
           component="main"
           sx={{
             flexGrow: 1,
-            width: { sm: mobileOpen ? '100%' : `calc(100% - ${240}px)` },
-            ml: { sm: mobileOpen ? 0 : `${240}px` },
+            width: '100%',
             p: 3,
             pt: '80px',
             bgcolor: 'background.default',
-            transition: 'margin 0.3s ease-in-out',
+            '& > *': {
+              maxWidth: '100%',
+              width: '100%',
+              mx: 'auto',
+              px: { xs: 2, md: 4 },
+            }
           }}
         >
           <div className="max-w-[1600px] w-full mx-auto">
-            {children || <Outlet />}
+            <Outlet />
           </div>
         </Box>
         <Footer />
@@ -113,7 +106,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     </ThemeProvider>
   );
 };
-
 export default MainLayout;
 
 

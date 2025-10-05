@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useWildberriesSearch } from '../hooks/useWildberriesSearch';
-import { ProductCard } from './ProductCard';
-import { ProgressBar } from './ProgressBar';
+import { useWildberriesSearch } from '@/hooks/useWildberriesSearch';
+import { ProductCard } from '@/components/ProductCard';
+import { ProgressBar } from '@/components/ProgressBar';
 
 const ProductSearchPage: React.FC = () => {
   const {

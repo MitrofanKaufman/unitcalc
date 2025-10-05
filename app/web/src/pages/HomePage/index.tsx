@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
  * <HomePage />
  * ```
  */
-export const HomePage: React.FC = () => {
+const HomePage: React.FC = () => {
   return (
     <main className="home-page">
       <div className="home-content">
@@ -34,3 +34,5 @@ export const HomePage: React.FC = () => {
     </main>
   );
 };
+
+export default HomePage;

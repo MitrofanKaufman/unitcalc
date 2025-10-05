@@ -85,7 +85,7 @@ const StyledMain = styled('main')({
  * 
  * @returns JSX элемент страницы документации
  */
-export const DocumentationPage: React.FC<DocumentationPageProps> = () => {
+const DocumentationPage: React.FC<DocumentationPageProps> = () => {
   const [currentPath, setCurrentPath] = useState('README.md');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
@@ -266,3 +266,5 @@ export const DocumentationPage: React.FC<DocumentationPageProps> = () => {
     </StyledMain>
   );
 };
+
+export default DocumentationPage;

@@ -307,32 +307,35 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
         sx={{
           display: { xs: 'block', md: 'none' },
           '& .MuiDrawer-paper': { 
-            boxSizing: 'border-box', 
-          {/* Theme toggle button at bottom */}
-          <Box sx={{ mt: 'auto', p: 2 }}>
-            <IconButton
-              onClick={(e) => {
-                e.stopPropagation();
-                handleThemeToggle();
-              }}
-              color="inherit"
-              sx={{
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'column',
+            '& .theme-toggle-container': {
+              mt: 'auto',
+              p: 2,
+              '& .MuiIconButton-root': {
                 width: '100%',
                 justifyContent: 'center',
                 backgroundColor: 'transparent',
                 border: 'none',
                 '&:hover': {
-                  backgroundColor: theme.palette.action.hover,
-                },
-                '& .MuiIconButton-root': {
-                  backgroundColor: 'transparent',
-                  border: 'none',
+                  backgroundColor: 'action.hover',
                 }
-              }}
-            >
-              {internalDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
-          </Box>
+              }
+            }
+          },
+        }}
+      >
+        <Box className="theme-toggle-container">
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              handleThemeToggle();
+            }}
+            color="inherit"
+          >
+            {internalDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
         </Box>
       </Drawer>
 
