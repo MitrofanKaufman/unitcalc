@@ -2,10 +2,9 @@
 // Exports all components, tokens, and utilities for use in applications
 
 export * from './components';
-export { Button } from './components/Button';
 export * from './tokens'
 export * from './themes'
 export * from './utils'
 
-// Типы для TypeScript
-export type * from './types'
+// Типы для TypeScript - экспортируем только уникальные типы
+// export type * from './types' // Убираем, так как компоненты уже экспортируют свои типы

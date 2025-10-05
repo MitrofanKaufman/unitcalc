@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .test-box {
+            padding: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>✅ Server Working!</h1>
+        <p>This proves the server is responding correctly.</p>
+        <p>Time: <span id="time"></span></p>
+    </div>
+
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+
+        // Test polyfills
+        if (typeof window.process !== 'undefined') {
+            console.log('✅ Polyfills working');
+        } else {
+            console.log('❌ Polyfills not working');
+        }
+    </script>
+</body>
+</html>

@@ -5,26 +5,32 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -b",
     "dev": "tsc --watch",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
     "validate": "node -e \"const { configLoader } = require('./dist/index.js'); configLoader.load().then(() => console.log('✅ Конфигурация валидна')).catch(console.error)\"",
     "generate-schema": "node -e \"const { configSchemas } = require('./dist/index.js'); console.log(JSON.stringify(configSchemas, null, 2))\" > schema.json"
   },
-  "keywords": ["config", "configuration", "validation", "zod", "typescript"],
+  "keywords": [
+    "config",
+    "configuration",
+    "validation",
+    "zod",
+    "typescript"
+  ],
   "dependencies": {
-    "zod": "^3.22.4",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
-    "typescript": "^5.3.0",
-    "jest": "^29.7.0",
     "@types/jest": "^29.5.8",
-    "eslint": "^8.55.0",
+    "@types/node": "^20.10.0",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
-    "@typescript-eslint/parser": "^6.14.0"
+    "@typescript-eslint/parser": "^6.14.0",
+    "eslint": "^8.55.0",
+    "jest": "^29.7.0",
+    "typescript": "^5.3.0"
   },
   "files": [
     "dist",

@@ -1,0 +1,112 @@
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
+  padding: 16px 0;
+  width: 100%;
+}
+
+.productCard {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.productCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.productContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px;
+}
+
+.productTitle {
+  font-weight: 500;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.productBrand {
+  color: #666;
+  margin-bottom: 12px;
+  font-size: 0.875rem;
+}
+
+.productFooter {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.productPrice {
+  font-weight: 600;
+  color: #1976d2;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.calculatorContainer {
+  margin-top: 2rem;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.calculatorHeader {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.calculatorTitle {
+  margin: 0;
+}
+
+.closeButton {
+  margin-left: auto;
+}
+
+.resultsContainer {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.resultsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.resultItem {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.resultValue {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1976d2;
+  margin: 0.5rem 0;
+}
+
+.resultLabel {
+  font-size: 0.875rem;
+  color: #666;
+}

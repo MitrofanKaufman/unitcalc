@@ -15,7 +15,8 @@ router.get('/rates', async (req, res) => {
       timestamp: new Date().toISOString()
     })
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    const err = error as Error
+    res.status(500).json({ error: err.message })
   }
 })
 
@@ -25,9 +26,10 @@ router.get('/convert', async (req, res) => {
     const { from, to, amount } = req.query
 
     if (!from || !to || !amount) {
-      return res.status(400).json({
+      res.status(400).json({
         error: 'Отсутствуют обязательные параметры: from, to, amount'
       })
+      return
     }
 
     // Заглушка для конвертации валют
@@ -40,7 +42,8 @@ router.get('/convert', async (req, res) => {
       timestamp: new Date().toISOString()
     })
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    const err = error as Error
+    res.status(500).json({ error: err.message })
   }
 })
 

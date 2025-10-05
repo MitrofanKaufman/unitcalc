@@ -1,0 +1,193 @@
+import React from 'react';
+import { DebugProvider } from './lib/debug/DebugContext';
+import { NotificationProvider } from './lib/notifications/NotificationProvider';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import MainLayout from './components/layout/MainLayout';
+import ComponentsPage from './components/ComponentsPage';
+import ProductNameSearch from './components/ProductNameSearch';
+import DebugPanel from './components/DebugPanel';
+import './styles.css';
+const HomePage: React.FC = () => {
+  return (
+    <main className="home-page">
+      <div className="home-content">
+        <h1 className="home-title">
+          🎉 Добро пожаловать в WB Calculator
+        </h1>
+        <p className="home-subtitle">
+          Профессиональный инструмент для расчета доходности товаров на маркетплейсах
+        </p>
+        <p className="home-description">
+          Текущее время: {new Date().toLocaleString('ru-RU')}
+        </p>
+
+        <div className="home-buttons">
+          <Link
+            to="/search"
+            className="action-button search"
+          >
+            🔍 Начать поиск товаров
+          </Link>
+
+          <button
+            className="action-button analytics"
+            onClick={() => {
+              alert('📊 Аналитика маркетплейсов - скоро будет доступна!');
+            }}
+          >
+            📊 Аналитика
+          </button>
+        </div>
+
+        <div className="home-features">
+          <div className="feature-card">
+            <h3>🎯 Точность</h3>
+            <p>Алгоритмы расчета основаны на реальных данных маркетплейсов</p>
+          </div>
+          <div className="feature-card">
+            <h3>⚡ Скорость</h3>
+            <p>Мгновенный расчет доходности для тысяч товаров</p>
+          </div>
+          <div className="feature-card">
+            <h3>🔒 Безопасность</h3>
+            <p>Все данные обрабатываются локально, без передачи третьим лицам</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+// Страница калькулятора доходности
+const CalculatorPage: React.FC = () => {
+  return (
+    <main className="calculator-page">
+      <div className="calculator-container">
+        <h1 className="page-title">🧮 Калькулятор доходности</h1>
+        <p className="page-subtitle">Рассчитайте доходность ваших товаров на маркетплейсах</p>
+        <div className="calculator-content">
+          <div className="calculator-placeholder">
+            <p>Калькулятор доходности будет загружен здесь...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+// Страница конвертера единиц
+const ConverterPage: React.FC = () => {
+  return (
+    <main className="converter-page">
+      <div className="converter-container">
+        <h1 className="page-title">🔄 Конвертер единиц</h1>
+        <p className="page-subtitle">Конвертируйте различные единицы измерения</p>
+        <div className="converter-content">
+          <div className="converter-placeholder">
+            <p>Конвертер единиц будет загружен здесь...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+// Страница поиска WB
+const WbSearchPage: React.FC = () => {
+  return (
+    <main className="wb-search-page">
+      <div className="wb-search-container">
+        <h1 className="page-title">🔍 Поиск товаров WB</h1>
+        <p className="page-subtitle">Поиск и анализ товаров на Wildberries</p>
+        <div className="wb-search-content">
+          <div className="wb-search-placeholder">
+            <p>Поиск WB будет загружен здесь...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+// Админ панель
+const AdminPage: React.FC = () => {
+  return (
+    <main className="admin-page">
+      <div className="admin-container">
+        <h1 className="page-title">⚙️ Админ панель</h1>
+        <p className="page-subtitle">Управление системой и настройками</p>
+        <div className="admin-content">
+          <div className="admin-placeholder">
+            <p>Админ панель будет загружена здесь...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+// Страница журнала изменений
+const ChangelogPage: React.FC = () => {
+  return (
+    <main className="changelog-page">
+      <div className="changelog-container">
+        <h1 className="page-title">📝 Журнал изменений</h1>
+        <p className="page-subtitle">История обновлений и новых функций</p>
+        <div className="changelog-content">
+          <div className="changelog-placeholder">
+            <p>Журнал изменений будет загружен здесь...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+// Страница документации
+const DocumentationPage: React.FC = () => {
+  return (
+    <main className="documentation-page">
+      <div className="documentation-container">
+        <h1 className="page-title">📚 Документация</h1>
+        <p className="page-subtitle">Руководство пользователя и API документация</p>
+        <div className="documentation-content">
+          <div className="documentation-placeholder">
+            <p>Документация будет загружена здесь...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+// Основной компонент приложения
+function AppContent() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/search" element={<ProductSearchPage />} />
+      <Route path="/components" element={<ComponentsPage />} />
+      <Route path="/calculator" element={<CalculatorPage />} />
+      <Route path="/converter" element={<ConverterPage />} />
+      <Route path="/wb-search" element={<WbSearchPage />} />
+      <Route path="/admin" element={<AdminPage />} />
+      <Route path="/admin/changelog" element={<ChangelogPage />} />
+      <Route path="/admin/documentation" element={<DocumentationPage />} />
+    </Routes>
+  );
+function App() {
+  return (
+    <DebugProvider enabled={true}>
+      <NotificationProvider>
+        <Router>
+          <MainLayout>
+            <AppContent />
+          </MainLayout>
+          <DebugPanel position="bottom-right" />
+        </Router>
+      </NotificationProvider>
+    </DebugProvider>
+  );
+}
+
+export default App;

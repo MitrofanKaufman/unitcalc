@@ -1,25 +1,44 @@
 {
   "compilerOptions": {
+    /* Base Options */
     "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": false,
     "jsx": "react-jsx",
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationMap": false,
+    "composite": false,
+    
+    /* Paths */
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["app/*"],
+      "@packages/*": ["packages/*"],
+      "@services/*": ["services/*"],
+      "@tests/*": ["tests/*"],
+      "@/*": ["app/web/src/*"]
+    }
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "exclude": ["node_modules", "**/node_modules/*", "**/dist/*"],
+  
+  /* Include all TypeScript files in the project */
+  "include": [
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "packages/core/**/*.ts",
+    "packages/config/**/*.ts",
+    "packages/logging/**/*.ts",
+    "services/**/*.ts",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
+  ]
 }

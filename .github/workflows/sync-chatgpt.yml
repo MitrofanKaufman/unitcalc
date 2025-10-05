@@ -1,0 +1,21 @@
+name: ChatGPT Sync
+
+# Триггер на пуш в main ветку с определённой пометкой
+on:
+  push:
+    branches:
+      - main
+    # Только коммиты, содержащие #sync
+    paths-ignore:
+      - '**/*'
+      
+jobs:
+  sync:
+    if: contains(github.event.head_commit.message, '#sync')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Notify ChatGPT
+        run: echo "✅ Коммит с #sync обнаружен. Код готов к синхронизации."

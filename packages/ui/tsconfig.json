@@ -1,15 +1,29 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es2018",
-    "module": "commonjs",
+    "target": "es2020",
+    "module": "esnext",
+    "moduleResolution": "node",
     "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "./dist/types",
+    "sourceMap": true,
     "outDir": "./dist",
-    "strict": true,
+    "rootDir": "./src",
+    "jsx": "react-jsx",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "react-jsx"
+    "strict": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": false,
+    "composite": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.test.ts"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.stories.tsx"],
+  "references": [
+    { "path": "../core" },
+    { "path": "../config" }
+  ]
 }

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketplace Calculator - Калькулятор доходности маркетплейсов</title>
+    <script>
+      // Глобальные полифиллы ДО загрузки любых скриптов
+      (function() {
+        // Полифилл process
+        var process = {
+          cwd: function() { return '/'; },
+          env: { NODE_ENV: 'development' },
+          platform: 'browser',
+          version: ''
+        };
+
+        // Определяем process в глобальном контексте
+        Object.defineProperty(window, 'process', {
+          value: process,
+          writable: false,
+          configurable: false
+        });
+
+        // Полифилл path с полной реализацией
+        var path = {
+          resolve: function(...args) {
+            var resolved = args.join('/').replace(/\/+/g, '/');
+            return resolved.startsWith('/') ? resolved : '/' + resolved;
+          },
+          join: function(...args) { return args.join('/'); },
+          dirname: function(p) {
+            if (!p || p === '/') return '/';
+            var segments = p.split('/').filter(Boolean);
+            segments.pop();
+            return segments.length ? '/' + segments.join('/') : '/';
+          },
+          basename: function(p, ext) {
+            if (!p) return '';
+            var segments = p.split('/').filter(Boolean);
+            var base = segments[segments.length - 1] || '';
+            if (ext && base.endsWith(ext)) {
+              base = base.slice(0, -ext.length);
+            }
+            return base;
+          },
+          extname: function(p) {
+            if (!p) return '';
+            var base = this.basename(p);
+            var lastDot = base.lastIndexOf('.');
+            return lastDot >= 0 ? '.' + base.slice(lastDot + 1) : '';
+          }
+        };
+
+        Object.defineProperty(window, 'path', {
+          value: path,
+          writable: false,
+          configurable: false
+        });
+
+        // Также определяем в globalThis
+        if (typeof globalThis !== 'undefined') {
+          Object.defineProperty(globalThis, 'process', {
+            value: process,
+            writable: false,
+            configurable: false
+          });
+          Object.defineProperty(globalThis, 'path', {
+            value: path,
+            writable: false,
+            configurable: false
+          });
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-DBnKRQOP.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

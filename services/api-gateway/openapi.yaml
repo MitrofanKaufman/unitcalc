@@ -1,0 +1,522 @@
+# \server\openapi.yaml
+# OpenAPI спецификация для Unit Calculator API
+
+openapi: 3.0.3
+info:
+  title: Unit Calculator API
+  description: |
+    API для конвертации единиц измерения.
+
+    ## Аутентификация
+    API использует JWT токены для аутентификации. Получите токен через эндпоинт `/auth/login`.
+
+    ## Ошибки
+    Все ошибки возвращаются в формате:
+    ```json
+    {
+      "success": false,
+      "error": {
+        "message": "Описание ошибки",
+        "code": "ERROR_CODE",
+        "details": {}
+      },
+      "timestamp": "2024-01-01T00:00:00.000Z"
+    }
+    ```
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:3001/api
+    description: Development server
+  - url: https://api.your-domain.com/api
+    description: Production server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Unit:
+      type: object
+      required:
+        - id
+        - name
+        - symbol
+        - category
+        - type
+        - isActive
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          example: "unit_123"
+        name:
+          type: string
+          example: "Метр"
+        symbol:
+          type: string
+          example: "m"
+        category:
+          type: string
+          enum: [length, mass, volume, temperature, time, speed, area, pressure, energy, power, currency, data]
+          example: "length"
+        type:
+          type: string
+          enum: [base, derived, conversion]
+          example: "base"
+        conversionFactor:
+          type: number
+          example: 1000
+        baseUnit:
+          type: string
+          example: "m"
+        description:
+          type: string
+          example: "Базовая единица длины"
+        isActive:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ConversionRequest:
+      type: object
+      required:
+        - from
+        - to
+        - value
+      properties:
+        from:
+          type: string
+          example: "m"
+        to:
+          type: string
+          example: "km"
+        value:
+          type: number
+          example: 1500
+
+    ConversionResult:
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/Unit'
+        to:
+          $ref: '#/components/schemas/Unit'
+        value:
+          type: number
+          example: 1500
+        result:
+          type: number
+          example: 1.5
+        formula:
+          type: string
+          example: "value / 1000"
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: object
+
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+        error:
+          $ref: '#/components/schemas/Error'
+        timestamp:
+          type: string
+          format: date-time
+        version:
+          type: string
+
+    PaginatedResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            pagination:
+              type: object
+              properties:
+                page:
+                  type: integer
+                limit:
+                  type: integer
+                total:
+                  type: integer
+                totalPages:
+                  type: integer
+
+paths:
+  /health:
+    get:
+      summary: Проверка здоровья сервиса
+      description: Возвращает информацию о статусе сервиса
+      responses:
+        '200':
+          description: Сервис работает нормально
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  timestamp:
+                    type: string
+                    format: date-time
+                  uptime:
+                    type: number
+                  version:
+                    type: string
+                  memory:
+                    type: object
+
+  /units:
+    get:
+      summary: Получить список единиц измерения
+      description: |
+        Возвращает список всех активных единиц измерения с возможностью фильтрации и пагинации.
+
+        Поддерживаемые параметры фильтрации:
+        - `category`: категория единиц
+        - `search`: поиск по названию или символу
+        - `type`: тип единицы
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [length, mass, volume, temperature, time, speed, area, pressure, energy, power, currency, data]
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+            enum: [name, symbol, category]
+            default: name
+        - name: sortOrder
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Список единиц измерения
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+        '400':
+          description: Неверные параметры запроса
+        '401':
+          description: Не авторизован
+
+    post:
+      summary: Создать новую единицу измерения
+      description: Создает новую единицу измерения
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - symbol
+                - category
+                - type
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                symbol:
+                  type: string
+                  minLength: 1
+                  maxLength: 20
+                category:
+                  type: string
+                  enum: [length, mass, volume, temperature, time, speed, area, pressure, energy, power, currency, data]
+                type:
+                  type: string
+                  enum: [base, derived, conversion]
+                conversionFactor:
+                  type: number
+                baseUnit:
+                  type: string
+                description:
+                  type: string
+                  maxLength: 500
+      responses:
+        '201':
+          description: Единица создана
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Unit'
+        '400':
+          description: Неверные данные
+        '401':
+          description: Не авторизован
+        '409':
+          description: Единица с таким символом уже существует
+
+  /units/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+
+    get:
+      summary: Получить единицу измерения по ID
+      description: Возвращает информацию о конкретной единице измерения
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Информация о единице
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Unit'
+        '404':
+          description: Единица не найдена
+
+    put:
+      summary: Обновить единицу измерения
+      description: Обновляет информацию о единице измерения
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                symbol:
+                  type: string
+                  minLength: 1
+                  maxLength: 20
+                category:
+                  type: string
+                  enum: [length, mass, volume, temperature, time, speed, area, pressure, energy, power, currency, data]
+                type:
+                  type: string
+                  enum: [base, derived, conversion]
+                conversionFactor:
+                  type: number
+                baseUnit:
+                  type: string
+                description:
+                  type: string
+                  maxLength: 500
+                isActive:
+                  type: boolean
+      responses:
+        '200':
+          description: Единица обновлена
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Unit'
+        '400':
+          description: Неверные данные
+        '404':
+          description: Единица не найдена
+
+    delete:
+      summary: Удалить единицу измерения
+      description: Помечает единицу измерения как неактивную
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Единица удалена
+        '404':
+          description: Единица не найдена
+
+  /convert:
+    post:
+      summary: Конвертировать значение
+      description: |
+        Конвертирует значение из одной единицы измерения в другую.
+
+        Поддерживаются прямые конверсии и цепочки конверсий.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversionRequest'
+      responses:
+        '200':
+          description: Результат конвертации
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ConversionResult'
+        '400':
+          description: Неверные данные или несовместимые единицы
+        '404':
+          description: Одна из единиц не найдена
+
+  /auth/login:
+    post:
+      summary: Вход в систему
+      description: Аутентификация пользователя и получение JWT токенов
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+      responses:
+        '200':
+          description: Успешный вход
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          user:
+                            type: object
+                          tokens:
+                            type: object
+        '400':
+          description: Неверные учетные данные
+        '429':
+          description: Слишком много попыток входа
+
+  /auth/register:
+    post:
+      summary: Регистрация пользователя
+      description: Создание нового аккаунта пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - name
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+                name:
+                  type: string
+                  minLength: 2
+                  maxLength: 50
+      responses:
+        '201':
+          description: Пользователь зарегистрирован
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          user:
+                            type: object
+                          tokens:
+                            type: object
+        '400':
+          description: Неверные данные или пользователь уже существует
+        '429':
+          description: Слишком много попыток регистрации

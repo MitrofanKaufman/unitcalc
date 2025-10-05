@@ -1,0 +1,47 @@
+name: Generate Documentation
+
+on:
+  push:
+    branches:
+      - main
+    # Срабатывает только при наличии #docs в сообщении коммита
+    paths-ignore:
+      - '**/*'
+
+jobs:
+  build-and-deploy-docs:
+    if: contains(github.event.head_commit.message, '#docs')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Generate Documentation
+        run: yarn docs:build
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: docs
+          branch: gh-pages
+          clean: true
+          clean-exclude: |
+            .nojekyll
+            CNAME
+            .gitignore
+
+      - name: Notify completion
+        run: echo "✅ Документация успешно сгенерирована и опубликована на GitHub Pages"

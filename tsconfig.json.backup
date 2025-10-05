@@ -1,0 +1,54 @@
+{
+  "compilerOptions": {
+    /* Base Options */
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    
+    /* Paths */
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["app/*"],
+      "@packages/*": ["packages/*"],
+      "@services/*": ["services/*"],
+      "@tests/*": ["tests/*"],
+      "@/*": ["app/web/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "**/node_modules/*", "**/dist/*"],
+  
+  /* Include all TypeScript files in the project */
+  "include": [
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "packages/**/*.ts",
+    "services/**/*.ts",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
+  ],
+  
+  /* Exclude node_modules and build directories */
+  "exclude": ["node_modules", "**/node_modules/*", "**/dist", "**/build"],
+  
+  /* Project references */
+  "references": [
+    { "path": "./app/web/tsconfig.app.json" },
+    { "path": "./services/api-gateway/tsconfig.json" },
+    { "path": "./packages/config/tsconfig.json" },
+    { "path": "./packages/core/tsconfig.json" },
+    { "path": "./packages/ui/tsconfig.json" }
+  ]
+}

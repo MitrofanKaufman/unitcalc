@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketplace Calculator - Калькулятор доходности маркетплейсов</title>
+    <script>
+      // Глобальные полифиллы ДО загрузки любых скриптов
+      (function() {
+        // Полифилл process
+        var process = {
+          cwd: function() { return '/'; },
+          env: { NODE_ENV: 'development' },
+          platform: 'browser',
+          version: ''
+        };
+
+        // Определяем process в глобальном контексте
+        Object.defineProperty(window, 'process', {
+          value: process,
+          writable: false,
+          configurable: false
+        });
+
+        // Полифилл path с полной реализацией
+        var path = {
+          resolve: function(...args) {
+            var resolved = args.join('/').replace(/\/+/g, '/');
+            return resolved.startsWith('/') ? resolved : '/' + resolved;
+          },
+          join: function(...args) { return args.join('/'); },
+          dirname: function(p) {
+            if (!p || p === '/') return '/';
+            var segments = p.split('/').filter(Boolean);
+            segments.pop();
+            return segments.length ? '/' + segments.join('/') : '/';
+          },
+          basename: function(p, ext) {
+            if (!p) return '';
+            var segments = p.split('/').filter(Boolean);
+            var base = segments[segments.length - 1] || '';
+            if (ext && base.endsWith(ext)) {
+              base = base.slice(0, -ext.length);
+            }
+            return base;
+          },
+          extname: function(p) {
+            if (!p) return '';
+            var base = this.basename(p);
+            var lastDot = base.lastIndexOf('.');
+            return lastDot >= 0 ? '.' + base.slice(lastDot + 1) : '';
+          }
+        };
+
+        Object.defineProperty(window, 'path', {
+          value: path,
+          writable: false,
+          configurable: false
+        });
+
+        // Также определяем в globalThis
+        if (typeof globalThis !== 'undefined') {
+          Object.defineProperty(globalThis, 'process', {
+            value: process,
+            writable: false,
+            configurable: false
+          });
+          Object.defineProperty(globalThis, 'path', {
+            value: path,
+            writable: false,
+            configurable: false
+          });
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Debug info -->
+    <noscript>
+      <div style="padding: 20px; background: #fff3cd; border: 2px solid #ffc107; margin: 40px; border-radius: 8px;">
+        <h1 style="color: #856404;">⚠️ JavaScript Disabled</h1>
+        <p>JavaScript is disabled in your browser. This application requires JavaScript to run.</p>
+      </div>
+    </noscript>
+
+    <div id="root">
+      <!-- Fallback content in case React fails to load -->
+      <div style="padding: 20px; background: #ffebee; border: 2px solid #f44336; margin: 40px; border-radius: 8px;">
+        <h1 style="color: #d32f2f;">⚠️ React App Failed to Load</h1>
+        <p>If you can see this message, React JavaScript is not working properly.</p>
+        <p>Please check the browser console for errors.</p>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Добавляем React в глобальную область видимости для совместимости с собранным приложением
+      window.React = {
+        version: '18.2.0',
+        createElement: () => {},
+        Fragment: Symbol('react.fragment')
+      };
+    </script>
+  </body>
+</html>

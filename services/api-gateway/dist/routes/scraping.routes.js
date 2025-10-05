@@ -1,0 +1,60 @@
+"use strict";
+// \services\api-gateway\src\routes\scraping.routes.ts
+// Маршруты для функций веб-скрапинга
+// Импортирует функции из отдельных файлов
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const router = (0, express_1.Router)();
+// POST /api/scraping/product
+router.post('/product', async (req, res) => {
+    try {
+        const { url, productId } = req.body;
+        if (!url && !productId) {
+            res.status(400).json({
+                error: 'Необходимо указать URL или ID продукта'
+            });
+            return;
+        }
+        // Заглушка для скрапинга данных продукта
+        res.json({
+            message: 'Product scraping endpoint - заглушка',
+            url: url,
+            productId: productId,
+            scrapedData: {
+                title: 'Пример продукта',
+                price: 1000,
+                availability: true
+            },
+            timestamp: new Date().toISOString()
+        });
+    }
+    catch (error) {
+        const err = error;
+        res.status(500).json({ error: err.message });
+    }
+});
+// GET /api/scraping/price
+router.get('/price', async (req, res) => {
+    try {
+        const { url } = req.query;
+        if (!url) {
+            res.status(400).json({
+                error: 'Необходимо указать URL продукта'
+            });
+            return;
+        }
+        // Заглушка для получения цены
+        res.json({
+            url: url,
+            price: 1000,
+            currency: 'RUB',
+            timestamp: new Date().toISOString()
+        });
+    }
+    catch (error) {
+        const err = error;
+        res.status(500).json({ error: err.message });
+    }
+});
+exports.default = router;
+//# sourceMappingURL=scraping.routes.js.map

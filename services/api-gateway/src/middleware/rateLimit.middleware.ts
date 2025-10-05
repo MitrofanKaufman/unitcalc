@@ -4,6 +4,17 @@
 
 import rateLimit from 'express-rate-limit'
 
+// Расширение типа Request для поддержки rateLimit
+declare global {
+  namespace Express {
+    interface Request {
+      rateLimit?: {
+        resetTime?: number
+      }
+    }
+  }
+}
+
 // Конфигурация rate limiting
 export const rateLimitMiddleware = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 минут
@@ -18,7 +29,7 @@ export const rateLimitMiddleware = rateLimit({
     res.status(429).json({
       error: 'Слишком много запросов',
       message: 'Превышен лимит запросов. Попробуйте через 15 минут.',
-      retryAfter: Math.ceil((req.rateLimit.resetTime - Date.now()) / 1000 / 60)
+      retryAfter: Math.ceil((req.rateLimit?.resetTime ? (req.rateLimit.resetTime - Date.now()) / 1000 / 60 : 15))
     })
   },
   // Пропускать rate limiting для health check

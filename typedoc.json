@@ -1,0 +1,33 @@
+{
+  "entryPoints": [
+    "app/web/src/App.tsx",
+    "app/web/src/components/HomePage.tsx",
+    "app/web/src/components/ProductSearchPage.tsx",
+    "app/web/src/components/AnalyticsPage.tsx",
+    "app/web/src/components/ProductCard.tsx",
+    "app/web/src/components/ProgressBar.tsx",
+    "app/web/src/components/layout/MainLayout.tsx",
+    "app/web/src/components/layout/ResponsiveHeader.tsx",
+    "app/web/src/components/common/DebugPanel.tsx",
+    "app/web/src/components/common/NotificationProvider.tsx",
+    "app/web/src/hooks/useWildberriesSearch.ts",
+    "app/web/src/services/wildberries.ts"
+  ],
+  "out": "docs",
+  "name": "WB Calculator Documentation",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "hideGenerator": true,
+  "readme": "none",
+  "sort": ["source-order"],
+  "tsconfig": "tsconfig.json",
+  "plugin": ["typedoc-plugin-markdown"],
+  "cleanOutputDir": true,
+  "categorizeByGroup": true,
+  "categoryOrder": ["Components", "Hooks", "Services", "Types", "*"],
+  "blockTags": ["@example", "@throws", "@see", "@deprecated"],
+  "inlineTags": ["@link", "@linkcode", "@linkplain"],
+  "entryPointStrategy": "expand",
+  "skipErrorChecking": true
+}

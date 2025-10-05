@@ -1,0 +1,303 @@
+import {
+  ProfitabilityCalculationEntity,
+  CalculationResultEntity,
+  CalculateProfitabilityDto,
+  MARKETPLACE_COMMISSIONS
+} from '../types';
+
+/**
+ * Сервис для расчетов доходности товаров
+ * Содержит математическую логику расчетов
+ */
+export class CalculationService {
+  private calculations: Map<string, ProfitabilityCalculationEntity> = new Map();
+
+  /**
+   * Расчет доходности товара
+   */
+  async calculateProfitability(dto: CalculateProfitabilityDto): Promise<ProfitabilityCalculationEntity> {
+    const {
+      productId,
+      purchasePrice,
+      sellingPrice,
+      logisticsCost,
+      otherCosts,
+      marketplaceId,
+      categoryId
+    } = dto;
+
+    if (!marketplaceId || !categoryId) {
+      throw new Error('marketplaceId and categoryId are required');
+    }
+
+    // Получение комиссии маркетплейса
+    const commission = this.calculateCommission(
+      sellingPrice,
+      marketplaceId!,
+      categoryId
+    ) as number;
+
+    // Расчет показателей
+    const revenue = sellingPrice - commission - logisticsCost - otherCosts;
+    const profit = revenue - purchasePrice;
+    const profitability = (profit / sellingPrice) * 100;
+    const roi = (profit / purchasePrice) * 100;
+
+    const result: CalculationResultEntity = {
+      revenue: Number(revenue.toFixed(2)),
+      commission: Number(commission.toFixed(2)),
+      logistics: logisticsCost,
+      otherCosts,
+      profit: Number(profit.toFixed(2)),
+      profitability: Number(profitability.toFixed(2)),
+      roi: Number(roi.toFixed(2)),
+      calculatedAt: new Date().toISOString()
+    };
+
+    const calculation: ProfitabilityCalculationEntity = {
+      id: `calc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      productId: productId || '',
+      purchasePrice: purchasePrice || 0,
+      sellingPrice: sellingPrice || 0,
+      logisticsCost,
+      otherCosts,
+      marketplaceId: marketplaceId || '',
+      categoryId: categoryId || '',
+      result,
+      createdAt: new Date().toISOString()
+    };
+
+    this.calculations.set(calculation.id, calculation);
+    return calculation;
+  }
+
+  /**
+   * Получение расчета по ID
+   */
+  async getCalculation(id: string): Promise<ProfitabilityCalculationEntity | null> {
+    return this.calculations.get(id) || null;
+  }
+
+  /**
+   * Получение истории расчетов для товара
+   */
+  async getCalculationHistory(productId: string): Promise<ProfitabilityCalculationEntity[]> {
+    return Array.from(this.calculations.values())
+      .filter(calc => calc.productId === productId)
+      .sort((a, b) => new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime());
+  }
+
+  /**
+   * Расчет комиссии маркетплейса
+   */
+  private calculateCommission(
+    sellingPrice: number,
+    marketplaceId: string,
+    categoryId: string
+  ): number {
+    const marketplace = MARKETPLACE_COMMISSIONS[marketplaceId as keyof typeof MARKETPLACE_COMMISSIONS];
+    if (!marketplace) {
+      throw new Error(`Неизвестный маркетплейс: ${marketplaceId}`);
+    }
+
+    const baseCommission = marketplace.base;
+    const categoryMultiplier = marketplace.categoryMultiplier?.[categoryId as keyof typeof marketplace.categoryMultiplier] || 0;
+
+    return sellingPrice * (baseCommission / 100) * (1 + categoryMultiplier);
+  }
+
+  /**
+   * Расчет оптимальной цены продажи
+   */
+  async calculateOptimalSellingPrice(
+    productId: string,
+    purchasePrice: number,
+    logisticsCost: number,
+    otherCosts: number,
+    targetProfitability: number,
+    marketplaceId: string,
+    categoryId: string
+  ): Promise<number> {
+    const marketplace = MARKETPLACE_COMMISSIONS[marketplaceId as keyof typeof MARKETPLACE_COMMISSIONS];
+    if (!marketplace) {
+      throw new Error(`Неизвестный маркетплейс: ${marketplaceId}`);
+    }
+
+    const baseCommission = marketplace.base;
+    const categoryMultiplier = marketplace.categoryMultiplier?.[categoryId as keyof typeof marketplace.categoryMultiplier] || 0;
+
+    // Формула: Цена продажи = (Закупка + Логистика + Другие затраты + Целевая прибыль) / (1 - Комиссия)
+    const totalCosts = purchasePrice + logisticsCost + otherCosts;
+    const commissionRate = (baseCommission / 100) * (1 + categoryMultiplier);
+
+    return totalCosts / (1 - commissionRate);
+  }
+
+  /**
+   * Анализ чувствительности прибыли к изменению цены
+   */
+  async analyzePriceSensitivity(
+    productId: string,
+    basePurchasePrice: number,
+    baseLogisticsCost: number,
+    baseOtherCosts: number,
+    baseSellingPrice: number,
+    marketplaceId: string,
+    categoryId: string,
+    priceRange: { min: number; max: number; step: number }
+  ): Promise<Array<{
+    sellingPrice: number;
+    profit: number;
+    profitability: number;
+    roi: number;
+  }>> {
+    const results = [];
+
+    for (let price = priceRange.min; price <= priceRange.max; price += priceRange.step) {
+      const commission = this.calculateCommission(price, marketplaceId, categoryId);
+      const revenue = price - commission - baseLogisticsCost - baseOtherCosts;
+      const profit = revenue - basePurchasePrice;
+      const profitability = (profit / price) * 100;
+      const roi = (profit / basePurchasePrice) * 100;
+
+      results.push({
+        sellingPrice: price,
+        profit: Number(profit.toFixed(2)),
+        profitability: Number(profitability.toFixed(2)),
+        roi: Number(roi.toFixed(2))
+      });
+    }
+
+    return results;
+  }
+
+  /**
+   * Расчет точки безубыточности
+   */
+  async calculateOptimalPrice(
+    productId: string,
+    purchasePrice: number,
+    targetProfitability: number,
+    logisticsCost: number,
+    otherCosts: number,
+    marketplaceId: string,
+    categoryId?: string
+  ): Promise<number> {
+    // Add input validation
+    if (targetProfitability <= 0) {
+      throw new Error('Target profitability must be greater than 0');
+    }
+
+    const marketplace = MARKETPLACE_COMMISSIONS[marketplaceId as keyof typeof MARKETPLACE_COMMISSIONS];
+    if (!marketplace) {
+      throw new Error(`Неизвестный маркетплейс: ${marketplaceId}`);
+    }
+
+    const baseCommission = marketplace.base;
+    const categoryMultiplier = marketplace.categoryMultiplier?.[categoryId as keyof typeof marketplace.categoryMultiplier] || 0;
+    const commissionRate = (baseCommission / 100) * (1 + categoryMultiplier);
+
+    // Точка безубыточности: Закупка + Логистика + Другие затраты / (1 - Комиссия)
+    const totalFixedCosts = purchasePrice + logisticsCost + otherCosts;
+
+    return totalFixedCosts / (1 - commissionRate);
+  }
+
+  /**
+   * Сравнение доходности между маркетплейсами
+   */
+  async compareMarketplaces(
+    productId: string,
+    purchasePrice: number,
+    logisticsCost: number,
+    otherCosts: number,
+    sellingPrice: number,
+    categoryId: string
+  ): Promise<Array<{
+    marketplaceId: string;
+    marketplaceName: string;
+    commission: number;
+    profit: number;
+    profitability: number;
+    roi: number;
+  }>> {
+    const results: Array<{
+      marketplaceId: string;
+      marketplaceName: string;
+      commission: number;
+      profit: number;
+      profitability: number;
+      roi: number;
+    }> = [];
+
+    for (const [marketplaceId, commission] of Object.entries(MARKETPLACE_COMMISSIONS)) {
+      const commissionConfig = commission as { base: number; categoryMultiplier?: Record<string, number>; name?: string };
+      const categoryMultiplier = commissionConfig.categoryMultiplier?.[categoryId] || 0;
+      const commissionAmount = sellingPrice * (commissionConfig.base / 100) * (1 + categoryMultiplier);
+      
+      const totalCosts = purchasePrice + logisticsCost + otherCosts + commissionAmount;
+      const profit = sellingPrice - totalCosts;
+      const profitability = (profit / sellingPrice) * 100;
+      const roi = (profit / totalCosts) * 100;
+
+      results.push({
+        marketplaceId,
+        marketplaceName: commissionConfig.name || marketplaceId,
+        commission: commissionAmount,
+        profit,
+        profitability,
+        roi
+      });
+    }
+
+    return results;
+  }
+
+  /**
+   * Получение названия маркетплейса
+   */
+  private getMarketplaceName(id: string): string {
+    const names: Record<string, string> = {
+      'wb': 'Wildberries',
+      'ozon': 'Ozon',
+      'yandex': 'Yandex Market'
+    };
+    return names[id] || id;
+  }
+
+  /**
+   * Получение статистики расчетов
+   */
+  async getCalculationStats(): Promise<{
+    totalCalculations: number;
+    averageProfitability: number;
+    averageRoi: number;
+    profitableCalculations: number;
+    unprofitableCalculations: number;
+  }> {
+    const calculations = Array.from(this.calculations.values());
+
+    if (calculations.length === 0) {
+      return {
+        totalCalculations: 0,
+        averageProfitability: 0,
+        averageRoi: 0,
+        profitableCalculations: 0,
+        unprofitableCalculations: 0
+      };
+    }
+
+    const totalProfitability = calculations.reduce((sum, calc) => sum + calc.result.profitability, 0);
+    const totalRoi = calculations.reduce((sum, calc) => sum + calc.result.roi, 0);
+    const profitableCalculations = calculations.filter(calc => calc.result.profit > 0).length;
+    const unprofitableCalculations = calculations.filter(calc => calc.result.profit <= 0).length;
+
+    return {
+      totalCalculations: calculations.length,
+      averageProfitability: Number((totalProfitability / calculations.length).toFixed(2)),
+      averageRoi: Number((totalRoi / calculations.length).toFixed(2)),
+      profitableCalculations,
+      unprofitableCalculations
+    };
+  }
+}

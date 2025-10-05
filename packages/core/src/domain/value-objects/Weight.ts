@@ -1,6 +1,8 @@
 // \packages\core\src\domain\value-objects\Weight.ts
 // Value Object для работы с весом
 
+import { z } from 'zod';
+
 /**
  * Единицы измерения веса
  */
@@ -11,6 +13,16 @@ export enum WeightUnit {
   POUND = 'lb',
   OUNCE = 'oz'
 }
+
+/**
+ * Схема валидации для Weight
+ */
+export const WeightSchema = z.object({
+  value: z.number().positive('Вес должен быть положительным числом'),
+  unit: z.nativeEnum(WeightUnit, {
+    errorMap: () => ({ message: 'Неподдерживаемая единица веса' })
+  })
+}).transform((data) => new Weight(data.value, data.unit));
 
 /**
  * Коэффициенты конвертации в граммы
@@ -26,7 +38,29 @@ const WEIGHT_CONVERSIONS: Record<WeightUnit, number> = {
 /**
  * Value Object для представления веса
  */
-export class Weight {
+/**
+ * Интерфейс для объекта Weight
+ */
+interface IWeight {
+  value: number;
+  unit: WeightUnit;
+  toGrams(): number;
+  toKilograms(): number;
+  toTons(): number;
+  toPounds(): number;
+  toOunces(): number;
+  convertTo(unit: WeightUnit): Weight;
+  add(other: Weight): Weight;
+  subtract(other: Weight): Weight;
+  multiply(factor: number): Weight;
+  divide(divisor: number): Weight;
+  equals(other: Weight): boolean;
+  isGreaterThan(other: Weight): boolean;
+  isLessThan(other: Weight): boolean;
+  format(precision?: number): string;
+}
+
+export class Weight implements IWeight {
   constructor(
     public readonly value: number,
     public readonly unit: WeightUnit
@@ -150,19 +184,46 @@ export class Weight {
   }
 
   /**
-   * Получение оптимальной единицы измерения для отображения
+   * Конвертация в тонны
    */
-  getOptimalUnit(): Weight {
-    const grams = this.toGrams()
+  toTons(): number {
+    return this.toGrams() / 1000000
+  }
 
-    if (grams >= 1000000) {
-      return this.convertTo(WeightUnit.TON)
-    } else if (grams >= 1000) {
-      return this.convertTo(WeightUnit.KILOGRAM)
-    } else if (grams >= 500) {
-      return this.convertTo(WeightUnit.KILOGRAM)
-    } else {
-      return this.convertTo(WeightUnit.GRAM)
+  /**
+   * Конвертация в фунты
+   */
+  toPounds(): number {
+    return this.toGrams() / 453.592
+  }
+
+  /**
+   * Конвертация в унции
+   */
+  toOunces(): number {
+    return this.toGrams() / 28.3495
+  }
+
+  /**
+   * Проверка меньше ли вес
+   */
+  isLessThan(other: Weight): boolean {
+    try {
+      const otherInGrams = other.toGrams()
+      return this.toGrams() < otherInGrams
+    } catch {
+      return false
     }
+  }
+
+  /**
+   * Деление веса на число
+   */
+  divide(divisor: number): Weight {
+    if (divisor <= 0) {
+      throw new Error('Делитель должен быть положительным числом');
+    }
+
+    return new Weight(this.value / divisor, this.unit);
   }
 }

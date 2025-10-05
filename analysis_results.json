@@ -1,0 +1,2237 @@
+[
+  {
+    "file": "app\\web\\public\\sw.js",
+    "functions": [
+      "CACHE_NAME",
+      "RUNTIME_CACHE",
+      "PRECACHE_URLS",
+      "API_CACHE_PATTERNS",
+      "STATIC_CACHE_PATTERNS",
+      "url",
+      "fetchRequest",
+      "responseToCache",
+      "data",
+      "options",
+      "body",
+      "shouldCacheStatic",
+      "shouldCacheAPI",
+      "urlsToCache"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\App.d.ts",
+    "functions": [
+      "App"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\App.tsx",
+    "functions": [
+      "handleSearch",
+      "e",
+      "OverlayMenu",
+      "handleSearch",
+      "e",
+      "handleNotificationClick",
+      "type",
+      "AppContent",
+      "App"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [],
+    "imports": [
+      "react",
+      "./lib/debug/DebugContext",
+      "./lib/notifications/NotificationSystem",
+      "./lib/notifications/useNotificationActions",
+      "react-router-dom",
+      "./components/ComponentsPage",
+      "./components/ProductNameSearch",
+      "./components/DebugPanel"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\common\\DataTable.d.ts",
+    "functions": [
+      "key",
+      "label",
+      "item",
+      "item",
+      "data",
+      "page",
+      "DataTable"
+    ],
+    "classes": [],
+    "interfaces": [
+      "TableColumn",
+      "TableAction",
+      "DataTableProps"
+    ],
+    "exports": [
+      "interface",
+      "interface",
+      "interface",
+      "declare"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\common\\DataTable.tsx",
+    "functions": [
+      "key",
+      "label",
+      "item",
+      "item",
+      "data",
+      "page",
+      "DataTable",
+      "handleSelect",
+      "item",
+      "isSelected",
+      "handleSelectAll",
+      "isSelected",
+      "item",
+      "isAllSelected",
+      "SkeletonRow",
+      "length",
+      "display"
+    ],
+    "classes": [],
+    "interfaces": [
+      "TableColumn",
+      "TableAction",
+      "DataTableProps"
+    ],
+    "exports": [
+      "interface",
+      "interface",
+      "interface",
+      "function"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\common\\PageHeader.d.ts",
+    "functions": [
+      "label",
+      "label",
+      "PageHeader"
+    ],
+    "classes": [],
+    "interfaces": [
+      "BreadcrumbItem",
+      "PageHeaderAction",
+      "PageHeaderProps"
+    ],
+    "exports": [
+      "interface",
+      "interface",
+      "interface",
+      "declare"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\common\\PageHeader.tsx",
+    "functions": [
+      "label",
+      "label",
+      "PageHeader",
+      "display"
+    ],
+    "classes": [],
+    "interfaces": [
+      "BreadcrumbItem",
+      "PageHeaderAction",
+      "PageHeaderProps"
+    ],
+    "exports": [
+      "interface",
+      "interface",
+      "interface",
+      "function"
+    ],
+    "imports": [
+      "react",
+      "@mui/icons-material",
+      "@mui/material"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\common\\SearchBar.d.ts",
+    "functions": [
+      "value",
+      "value",
+      "e"
+    ],
+    "classes": [],
+    "interfaces": [
+      "FilterOption",
+      "FilterConfig",
+      "SearchBarProps"
+    ],
+    "exports": [
+      "interface",
+      "interface",
+      "interface",
+      "declare"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\common\\SearchBar.tsx",
+    "functions": [
+      "value",
+      "value",
+      "e",
+      "value",
+      "handleSearch",
+      "handleQueryChange",
+      "event",
+      "newValue",
+      "displayValue",
+      "handleKeyPress",
+      "event",
+      "handleFilterChange",
+      "filterKey",
+      "clearAll",
+      "onKeyDown",
+      "event",
+      "display"
+    ],
+    "classes": [],
+    "interfaces": [
+      "FilterOption",
+      "FilterConfig",
+      "SearchBarProps"
+    ],
+    "exports": [
+      "interface",
+      "interface",
+      "interface",
+      "SearchBar"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\DebugPanel.tsx",
+    "functions": [
+      "getPositionStyles",
+      "addLog",
+      "newLog",
+      "id",
+      "clearLogs",
+      "getLogIcon",
+      "type",
+      "flex"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\features\\admin\\Documentation.tsx",
+    "functions": [
+      "navigate",
+      "location",
+      "handleSectionChange",
+      "sectionId",
+      "section",
+      "handleSearchChange",
+      "event",
+      "filteredSections",
+      "currentSection",
+      "CurrentComponent",
+      "mt",
+      "documentationSections",
+      "getStatusColor",
+      "status",
+      "getStatusIcon",
+      "status",
+      "mt",
+      "display"
+    ],
+    "classes": [],
+    "interfaces": [
+      "AdminSection"
+    ],
+    "exports": [],
+    "imports": [
+      "react",
+      "react-router-dom",
+      "./Settings",
+      "./Components",
+      "./Changelog"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\features\\FeaturesLayout.tsx",
+    "functions": [
+      "FeaturesLayout",
+      "toggleMenu"
+    ],
+    "classes": [],
+    "interfaces": [
+      "FeaturesLayoutProps"
+    ],
+    "exports": [
+      "function"
+    ],
+    "imports": [
+      "react",
+      "@mui/material",
+      "lucide-react",
+      "./FeaturesLayout.module.css"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\features\\profitability-calculator\\components\\CalculatorForm.d.ts",
+    "functions": [
+      "product",
+      "CalculatorForm"
+    ],
+    "classes": [],
+    "interfaces": [
+      "CalculatorFormProps"
+    ],
+    "exports": [
+      "declare"
+    ],
+    "imports": [
+      "@/types"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\features\\profitability-calculator\\components\\CalculatorForm.tsx",
+    "functions": [
+      "product",
+      "CalculatorForm",
+      "calculateProfitability",
+      "purchase",
+      "logistics",
+      "other",
+      "selling",
+      "marketplace",
+      "baseCommission",
+      "categoryMultiplier",
+      "commission",
+      "revenue",
+      "profit",
+      "profitability",
+      "roi",
+      "clearAll",
+      "backgroundColor"
+    ],
+    "classes": [],
+    "interfaces": [
+      "CalculatorFormProps",
+      "CalculationResult"
+    ],
+    "exports": [
+      "function"
+    ],
+    "imports": [
+      "react",
+      "@mui/icons-material",
+      "@/types"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\features\\profitability-calculator\\ProfitabilityCalculator.d.ts",
+    "functions": [
+      "ProfitabilityCalculator"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\components\\features\\profitability-calculator\\ProfitabilityCalculator.tsx",
+    "functions": [
+      "ProfitabilityCalculator",
+      "productPrice",
+      "that",
+      "handleInputChange",
+      "field",
+      "event",
+      "calculateProfit",
+      "productPrice",
+      "costPrice",
+      "shippingCost",
+      "commission",
+      "totalCost",
+      "profit",
+      "margin"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "function"
+    ],
+    "imports": [
+      "react",
+      "@mui/material",
+      "../FeaturesLayout"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\features\\unit-converter\\UnitConverter.d.ts",
+    "functions": [
+      "UnitConverter"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\components\\features\\unit-converter\\UnitConverter.tsx",
+    "functions": [
+      "name",
+      "fromBase",
+      "length",
+      "fromBase",
+      "name",
+      "fromBase",
+      "name",
+      "fromBase",
+      "name",
+      "fromBase",
+      "name",
+      "fromBase",
+      "name",
+      "fromBase",
+      "weight",
+      "fromBase",
+      "name",
+      "fromBase",
+      "name",
+      "fromBase",
+      "temperature",
+      "fromBase",
+      "name",
+      "fromBase",
+      "name",
+      "fromBase",
+      "UnitConverter",
+      "handleConvert",
+      "numValue",
+      "baseValue",
+      "convertedValue",
+      "handleSwap",
+      "value"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "function"
+    ],
+    "imports": [
+      "react",
+      "@/components/ui/card",
+      "@/components/ui/button",
+      "@/components/ui/input",
+      "@/components/ui/label",
+      "lucide-react",
+      "../FeaturesLayout"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\features\\wb-search\\WbSearch.d.ts",
+    "functions": [
+      "WbSearch"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\components\\features\\wb-search\\WbSearch.tsx",
+    "functions": [
+      "generateMockProducts",
+      "count",
+      "brands",
+      "adjectives",
+      "nouns",
+      "length",
+      "hasSale",
+      "price",
+      "salePrice",
+      "rating",
+      "feedbacks",
+      "inStock",
+      "brand",
+      "name",
+      "WbSearch",
+      "inputRef",
+      "dropdownRef",
+      "handleClickOutside",
+      "event",
+      "timeoutId",
+      "id",
+      "searchProducts",
+      "response",
+      "data",
+      "length",
+      "handleSuggestionClick",
+      "suggestion",
+      "handleKeyDown",
+      "e",
+      "selected",
+      "clearSearch",
+      "displayResults",
+      "when",
+      "handleSort",
+      "sortBy",
+      "sorted",
+      "e",
+      "dark",
+      "dark",
+      "md"
+    ],
+    "classes": [],
+    "interfaces": [
+      "Product",
+      "SearchSuggestion"
+    ],
+    "exports": [
+      "function"
+    ],
+    "imports": [
+      "react",
+      "@mui/material",
+      "@mui/material",
+      "lucide-react",
+      "@/lib/utils",
+      "./WbSearch.module.css",
+      "../FeaturesLayout"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\layout\\Footer.d.ts",
+    "functions": [
+      "Footer"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\components\\layout\\Footer.tsx",
+    "functions": [
+      "versionHistory",
+      "Footer",
+      "theme",
+      "muiTheme",
+      "currentYear",
+      "appVersion",
+      "handleVersionClick",
+      "handleCloseVersionDialog",
+      "m"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "Footer"
+    ],
+    "imports": [
+      "react",
+      "@mui/material",
+      "@mui/material/styles",
+      "@mui/icons-material/Code",
+      "@mui/icons-material/Handshake",
+      "@mui/icons-material/Feedback",
+      "@mui/icons-material/Article",
+      "@mui/icons-material/OpenInNew"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\layout\\MainLayout.tsx",
+    "functions": [
+      "navigate",
+      "isAuthenticated",
+      "currentUserRole",
+      "handleLogout",
+      "toggleTheme",
+      "theme"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "AnimatedHeading"
+    ],
+    "imports": [
+      "react",
+      "@mui/material",
+      "react-router-dom",
+      "./ResponsiveHeader",
+      "./Footer",
+      "@/config/menuConfig"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\layout\\ResponsiveHeader.d.ts",
+    "functions": [
+      "isAuthenticated",
+      "darkMode"
+    ],
+    "classes": [],
+    "interfaces": [
+      "UserData",
+      "MenuItemBase",
+      "MenuItemWithChildren",
+      "ResponsiveHeaderProps"
+    ],
+    "exports": [
+      "type",
+      "interface",
+      "interface",
+      "interface",
+      "type"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\layout\\ResponsiveHeader.tsx",
+    "functions": [
+      "isAuthenticated",
+      "darkMode",
+      "theme",
+      "navigate",
+      "location",
+      "isMobile",
+      "currentTheme",
+      "currentUserRole",
+      "itemsToRender",
+      "filteredMenuItems",
+      "item",
+      "to",
+      "isItemActive",
+      "item",
+      "handleDrawerToggle",
+      "handleLogout",
+      "handleCalculatorToggle",
+      "handleThemeToggle",
+      "newDarkMode",
+      "handleDesktopMenuToggle",
+      "handleClick",
+      "itemId",
+      "isCurrentlyExpanded",
+      "handleMenuItemClick",
+      "item",
+      "renderMenuItems",
+      "items",
+      "hasChildren",
+      "isExpanded",
+      "itemText",
+      "iconElement",
+      "expandIcon",
+      "zIndex"
+    ],
+    "classes": [],
+    "interfaces": [
+      "UserData",
+      "MenuItemBase",
+      "MenuItemWithChildren",
+      "ResponsiveHeaderProps"
+    ],
+    "exports": [
+      "type",
+      "interface",
+      "interface",
+      "interface",
+      "type"
+    ],
+    "imports": [
+      "react",
+      "react-router-dom",
+      "../../config/menuConfig",
+      "./MainLayout",
+      "../features/profitability-calculator/ProfitabilityCalculator"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\ProductNameSearch.tsx",
+    "functions": [
+      "searchProducts",
+      "query",
+      "filtered",
+      "handleSearch",
+      "e",
+      "handleProductClick",
+      "product",
+      "display"
+    ],
+    "classes": [],
+    "interfaces": [
+      "Product"
+    ],
+    "exports": [],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\shared\\ErrorFallback.d.ts",
+    "functions": [
+      "error"
+    ],
+    "classes": [],
+    "interfaces": [
+      "ErrorFallbackProps"
+    ],
+    "exports": [
+      "declare"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\shared\\ErrorFallback.tsx",
+    "functions": [
+      "error",
+      "theme"
+    ],
+    "classes": [],
+    "interfaces": [
+      "ErrorFallbackProps"
+    ],
+    "exports": [
+      "ErrorFallback"
+    ],
+    "imports": [
+      "react",
+      "@mui/material",
+      "@/lib/theme/useTheme"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\ui\\AnimatedHeading.d.ts",
+    "functions": [
+      "AnimatedHeading"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\components\\ui\\AnimatedHeading.tsx",
+    "functions": [
+      "fadeOut",
+      "AnimatedHeading"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "AnimatedHeading"
+    ],
+    "imports": [
+      "@mui/material/styles",
+      "@mui/material/Typography"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\ui\\button.d.ts",
+    "functions": [
+      "buttonVariants"
+    ],
+    "classes": [],
+    "interfaces": [
+      "ButtonProps"
+    ],
+    "exports": [
+      "interface"
+    ],
+    "imports": [
+      "react",
+      "class-variance-authority"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\ui\\button.tsx",
+    "functions": [
+      "buttonVariants",
+      "Button"
+    ],
+    "classes": [],
+    "interfaces": [
+      "ButtonProps"
+    ],
+    "exports": [
+      "interface"
+    ],
+    "imports": [
+      "react",
+      "class-variance-authority",
+      "@/lib/utils"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\ui\\card.tsx",
+    "functions": [
+      "Card",
+      "CardHeader",
+      "CardTitle",
+      "CardDescription",
+      "CardContent",
+      "CardFooter"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [],
+    "imports": [
+      "react",
+      "@/lib/utils"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\ui\\input.d.ts",
+    "functions": [],
+    "classes": [],
+    "interfaces": [
+      "InputProps"
+    ],
+    "exports": [
+      "interface"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\ui\\input.tsx",
+    "functions": [
+      "Input"
+    ],
+    "classes": [],
+    "interfaces": [
+      "InputProps"
+    ],
+    "exports": [
+      "interface"
+    ],
+    "imports": [
+      "react",
+      "@/lib/utils"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\ui\\label.d.ts",
+    "functions": [
+      "Label"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [],
+    "imports": [
+      "react",
+      "@radix-ui/react-label",
+      "class-variance-authority"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\ui\\label.tsx",
+    "functions": [
+      "labelVariants",
+      "Label"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [],
+    "imports": [
+      "react",
+      "@radix-ui/react-label",
+      "class-variance-authority",
+      "@/lib/utils"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\components\\ui\\select.tsx",
+    "functions": [
+      "Select",
+      "SelectGroup",
+      "SelectValue",
+      "SelectTrigger",
+      "SelectContent",
+      "SelectLabel",
+      "SelectItem",
+      "SelectSeparator"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [],
+    "imports": [
+      "react",
+      "@radix-ui/react-select",
+      "lucide-react",
+      "@/lib/utils"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\config\\menuConfig.d.ts",
+    "functions": [
+      "menuItems"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "declare"
+    ],
+    "imports": [
+      "../components/layout/ResponsiveHeader"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\config\\menuConfig.ts",
+    "functions": [
+      "getMenuItems",
+      "filteredChildren"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "getMenuItems"
+    ],
+    "imports": [
+      "react",
+      "../components/layout/ResponsiveHeader",
+      "@mui/icons-material/Dashboard",
+      "@mui/icons-material/Description",
+      "@mui/icons-material/History",
+      "@mui/icons-material/Person",
+      "@mui/icons-material/Settings",
+      "@mui/icons-material/ExitToApp",
+      "@mui/icons-material/Assessment",
+      "@mui/icons-material/ShoppingCart",
+      "@mui/icons-material/EventNote",
+      "@mui/icons-material/Widgets",
+      "@mui/icons-material/AdminPanelSettings"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\constants\\index.d.ts",
+    "functions": [
+      "APP_NAME",
+      "APP_VERSION",
+      "APP_DESCRIPTION"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\constants\\index.ts",
+    "functions": [
+      "APP_NAME",
+      "APP_VERSION",
+      "APP_DESCRIPTION",
+      "MARKETPLACES",
+      "PRODUCT_CATEGORIES",
+      "PRODUCT_STATUSES",
+      "DEFAULT_PAGINATION",
+      "API_TIMEOUTS",
+      "CACHE_DURATIONS",
+      "VALIDATION_RULES",
+      "COLORS",
+      "SIZES",
+      "STORAGE_KEYS",
+      "ERROR_MESSAGES",
+      "SUCCESS_MESSAGES",
+      "REGEX_PATTERNS",
+      "API_ENDPOINTS",
+      "FEATURE_FLAGS"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "APP_NAME",
+      "APP_VERSION",
+      "APP_DESCRIPTION",
+      "MARKETPLACES",
+      "PRODUCT_CATEGORIES",
+      "PRODUCT_STATUSES",
+      "DEFAULT_PAGINATION",
+      "API_TIMEOUTS",
+      "CACHE_DURATIONS",
+      "VALIDATION_RULES",
+      "COLORS",
+      "SIZES",
+      "STORAGE_KEYS",
+      "ERROR_MESSAGES",
+      "SUCCESS_MESSAGES",
+      "REGEX_PATTERNS",
+      "API_ENDPOINTS",
+      "FEATURE_FLAGS"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\features\\ui\\uiSlice.d.ts",
+    "functions": [],
+    "classes": [],
+    "interfaces": [
+      "UIState"
+    ],
+    "exports": [
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\features\\ui\\uiSlice.ts",
+    "functions": [
+      "uiSlice",
+      "name"
+    ],
+    "classes": [],
+    "interfaces": [
+      "UIState"
+    ],
+    "exports": [
+      "const"
+    ],
+    "imports": [
+      "@reduxjs/toolkit"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\hooks\\useProduct.d.ts",
+    "functions": [
+      "useProduct",
+      "product",
+      "searchResults",
+      "useReferences",
+      "marketplaces"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "declare",
+      "declare"
+    ],
+    "imports": [
+      "@/types/dto"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\hooks\\useProduct.ts",
+    "functions": [
+      "mockApiClient",
+      "getProduct",
+      "searchProducts",
+      "healthCheck",
+      "getMarketplaces",
+      "getCategories",
+      "useProduct",
+      "fetchProduct",
+      "id",
+      "product",
+      "searchProducts",
+      "query",
+      "products",
+      "data",
+      "checkHealth",
+      "product",
+      "useReferences",
+      "fetchMarketplaces",
+      "data",
+      "fetchCategories",
+      "data",
+      "loading",
+      "marketplaces"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "function",
+      "function"
+    ],
+    "imports": [
+      "react",
+      "@/types/dto",
+      "@/types/dto",
+      "@/services/apiClient"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\hooks\\useProductSearch.d.ts",
+    "functions": [
+      "query",
+      "suggestions",
+      "fetchProducts",
+      "handleSuggestionSelect",
+      "handleKeyDown",
+      "loadMore",
+      "setShowSuggestions",
+      "useProductSearch"
+    ],
+    "classes": [],
+    "interfaces": [
+      "UseProductSearchReturn"
+    ],
+    "exports": [
+      "declare"
+    ],
+    "imports": [
+      "@/types/dto"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\hooks\\useProductSearch.ts",
+    "functions": [
+      "ITEMS_PER_PAGE",
+      "query",
+      "suggestions",
+      "fetchProducts",
+      "handleSuggestionSelect",
+      "handleKeyDown",
+      "loadMore",
+      "setShowSuggestions",
+      "useProductSearch",
+      "searchInputRef",
+      "products",
+      "updateProgress",
+      "newProgress",
+      "fetchSuggestions",
+      "results",
+      "fetchProducts",
+      "result",
+      "currentStep",
+      "progress",
+      "1",
+      "errorMessage",
+      "loadMore",
+      "handleSuggestionSelect",
+      "suggestion",
+      "handleKeyDown",
+      "e"
+    ],
+    "classes": [],
+    "interfaces": [
+      "UseProductSearchReturn"
+    ],
+    "exports": [
+      "useProductSearch"
+    ],
+    "imports": [
+      "react",
+      "@/services/wildberries",
+      "@/types/dto"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\background\\TaskManager.d.ts",
+    "functions": [
+      "task"
+    ],
+    "classes": [
+      "TaskManager"
+    ],
+    "interfaces": [
+      "Task",
+      "TaskResult",
+      "TaskHandlerConfig"
+    ],
+    "exports": [
+      "declare",
+      "declare",
+      "declare",
+      "interface",
+      "interface",
+      "interface",
+      "type",
+      "declare",
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\lib\\background\\TaskManager.ts",
+    "functions": [
+      "task",
+      "task",
+      "taskId",
+      "status",
+      "cutoffTime",
+      "pendingTasks",
+      "availableSlots",
+      "tasksToStart",
+      "handler",
+      "timeoutPromise",
+      "executePromise",
+      "updateProgress",
+      "newProgress",
+      "result",
+      "result",
+      "delay",
+      "tasks",
+      "completedTasks",
+      "total",
+      "running",
+      "cancelled",
+      "taskManager"
+    ],
+    "classes": [
+      "TaskManager"
+    ],
+    "interfaces": [
+      "Task",
+      "TaskResult",
+      "TaskHandlerConfig"
+    ],
+    "exports": [
+      "enum",
+      "enum",
+      "enum",
+      "interface",
+      "interface",
+      "interface",
+      "type",
+      "class",
+      "taskManager"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\lib\\debug\\DebugContext.d.ts",
+    "functions": [
+      "isDebugMode",
+      "log",
+      "error",
+      "warn",
+      "info",
+      "children"
+    ],
+    "classes": [],
+    "interfaces": [
+      "DebugContextType",
+      "DebugProviderProps"
+    ],
+    "exports": [
+      "declare",
+      "declare"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\debug\\DebugContext.tsx",
+    "functions": [
+      "isDebugMode",
+      "log",
+      "error",
+      "warn",
+      "info",
+      "DebugContext",
+      "log",
+      "message",
+      "error",
+      "message",
+      "warn",
+      "message",
+      "info",
+      "message",
+      "toggleDebug",
+      "mode",
+      "useDebug",
+      "context"
+    ],
+    "classes": [],
+    "interfaces": [
+      "DebugContextType",
+      "DebugProviderProps"
+    ],
+    "exports": [
+      "DebugProvider",
+      "useDebug"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\debug\\DebugPanel.d.ts",
+    "functions": [],
+    "classes": [],
+    "interfaces": [
+      "DebugPanelProps"
+    ],
+    "exports": [
+      "declare"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\debug\\DebugPanel.tsx",
+    "functions": [
+      "theme",
+      "originalLog",
+      "originalError",
+      "originalWarn",
+      "originalInfo",
+      "message",
+      "message",
+      "message",
+      "message",
+      "id",
+      "getPositionStyles",
+      "getLogIcon",
+      "type",
+      "clearLogs",
+      "p"
+    ],
+    "classes": [],
+    "interfaces": [
+      "DebugPanelProps"
+    ],
+    "exports": [
+      "DebugPanel"
+    ],
+    "imports": [
+      "react",
+      "@mui/material",
+      "./DebugContext",
+      "../theme/useTheme"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\debug\\usePerformanceMonitor.d.ts",
+    "functions": [
+      "fps",
+      "metrics",
+      "logPerformanceIssue"
+    ],
+    "classes": [],
+    "interfaces": [
+      "PerformanceMetrics"
+    ],
+    "exports": [
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\lib\\debug\\usePerformanceMonitor.tsx",
+    "functions": [
+      "usePerformanceMonitor",
+      "fps",
+      "measureFPS",
+      "currentTime",
+      "animationId",
+      "checkMemory",
+      "memory",
+      "memoryUsage",
+      "interval",
+      "measureRenderTime",
+      "componentName",
+      "renderTime",
+      "component",
+      "countComponents",
+      "interval",
+      "logPerformanceIssue"
+    ],
+    "classes": [],
+    "interfaces": [
+      "PerformanceMetrics"
+    ],
+    "exports": [
+      "usePerformanceMonitor"
+    ],
+    "imports": [
+      "react",
+      "./DebugContext"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\error-handling\\ErrorBoundary.d.ts",
+    "functions": [
+      "children",
+      "hasError",
+      "retry"
+    ],
+    "classes": [
+      "ErrorBoundary"
+    ],
+    "interfaces": [
+      "Props",
+      "State"
+    ],
+    "exports": [
+      "declare"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\error-handling\\ErrorBoundary.tsx",
+    "functions": [
+      "children",
+      "hasResetKeyChanged",
+      "error",
+      "config",
+      "errorData"
+    ],
+    "classes": [
+      "ErrorBoundary"
+    ],
+    "interfaces": [
+      "Props",
+      "State"
+    ],
+    "exports": [
+      "class"
+    ],
+    "imports": [
+      "react",
+      "@wb-calc/config"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\error-handling\\ErrorLogger.d.ts",
+    "functions": [
+      "id",
+      "log",
+      "addBreadcrumb",
+      "getStats",
+      "sessionId",
+      "logWarn",
+      "logInfo",
+      "addBreadcrumb"
+    ],
+    "classes": [
+      "ErrorLogger"
+    ],
+    "interfaces": [
+      "ErrorLog",
+      "Breadcrumb"
+    ],
+    "exports": [
+      "declare",
+      "interface",
+      "interface",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare",
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\lib\\error-handling\\ErrorLogger.ts",
+    "functions": [
+      "logsToSend",
+      "config",
+      "response",
+      "method",
+      "filename",
+      "reason",
+      "errorLogger",
+      "useErrorLogger",
+      "logError",
+      "message",
+      "logWarn",
+      "message",
+      "logInfo",
+      "message",
+      "addBreadcrumb"
+    ],
+    "classes": [
+      "ErrorLogger"
+    ],
+    "interfaces": [
+      "ErrorLog",
+      "Breadcrumb"
+    ],
+    "exports": [
+      "enum",
+      "interface",
+      "interface",
+      "class",
+      "errorLogger",
+      "useErrorLogger",
+      "logError",
+      "logWarn",
+      "logInfo",
+      "addBreadcrumb"
+    ],
+    "imports": [
+      "@wb-calc/config"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\notifications\\NotificationProvider.d.ts",
+    "functions": [
+      "id",
+      "removeNotification",
+      "useNotifications"
+    ],
+    "classes": [],
+    "interfaces": [
+      "Notification",
+      "NotificationContextType",
+      "NotificationProviderProps"
+    ],
+    "exports": [
+      "declare",
+      "declare"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\notifications\\NotificationProvider.tsx",
+    "functions": [
+      "id",
+      "removeNotification",
+      "NotificationContext",
+      "useNotifications",
+      "context",
+      "addNotification",
+      "id",
+      "removeNotification",
+      "id",
+      "contextValue"
+    ],
+    "classes": [],
+    "interfaces": [
+      "Notification",
+      "NotificationContextType",
+      "NotificationProviderProps"
+    ],
+    "exports": [
+      "useNotifications",
+      "NotificationProvider"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\notifications\\NotificationSystem.tsx",
+    "functions": [
+      "id",
+      "hideNotification",
+      "clearAll",
+      "NotificationContext",
+      "useNotifications",
+      "context",
+      "showNotification",
+      "notification",
+      "id",
+      "duration",
+      "hideNotification",
+      "id",
+      "clearAll",
+      "position",
+      "notification",
+      "getBackgroundColor",
+      "type",
+      "getBorderColor",
+      "type",
+      "getIcon",
+      "type"
+    ],
+    "classes": [],
+    "interfaces": [
+      "Notification",
+      "NotificationContextType",
+      "NotificationProviderProps",
+      "NotificationItemProps"
+    ],
+    "exports": [
+      "interface",
+      "useNotifications",
+      "NotificationProvider"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\notifications\\useNotificationActions.tsx",
+    "functions": [
+      "useNotificationActions",
+      "showSuccess",
+      "title",
+      "showError",
+      "title",
+      "showWarning",
+      "title",
+      "showInfo",
+      "title",
+      "showPersistent"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "useNotificationActions"
+    ],
+    "imports": [
+      "./NotificationSystem"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\offline\\OfflineManager.d.ts",
+    "functions": [
+      "isOnline",
+      "clearCache",
+      "children"
+    ],
+    "classes": [],
+    "interfaces": [
+      "OfflineContextType",
+      "OfflineManagerProps"
+    ],
+    "exports": [
+      "declare",
+      "declare"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\offline\\OfflineManager.tsx",
+    "functions": [
+      "isOnline",
+      "clearCache",
+      "OfflineContext",
+      "initializeOfflineMode",
+      "config",
+      "setupEventListeners",
+      "removeEventListeners",
+      "handleOnline",
+      "handleOffline",
+      "handleNetworkReconnection",
+      "handleNetworkDisconnection",
+      "initializeStorage",
+      "db",
+      "loadSyncStatus",
+      "lastSync",
+      "pending",
+      "checkPendingChanges",
+      "queue",
+      "performSync",
+      "config",
+      "queue",
+      "now",
+      "forceSync",
+      "clearCache",
+      "keysToKeep",
+      "keysToRemove",
+      "openDatabase",
+      "request",
+      "db",
+      "syncStore",
+      "productStore",
+      "cacheStore",
+      "getSyncQueue",
+      "db",
+      "transaction",
+      "store",
+      "request",
+      "syncItem",
+      "item",
+      "clearSyncQueue",
+      "db",
+      "transaction",
+      "store",
+      "request",
+      "clearDatabase",
+      "db",
+      "request",
+      "useOffline",
+      "context"
+    ],
+    "classes": [],
+    "interfaces": [
+      "OfflineContextType",
+      "OfflineManagerProps"
+    ],
+    "exports": [
+      "OfflineManager",
+      "useOffline"
+    ],
+    "imports": [
+      "react",
+      "@wb-calc/config"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\service-worker\\ServiceWorkerManager.d.ts",
+    "functions": [],
+    "classes": [],
+    "interfaces": [
+      "ServiceWorkerManagerProps"
+    ],
+    "exports": [
+      "declare"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\service-worker\\ServiceWorkerManager.tsx",
+    "functions": [
+      "registerServiceWorker",
+      "config",
+      "registration",
+      "scope",
+      "newWorker",
+      "updateServiceWorker"
+    ],
+    "classes": [],
+    "interfaces": [
+      "ServiceWorkerManagerProps"
+    ],
+    "exports": [
+      "ServiceWorkerManager"
+    ],
+    "imports": [
+      "react",
+      "@wb-calc/config"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\storage\\IndexedDBManager.d.ts",
+    "functions": [],
+    "classes": [
+      "IndexedDBManager"
+    ],
+    "interfaces": [
+      "StorageResult"
+    ],
+    "exports": [
+      "declare",
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\lib\\storage\\IndexedDBManager.ts",
+    "functions": [
+      "request",
+      "db",
+      "store",
+      "keyPath",
+      "dataWithTimestamp",
+      "lastModified",
+      "transaction",
+      "store",
+      "request",
+      "success",
+      "transaction",
+      "store",
+      "request",
+      "success",
+      "transaction",
+      "store",
+      "request",
+      "success",
+      "transaction",
+      "store",
+      "request",
+      "success",
+      "transaction",
+      "store",
+      "request",
+      "success",
+      "transaction",
+      "store",
+      "index",
+      "request",
+      "syncItem",
+      "result",
+      "savedData",
+      "id",
+      "existing",
+      "updated",
+      "cacheItem",
+      "cached",
+      "cacheData",
+      "expiresAt",
+      "success",
+      "transaction",
+      "store",
+      "index",
+      "request",
+      "cursor",
+      "result",
+      "result",
+      "indexedDBManager"
+    ],
+    "classes": [
+      "IndexedDBManager"
+    ],
+    "interfaces": [
+      "StorageConfig",
+      "StorageResult"
+    ],
+    "exports": [
+      "class",
+      "indexedDBManager"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\lib\\theme\\ThemeProvider.d.ts",
+    "functions": [
+      "colors"
+    ],
+    "classes": [],
+    "interfaces": [
+      "ThemeProviderProps"
+    ],
+    "exports": [
+      "declare",
+      "declare"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\theme\\ThemeProvider.tsx",
+    "functions": [
+      "ThemeContext",
+      "useTheme",
+      "theme",
+      "theme"
+    ],
+    "classes": [],
+    "interfaces": [
+      "ThemeProviderProps"
+    ],
+    "exports": [
+      "useTheme",
+      "ThemeProvider"
+    ],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\theme\\useTheme.d.ts",
+    "functions": [
+      "useTheme"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\lib\\theme\\useTheme.ts",
+    "functions": [
+      "useTheme"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "useTheme"
+    ],
+    "imports": [
+      "react",
+      "./ThemeProvider"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\utils.d.ts",
+    "functions": [
+      "cn"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "declare"
+    ],
+    "imports": [
+      "clsx"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\lib\\utils.ts",
+    "functions": [
+      "cn"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "function"
+    ],
+    "imports": [
+      "clsx",
+      "tailwind-merge"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\main.tsx",
+    "functions": [
+      "root"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [],
+    "imports": [
+      "react",
+      "react-dom/client",
+      "./App"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\polyfills\\process.ts",
+    "functions": [
+      "cwd"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\services\\api.d.ts",
+    "functions": [
+      "searchUnits",
+      "getUnitCategories"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "declare",
+      "declare"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\services\\api.ts",
+    "functions": [
+      "API_BASE_URL",
+      "searchUnits",
+      "query",
+      "response",
+      "getUnitCategories",
+      "response"
+    ],
+    "classes": [],
+    "interfaces": [],
+    "exports": [
+      "searchUnits",
+      "getUnitCategories"
+    ],
+    "imports": [
+      "axios"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\services\\productStorageService.d.ts",
+    "functions": [],
+    "classes": [
+      "ProductStorageService"
+    ],
+    "interfaces": [],
+    "exports": [
+      "declare"
+    ],
+    "imports": [
+      "@/types"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\services\\productStorageService.ts",
+    "functions": [
+      "localProduct",
+      "serverProduct",
+      "scrapedProduct",
+      "localProducts",
+      "serverProducts",
+      "scrapedProducts",
+      "stored",
+      "product",
+      "keys",
+      "stored",
+      "product",
+      "searchText",
+      "productWithCache",
+      "cacheTime",
+      "now",
+      "productId",
+      "_query",
+      "productId",
+      "id",
+      "count",
+      "keys",
+      "stored",
+      "product",
+      "keys",
+      "stored",
+      "product"
+    ],
+    "classes": [
+      "ProductStorageService"
+    ],
+    "interfaces": [],
+    "exports": [
+      "class"
+    ],
+    "imports": [
+      "@/types"
+    ]
+  },
+  {
+    "file": "app\\web\\src\\services\\wildberries.d.ts",
+    "functions": [
+      "query"
+    ],
+    "classes": [
+      "WildberriesService"
+    ],
+    "interfaces": [],
+    "exports": [],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\services\\wildberries.ts",
+    "functions": [
+      "res",
+      "data",
+      "s",
+      "query",
+      "base",
+      "params",
+      "res",
+      "data",
+      "rawProducts",
+      "processedProducts",
+      "p",
+      "progress",
+      "id",
+      "idStr",
+      "products",
+      "product",
+      "p",
+      "res",
+      "data",
+      "wbProduct"
+    ],
+    "classes": [
+      "WildberriesService"
+    ],
+    "interfaces": [],
+    "exports": [],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\types\\dto.d.ts",
+    "functions": [],
+    "classes": [],
+    "interfaces": [
+      "SearchProductsDto",
+      "Product",
+      "CalculationResult",
+      "PaginatedResponse",
+      "ApiResponse",
+      "AsyncState"
+    ],
+    "exports": [
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\types\\dto.ts",
+    "functions": [],
+    "classes": [],
+    "interfaces": [
+      "SearchProductsDto",
+      "Product",
+      "CalculationResult",
+      "PaginatedResponse",
+      "ApiResponse",
+      "AsyncState"
+    ],
+    "exports": [
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\types\\index.d.ts",
+    "functions": [
+      "id"
+    ],
+    "classes": [],
+    "interfaces": [
+      "BaseEntity",
+      "Marketplace",
+      "Product",
+      "ProductCategory",
+      "ProfitabilityCalculation",
+      "CalculationResult",
+      "User",
+      "AppSettings",
+      "PaginationParams",
+      "PaginatedResponse",
+      "ApiResponse",
+      "ApiError",
+      "SearchFilters",
+      "FormField",
+      "FormConfig",
+      "AsyncState",
+      "OperationResult"
+    ],
+    "exports": [
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "declare",
+      "declare",
+      "type",
+      "interface",
+      "type",
+      "interface"
+    ],
+    "imports": []
+  },
+  {
+    "file": "app\\web\\src\\types\\index.ts",
+    "functions": [
+      "commission"
+    ],
+    "classes": [],
+    "interfaces": [
+      "BaseEntity",
+      "Marketplace",
+      "Product",
+      "ProductCategory",
+      "ProfitabilityCalculation",
+      "CalculationResult",
+      "User",
+      "AppSettings",
+      "PaginationParams",
+      "PaginatedResponse",
+      "ApiResponse",
+      "ApiError",
+      "SearchFilters",
+      "FormField",
+      "FormConfig",
+      "AsyncState",
+      "OperationResult"
+    ],
+    "exports": [
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "interface",
+      "MARKETPLACES",
+      "PRODUCT_CATEGORIES",
+      "type",
+      "interface",
+      "type",
+      "interface"
+    ],
+    "imports": []
+  }
+]
