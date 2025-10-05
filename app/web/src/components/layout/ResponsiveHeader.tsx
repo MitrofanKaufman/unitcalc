@@ -293,24 +293,21 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
           </Toolbar>
         </AppBar>
       
-      {/* Mobile Drawer */}
+      {/* Mobile Menu */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
         onClose={handleDrawerToggle}
         ModalProps={{
           keepMounted: true, // Better open performance on mobile
+          disableEnforceFocus: true, // Позволяет фокусироваться на элементах внутри Drawer
+          disableAutoFocus: true, // Предотвращает автоматическую фокусировку на первом элементе
+          disableRestoreFocus: true, // Предотвращает возврат фокуса после закрытия
         }}
         sx={{
           display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
-        }}
-      >
-        <Toolbar />
-        <Box sx={{ overflow: 'auto', display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <List sx={{ flexGrow: 1 }}>
-            {renderMenuItems(filteredMenuItems)}
-          </List>
+          '& .MuiDrawer-paper': { 
+            boxSizing: 'border-box', 
           {/* Theme toggle button at bottom */}
           <Box sx={{ mt: 'auto', p: 2 }}>
             <IconButton
@@ -341,7 +338,7 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
 
       {/* Desktop Menu */}
       <Drawer
-        variant="temporary"
+        variant="permanent"
         open={desktopMenuOpen}
         onClose={handleDesktopMenuToggle}
         sx={{
@@ -353,8 +350,17 @@ const ResponsiveHeader: React.FC<ResponsiveHeaderProps> = ({
             height: '100vh',
             borderRight: 'none',
             backgroundColor: theme.palette.background.default,
+            // Убедимся, что Drawer не скрыт от скринридеров
+            '&[role="presentation"]': {
+              '&[aria-hidden="true"]': {
+                display: 'block',
+                position: 'relative',
+                visibility: 'visible',
+              },
+            },
           },
         }}
+        aria-label="Боковое меню"
       >
         <Toolbar />
         <Box sx={{ overflow: 'auto', display: 'flex', flexDirection: 'column', height: '100%' }}>

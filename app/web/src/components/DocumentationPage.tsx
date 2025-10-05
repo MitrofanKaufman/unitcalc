@@ -1,11 +1,91 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
+import { useState, useEffect } from 'react';
+import { styled } from '@mui/material/styles';
+
+// Типы для пропсов компонента
+type DocumentationPageProps = {
+  // Добавьте здесь пропсы компонента, если они понадобятся
+};
+
+// Стилизованные компоненты для улучшения доступности
+const StyledMain = styled('main')({
+  '& .MuiDrawer-root': {
+    '& .MuiDrawer-paper': {
+      position: 'relative',
+      width: 300,
+      height: '100vh',
+      overflowY: 'auto',
+      '&:focus-visible': {
+        outline: '2px solid #1976d2',
+      },
+    },
+  },
+  '& .documentation-page': {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  '& .documentation-container': {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+  },
+  '& .documentation-layout': {
+    display: 'flex',
+    flex: 1,
+  },
+  '& .documentation-nav': {
+    width: 300,
+    padding: '1rem',
+    backgroundColor: '#f5f5f5',
+    borderRight: '1px solid #e0e0e0',
+    '& a': {
+      color: '#1976d2',
+      textDecoration: 'none',
+      '&:hover, &:focus': {
+        textDecoration: 'underline',
+        outline: 'none',
+      },
+      '&:focus-visible': {
+        outline: '2px solid #1976d2',
+        borderRadius: '4px',
+      },
+    },
+    '& ul': {
+      listStyle: 'none',
+      padding: 0,
+      '& li': {
+        margin: '0.5rem 0',
+      },
+    },
+  },
+  '& .documentation-content': {
+    flex: 1,
+    padding: '1rem',
+    maxWidth: 'calc(100% - 300px)',
+    '& .markdown-content': {
+      '& h1, & h2, & h3, & h4, & h5, & h6': {
+        marginTop: '1.5em',
+        marginBottom: '0.5em',
+      },
+      '& a': {
+        color: '#1976d2',
+        textDecoration: 'none',
+        '&:hover, &:focus': {
+          textDecoration: 'underline',
+          outline: 'none',
+        },
+      },
+    },
+  },
+});
 
 /**
  * Компонент страницы документации для отображения сгенерированной TypeDoc документации
  * 
  * @returns JSX элемент страницы документации
  */
-export const DocumentationPage: React.FC = () => {
+export const DocumentationPage: React.FC<DocumentationPageProps> = () => {
   const [currentPath, setCurrentPath] = useState('README.md');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
@@ -136,7 +216,8 @@ export const DocumentationPage: React.FC = () => {
   };
 
   return (
-    <main className="documentation-page">
+    <StyledMain>
+      <div className="documentation-page" role="main">
       <div className="documentation-container">
         <div className="documentation-header">
           <h1 className="page-title">📚 Документация WB Calculator</h1>
@@ -166,4 +247,22 @@ export const DocumentationPage: React.FC = () => {
             <h3>🔧 Сервисы</h3>
             <ul>
               <li><a href="#" onClick={() => handleNavigation('services/README.md')}>📋 Обзор сервисов</a></li>
-              <li><a href="#" onClick={() => handleNavigation('services/wildberries/README
+              <li><a href="#" onClick={() => handleNavigation('services/wildberries/README.md')}>Wildberries API</a></li>
+            </ul>
+          </nav>
+          
+          <div className="documentation-content">
+            {loading ? (
+              <div className="loading">Загрузка документации...</div>
+            ) : error ? (
+              <div className="error">{error}</div>
+            ) : (
+              <div className="markdown-content" dangerouslySetInnerHTML={{ __html: content }} />
+            )}
+          </div>
+        </div>
+      </div>
+      </div>
+    </StyledMain>
+  );
+};

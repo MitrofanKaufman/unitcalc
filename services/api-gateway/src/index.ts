@@ -55,11 +55,77 @@ app.get('/favicon.ico', (req, res) => {
 app.use(notFoundHandler)
 app.use(errorHandler)
 
-// Запуск сервера
-app.listen(PORT, () => {
-  console.log(`🚀 Сервер запущен на порту ${PORT}`)
-  console.log(`📊 Health check: http://localhost:${PORT}/health`)
-  console.log(`🔗 API документация: http://localhost:${PORT}/api-docs`)
-})
+// Функция для проверки и освобождения порта
+const checkAndClosePort = (port: number): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const server = require('http').createServer()
+    
+    server.on('error', (e: NodeJS.ErrnoException) => {
+      if (e.code === 'EADDRINUSE') {
+        console.log(`⚠️  Порт ${port} уже используется, пытаемся закрыть...`)
+        const kill = require('kill-port')
+        kill(port, 'tcp')
+          .then(() => {
+            console.log(`✅ Порт ${port} успешно освобожден`)
+            resolve()
+          })
+          .catch((err: Error) => {
+            console.error(`❌ Не удалось освободить порт ${port}:`, err.message)
+            reject(err)
+          })
+      } else {
+        reject(e)
+      }
+    })
+
+    server.on('listening', () => {
+      server.close(() => resolve())
+    })
+
+    server.listen(port)
+  })
+}
+
+// Функция запуска сервера с обработкой занятого порта
+  try {
+    // Пытаемся освободить порт, если он занят
+    await checkAndClosePort(Number(PORT))
+    
+    // Запускаем сервер
+    import { startServer } from './utils/server';
+
+    startServer(app, Number(PORT))
+      .then(() => {
+        console.log(`📊 Health check: http://localhost:${PORT}/health`);
+        console.log(`🔗 API документация: http://localhost:${PORT}/api-docs`);
+        console.error('Ошибка сервера:', error)
+      }
+      process.exit(1)
+    })
+
+    // Обработка завершения работы
+    process.on('SIGTERM', () => {
+      console.log('🛑 Получен сигнал SIGTERM. Завершение работы...')
+      server.close(() => {
+        console.log('✅ HTTP сервер остановлен')
+        process.exit(0)
+      })
+    })
+
+    process.on('SIGINT', () => {
+      console.log('🛑 Получен сигнал SIGINT. Завершение работы...')
+      server.close(() => {
+        console.log('✅ HTTP сервер остановлен')
+        process.exit(0)
+      })
+    })
+  } catch (error) {
+    console.error('❌ Не удалось запустить сервер:', error)
+    process.exit(1)
+  }
+}
+
+// Запускаем сервер
+startServer()
 
 export default app
