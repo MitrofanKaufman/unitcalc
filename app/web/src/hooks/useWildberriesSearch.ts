@@ -39,24 +39,7 @@ export interface Product {
  * - Автоматическое получение подсказок
  * - Обработку ошибок сети
  * - Кеширование результатов
- *
- * @returns Объект с состоянием поиска и функциями управления
- *
- * @example
- * ```typescript
- * const {
- *   products,
- *   suggestions,
- *   isSearching,
- *   searchProducts,
- *   fetchSuggestions
- * } = useWildberriesSearch();
- *
- * // Поиск товаров
- * const handleSearch = (query: string) => {
- *   searchProducts(query);
- * };
- * ```
+ * - Пагинацию результатов
  */
 export const useWildberriesSearch = () => {
   const [state, setState] = useState<{
@@ -67,6 +50,8 @@ export const useWildberriesSearch = () => {
     progress: { current: number; total: number };
     error: string | null;
     query: string;
+    currentPage: number;
+    hasMoreProducts: boolean;
   }>({
     products: [],
     suggestions: [],
@@ -75,6 +60,8 @@ export const useWildberriesSearch = () => {
     progress: { current: 0, total: 10 },
     error: null,
     query: '',
+    currentPage: 1,
+    hasMoreProducts: false,
   });
 
   /**
@@ -83,7 +70,15 @@ export const useWildberriesSearch = () => {
    */
   const searchProducts = useCallback(async (query: string) => {
     if (!query.trim()) {
-      setState(prev => ({ ...prev, products: [], suggestions: [], error: null, query: '' }));
+      setState(prev => ({
+        ...prev,
+        products: [],
+        suggestions: [],
+        error: null,
+        query: '',
+        currentPage: 1,
+        hasMoreProducts: false
+      }));
       return;
     }
 
@@ -93,6 +88,7 @@ export const useWildberriesSearch = () => {
       isLoading: true,
       error: null,
       query,
+      currentPage: 1,
       progress: { current: 0, total: 10 },
     }));
 
@@ -103,10 +99,11 @@ export const useWildberriesSearch = () => {
 
       setState(prev => ({
         ...prev,
-        products,
+        products: products.slice(0, 20), // Показываем первые 20 товаров
         isLoading: false,
         isSearching: false,
         progress: { current: 10, total: 10 },
+        hasMoreProducts: products.length > 20,
       }));
     } catch (error) {
       setState(prev => ({
@@ -115,9 +112,40 @@ export const useWildberriesSearch = () => {
         isLoading: false,
         isSearching: false,
         products: [],
+        hasMoreProducts: false,
       }));
     }
   }, []);
+
+  /**
+   * Загружает дополнительные товары для текущего поиска
+   */
+  const loadMoreProducts = useCallback(async () => {
+    if (!state.query || !state.hasMoreProducts || state.isLoading) return;
+
+    setState(prev => ({ ...prev, isLoading: true }));
+
+    try {
+      const allProducts = await WildberriesService.fetchProducts(state.query);
+      const nextPage = state.currentPage + 1;
+      const startIndex = nextPage * 20;
+      const endIndex = startIndex + 20;
+
+      setState(prev => ({
+        ...prev,
+        products: [...prev.products, ...allProducts.slice(startIndex, endIndex)],
+        currentPage: nextPage,
+        hasMoreProducts: endIndex < allProducts.length,
+        isLoading: false,
+      }));
+    } catch (error) {
+      setState(prev => ({
+        ...prev,
+        error: error instanceof Error ? error.message : 'Ошибка загрузки',
+        isLoading: false,
+      }));
+    }
+  }, [state.query, state.currentPage, state.hasMoreProducts, state.isLoading]);
 
   /**
    * Получает подсказки поиска для автодополнения
@@ -149,6 +177,8 @@ export const useWildberriesSearch = () => {
       query: '',
       isLoading: false,
       isSearching: false,
+      currentPage: 1,
+      hasMoreProducts: false,
     }));
   }, []);
 
@@ -167,5 +197,6 @@ export const useWildberriesSearch = () => {
     fetchSuggestions,
     clearSearch,
     retrySearch,
+    loadMoreProducts,
   };
 };
