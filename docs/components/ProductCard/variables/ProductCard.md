@@ -8,7 +8,7 @@
 
 > `const` **ProductCard**: `React.FC`\<[`ProductCardProps`](../interfaces/ProductCardProps.md)\>
 
-Defined in: components/ProductCard.tsx:41
+Defined in: [components/ProductCard.tsx:41](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/components/ProductCard.tsx#L41)
 
 Компонент карточки товара для отображения в результатах поиска
 

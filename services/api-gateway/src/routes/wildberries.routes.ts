@@ -1,6 +1,12 @@
 import { Router } from 'express';
-import axios from 'axios';
 import type { Request, Response, NextFunction } from 'express';
+import {
+  getProduct,
+  getProductDetails,
+  calculateProfitability,
+  searchProducts,
+  getSuggestions
+} from '../controllers/wildberriesController';
 
 const router = Router();
 
@@ -14,124 +20,289 @@ const addCorsHeaders = (req: Request, res: Response, next: NextFunction) => {
 };
 
 /**
- * Получение поисковых подсказок с Wildberries
- * GET /api/wildberries/suggest?query=текст
+ * Получение данных о товаре
+ * GET /api/wildberries/product/:id
  */
-router.get('/suggest', addCorsHeaders, async (req: Request, res: Response) => {
-  try {
-    const { query } = req.query;
+/**
+ * @swagger
+ * /wildberries/product/{id}:
+ *   get:
+ *     summary: Получение данных о товаре
+ *     description: Возвращает базовую информацию о товаре с сайта Wildberries
+ *     tags: [Products]
+ *     parameters:
+ *       - $ref: '#/components/parameters/productId'
+ *     responses:
+ *       200:
+ *         description: Успешное получение данных товара
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     product:
+ *                       $ref: '#/components/schemas/ProductData'
+ *       400:
+ *         description: Некорректный ID товара
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Товар не найден
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get('/product/:id', addCorsHeaders, getProduct);
 
-    if (!query || typeof query !== 'string') {
-      return res.status(400).json({
-        success: false,
-        message: 'Необходим параметр запроса',
-      });
-    }
+/**
+ * Получение детальной информации о товаре
+ * GET /api/wildberries/get/:id
+ */
+/**
+ * @swagger
+ * /wildberries/get/{id}:
+ *   get:
+ *     summary: Получение детальной информации о товаре
+ *     description: Возвращает полную информацию о товаре включая аналитику и метаданные
+ *     tags: [Products]
+ *     parameters:
+ *       - $ref: '#/components/parameters/productId'
+ *     responses:
+ *       200:
+ *         description: Успешное получение детальной информации
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     product:
+ *                       $ref: '#/components/schemas/ProductData'
+ *                     seller:
+ *                       type: object
+ *                       description: Информация о продавце
+ *                     metadata:
+ *                       type: object
+ *                       properties:
+ *                         collectedAt:
+ *                           type: string
+ *                           format: date-time
+ *                         executionTime:
+ *                           type: number
+ *                         hasErrors:
+ *                           type: boolean
+ *       400:
+ *         description: Некорректный ID товара
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Не удалось собрать информацию
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get('/get/:id', addCorsHeaders, getProductDetails);
 
-    try {
-      // Try to get suggestions from Wildberries API with more realistic browser headers
-      const response = await axios.get('https://search.wb.ru/suggests/api/v2/hint', {
-        params: {
-          query: query,
-          limit: 10,
-          lang: 'ru',
-          locale: 'ru',
-          dest: -1257786,  // Moscow region
-          curr: 'rub',
-          spp: 0,         // No premium user discount
-          nm: ''          // No specific product filter
-        },
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-          'Accept': 'application/json, text/plain, */*',
-          'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
-          'Referer': 'https://www.wildberries.ru/',
-          'Origin': 'https://www.wildberries.ru',
-          'Sec-Fetch-Dest': 'empty',
-          'Sec-Fetch-Mode': 'cors',
-          'Sec-Fetch-Site': 'same-site',
-          'X-Requested-With': 'XMLHttpRequest',
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache',
-          'sec-ch-ua': '"Chromium";v="91", " Not;A Brand";v="99"',
-          'sec-ch-ua-mobile': '?0',
-          'DNT': '1'
-        },
-        timeout: 3000
-      });
-
-      // Extract suggestions from response
-      let suggestions: string[] = [];
-      if (response.data?.queries?.length > 0) {
-        suggestions = response.data.queries.map((item: { value: string }) => item.value.trim());
-      } else if (response.data?.suggestions?.length > 0) {
-        // Alternative response format
-        suggestions = response.data.suggestions.map((item: string) => item.trim());
-      }
-      
-      return res.json({ success: true, data: suggestions });
-      
-    } catch (error) {
-      console.warn('Не удалось загрузить подсказки с API Wildberries:', error);
-      
-      // Fallback to test data
-      const suggestions = [
-        `${query} ${query.endsWith('а') ? 'женская' : 'женский'}`,
-        `${query} ${query.endsWith('а') ? 'мужская' : 'мужской'}`,
-        `${query} 2025`,
-        `${query} со скидкой`,
-        `${query} купить`
-      ];
-      
-      return res.json({ success: true, data: suggestions });
-    }
-    
-  } catch (error) {
-    console.error('Ошибка при получении подсказок:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Произошла ошибка при получении подсказок',
-      error: error instanceof Error ? error.message : 'Неизвестная ошибка',
-    });
-  }
-});
+/**
+ * Расчет доходности товара
+ * GET /api/wildberries/calc/:id
+ */
+/**
+ * @swagger
+ * /wildberries/calc/{id}:
+ *   get:
+ *     summary: Расчет доходности товара
+ *     description: Рассчитывает доходность товара с учетом затрат и желаемой маржи
+ *     tags: [Analytics]
+ *     parameters:
+ *       - $ref: '#/components/parameters/productId'
+ *       - $ref: '#/components/parameters/purchasePrice'
+ *       - $ref: '#/components/parameters/logistics'
+ *       - $ref: '#/components/parameters/otherCosts'
+ *       - $ref: '#/components/parameters/desiredMargin'
+ *     responses:
+ *       200:
+ *         description: Успешный расчет доходности
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/ProfitabilityCalculation'
+ *       400:
+ *         description: Некорректные параметры
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Не удалось получить данные товара
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get('/calc/:id', addCorsHeaders, calculateProfitability);
 
 /**
  * Поиск товаров на Wildberries
  * GET /api/wildberries/search?query=текст
  */
-router.get('/search', async (req: Request, res: Response) => {
-  try {
-    const { query } = req.query;
+/**
+ * @swagger
+ * /wildberries/search:
+ *   get:
+ *     summary: Поиск товаров
+ *     description: Поиск товаров на Wildberries (заглушка для будущего функционала)
+ *     tags: [Search]
+ *     parameters:
+ *       - $ref: '#/components/parameters/searchQuery'
+ *       - name: limit
+ *         in: query
+ *         description: Максимальное количество результатов
+ *         schema:
+ *           type: number
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 20
+ *       - name: offset
+ *         in: query
+ *         description: Смещение для пагинации
+ *         schema:
+ *           type: number
+ *           minimum: 0
+ *           default: 0
+ *     responses:
+ *       200:
+ *         description: Успешный поиск
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                       title:
+ *                         type: string
+ *                       price:
+ *                         type: number
+ *                       rating:
+ *                         type: number
+ *                       image:
+ *                         type: string
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: number
+ *                     limit:
+ *                       type: number
+ *                     offset:
+ *                       type: number
+ *                     hasMore:
+ *                       type: boolean
+ *       400:
+ *         description: Не указан поисковый запрос
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get('/search', addCorsHeaders, searchProducts);
 
-    if (!query || typeof query !== 'string') {
-      return res.status(400).json({
-        success: false,
-        message: 'Необходим параметр запроса',
-      });
-    }
-
-    // Здесь будет логика поиска товаров на Wildberries
-    // Временная заглушка
-    const products = [
-      { id: 1, name: `${query} 1`, price: 1000 },
-      { id: 2, name: `${query} 2`, price: 2000 },
-      { id: 3, name: `${query} 3`, price: 1500 },
-    ];
-
-    res.json({
-      success: true,
-      data: products,
-      timestamp: new Date().toISOString(),
-    });
-  } catch (error) {
-    console.error('Ошибка при поиске товаров:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Произошла ошибка при поиске товаров',
-      error: error instanceof Error ? error.message : 'Неизвестная ошибка',
-    });
-  }
-});
+/**
+ * Получение поисковых подсказок с Wildberries
+ * GET /api/wildberries/suggest?query=текст
+ */
+/**
+ * @swagger
+ * /wildberries/suggest:
+ *   get:
+ *     summary: Получение поисковых подсказок
+ *     description: Возвращает поисковые подсказки для автодополнения
+ *     tags: [Search]
+ *     parameters:
+ *       - $ref: '#/components/parameters/searchQuery'
+ *     responses:
+ *       200:
+ *         description: Успешное получение подсказок
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["смартфон женский", "смартфон мужской", "смартфон 2025"]
+ *       400:
+ *         description: Не указан поисковый запрос
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get('/suggest', addCorsHeaders, getSuggestions);
 
 export default router;

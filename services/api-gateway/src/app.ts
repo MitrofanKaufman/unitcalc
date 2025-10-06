@@ -7,16 +7,19 @@ import cors from 'cors'
 import helmet from 'helmet'
 import { createServer } from 'http'
 import { WebSocketServer } from 'ws'
+import swaggerUi from 'swagger-ui-express'
 import { errorHandler } from './middleware/error.middleware'
 import { notFoundHandler } from './middleware/notFound.middleware'
 import { requestLogger } from './middleware/logging.middleware'
 import { rateLimitMiddleware } from './middleware/rateLimit.middleware'
+import { specs } from './config/swagger'
 
 // Импорт маршрутов
 import unitsRoutes from './routes/units.routes'
 import currencyRoutes from './routes/currency.routes'
 import calculationsRoutes from './routes/calculations.routes'
 import scrapingRoutes from './routes/scraping.routes'
+import wildberriesRoutes from './routes/wildberries.routes'
 
 const app = express()
 
@@ -86,7 +89,8 @@ app.get('/', (req, res) => {
       units: '/api/units/*',
       currency: '/api/currency/*',
       calculations: '/api/calculations/*',
-      scraping: '/api/scraping/*'
+      scraping: '/api/scraping/*',
+      wildberries: '/api/wildberries/*'
     },
     timestamp: new Date().toISOString()
   })
@@ -97,6 +101,7 @@ app.use('/api/units', unitsRoutes)
 app.use('/api/currency', currencyRoutes)
 app.use('/api/calculations', calculationsRoutes)
 app.use('/api/scraping', scrapingRoutes)
+app.use('/api/wildberries', wildberriesRoutes)
 
 // 404 handler
 app.use(notFoundHandler)

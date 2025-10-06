@@ -1,0 +1,79 @@
+.progressBar {
+  width: 100%;
+  height: 0.75rem;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+  width: 0%;
+}
+
+/* Status colors */
+.progressBlue {
+  background-color: #3b82f6; /* blue-500 */
+}
+
+.progressYellow {
+  background-color: #eab308; /* yellow-500 */
+}
+
+.progressGreen {
+  background-color: #22c55e; /* green-500 */
+}
+
+.progressDarkGreen {
+  background-color: #16a34a; /* green-600 */
+}
+
+/* Status messages */
+.statusMessage {
+  font-size: 0.875rem;
+  color: #4b5563; /* gray-600 */
+}
+
+.statusStep {
+  font-size: 0.75rem;
+  color: #6b7280; /* gray-500 */
+}
+
+/* Error and data containers */
+.errorContainer {
+  background-color: #fef2f2; /* red-50 */
+  border: 1px solid #fecaca; /* red-200 */
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.dataContainer {
+  background-color: #f0fdf4; /* green-50 */
+  border: 1px solid #bbf7d0; /* green-200 */
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.errorTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #991b1b; /* red-800 */
+  margin-bottom: 0.25rem;
+}
+
+.errorText {
+  font-size: 0.75rem;
+  color: #dc2626; /* red-600 */
+}
+
+.dataTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #166534; /* green-800 */
+  margin-bottom: 0.25rem;
+}

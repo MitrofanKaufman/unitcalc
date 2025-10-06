@@ -8,7 +8,7 @@
 
 > **useWildberriesSearch**(): `object`
 
-Defined in: hooks/useWildberriesSearch.ts:61
+Defined in: [hooks/useWildberriesSearch.ts:44](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/hooks/useWildberriesSearch.ts#L44)
 
 Кастомный хук для управления поиском товаров Wildberries
 
@@ -17,10 +17,9 @@ Defined in: hooks/useWildberriesSearch.ts:61
 - Автоматическое получение подсказок
 - Обработку ошибок сети
 - Кеширование результатов
+- Пагинацию результатов
 
 ## Returns
-
-Объект с состоянием поиска и функциями управления
 
 ### products
 
@@ -57,6 +56,14 @@ Defined in: hooks/useWildberriesSearch.ts:61
 ### query
 
 > **query**: `string`
+
+### currentPage
+
+> **currentPage**: `number`
+
+### hasMoreProducts
+
+> **hasMoreProducts**: `boolean`
 
 ### searchProducts()
 
@@ -114,19 +121,12 @@ Defined in: hooks/useWildberriesSearch.ts:61
 
 `void`
 
-## Example
+### loadMoreProducts()
 
-```typescript
-const {
-  products,
-  suggestions,
-  isSearching,
-  searchProducts,
-  fetchSuggestions
-} = useWildberriesSearch();
+> **loadMoreProducts**: () => `Promise`\<`void`\>
 
-// Поиск товаров
-const handleSearch = (query: string) => {
-  searchProducts(query);
-};
-```
+Загружает дополнительные товары для текущего поиска
+
+#### Returns
+
+`Promise`\<`void`\>
