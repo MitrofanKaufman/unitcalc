@@ -27,6 +27,7 @@
     "test": "yarn workspaces foreach -pvi run test",
     "test:e2e": "cd tests/e2e && npx playwright test",
     "lint": "eslint --ext .ts,.tsx .",
+    "lint:fix": "eslint --ext .ts,.tsx --fix .",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "prepare": "husky install"
   },

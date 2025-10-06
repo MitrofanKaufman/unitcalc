@@ -6,7 +6,7 @@
 
 # Interface: Product
 
-Defined in: hooks/useWildberriesSearch.ts:7
+Defined in: [hooks/useWildberriesSearch.ts:7](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/hooks/useWildberriesSearch.ts#L7)
 
 Интерфейс товара для типизации данных
 
@@ -16,7 +16,7 @@ Defined in: hooks/useWildberriesSearch.ts:7
 
 > **id**: `number`
 
-Defined in: hooks/useWildberriesSearch.ts:9
+Defined in: [hooks/useWildberriesSearch.ts:9](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/hooks/useWildberriesSearch.ts#L9)
 
 Уникальный идентификатор товара
 
@@ -26,7 +26,7 @@ Defined in: hooks/useWildberriesSearch.ts:9
 
 > **name**: `string`
 
-Defined in: hooks/useWildberriesSearch.ts:11
+Defined in: [hooks/useWildberriesSearch.ts:11](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/hooks/useWildberriesSearch.ts#L11)
 
 Название товара
 
@@ -36,7 +36,7 @@ Defined in: hooks/useWildberriesSearch.ts:11
 
 > **price**: `number`
 
-Defined in: hooks/useWildberriesSearch.ts:13
+Defined in: [hooks/useWildberriesSearch.ts:13](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/hooks/useWildberriesSearch.ts#L13)
 
 Цена в копейках
 
@@ -46,7 +46,7 @@ Defined in: hooks/useWildberriesSearch.ts:13
 
 > **rating**: `null` \| `number`
 
-Defined in: hooks/useWildberriesSearch.ts:15
+Defined in: [hooks/useWildberriesSearch.ts:15](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/hooks/useWildberriesSearch.ts#L15)
 
 Рейтинг товара (0-5)
 
@@ -56,7 +56,7 @@ Defined in: hooks/useWildberriesSearch.ts:15
 
 > **image**: `string`
 
-Defined in: hooks/useWildberriesSearch.ts:17
+Defined in: [hooks/useWildberriesSearch.ts:17](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/hooks/useWildberriesSearch.ts#L17)
 
 URL основного изображения
 
@@ -66,7 +66,7 @@ URL основного изображения
 
 > **images**: `string`[]
 
-Defined in: hooks/useWildberriesSearch.ts:19
+Defined in: [hooks/useWildberriesSearch.ts:19](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/hooks/useWildberriesSearch.ts#L19)
 
 Массив URL всех изображений
 
@@ -76,7 +76,7 @@ Defined in: hooks/useWildberriesSearch.ts:19
 
 > **brand**: `string`
 
-Defined in: hooks/useWildberriesSearch.ts:21
+Defined in: [hooks/useWildberriesSearch.ts:21](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/hooks/useWildberriesSearch.ts#L21)
 
 Название бренда
 
@@ -86,7 +86,7 @@ Defined in: hooks/useWildberriesSearch.ts:21
 
 > **seller**: `object`
 
-Defined in: hooks/useWildberriesSearch.ts:23
+Defined in: [hooks/useWildberriesSearch.ts:23](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/hooks/useWildberriesSearch.ts#L23)
 
 Информация о продавце
 
@@ -108,7 +108,7 @@ Defined in: hooks/useWildberriesSearch.ts:23
 
 > **feedbacks**: `number`
 
-Defined in: hooks/useWildberriesSearch.ts:29
+Defined in: [hooks/useWildberriesSearch.ts:29](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/hooks/useWildberriesSearch.ts#L29)
 
 Количество отзывов
 
@@ -118,6 +118,6 @@ Defined in: hooks/useWildberriesSearch.ts:29
 
 > **inStock**: `boolean`
 
-Defined in: hooks/useWildberriesSearch.ts:31
+Defined in: [hooks/useWildberriesSearch.ts:31](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/hooks/useWildberriesSearch.ts#L31)
 
 Доступность товара

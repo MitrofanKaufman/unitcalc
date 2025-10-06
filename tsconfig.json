@@ -28,17 +28,20 @@
       "@/*": ["app/web/src/*"]
     }
   },
-  "exclude": ["node_modules", "**/node_modules/*", "**/dist/*"],
-  
   /* Include all TypeScript files in the project */
   "include": [
     "app/**/*.ts",
     "app/**/*.tsx",
-    "packages/core/**/*.ts",
-    "packages/config/**/*.ts",
-    "packages/logging/**/*.ts",
+    "packages/**/*.ts",
+    "packages/**/*.tsx",
+    "packages/**/*.d.ts",
     "services/**/*.ts",
     "tests/**/*.ts",
     "tests/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*",
+    "**/dist/*"
   ]
 }

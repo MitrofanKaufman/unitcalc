@@ -4,7 +4,7 @@ import DebugPanel from './components/layout/Debug/DebugPanel';
 import { NotificationProvider } from './components/common/NotificationProvider';
 import MainLayout from './components/layout/MainLayout';
 
-// Импорты страниц
+// Импорт страниц
 import { 
   HomePage, 
   ProductSearchPage, 
@@ -16,7 +16,7 @@ import {
  * Основной компонент приложения
  * @returns {JSX.Element} Корневой компонент приложения
  */
-function App() {
+function App(): JSX.Element {
   return (
     <NotificationProvider>
       <BrowserRouter>

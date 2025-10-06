@@ -8,4 +8,4 @@
 
 > `const` **ProgressBar**: `React.FC`\<`ProgressBarProps`\>
 
-Defined in: components/ProgressBar.tsx:9
+Defined in: [components/ProgressBar.tsx:9](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/components/ProgressBar.tsx#L9)

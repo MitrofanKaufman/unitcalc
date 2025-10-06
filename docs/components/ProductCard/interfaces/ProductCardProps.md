@@ -6,7 +6,7 @@
 
 # Interface: ProductCardProps
 
-Defined in: components/ProductCard.tsx:7
+Defined in: [components/ProductCard.tsx:7](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/components/ProductCard.tsx#L7)
 
 Проперти компонента карточки товара
 
@@ -16,6 +16,6 @@ Defined in: components/ProductCard.tsx:7
 
 > **product**: [`Product`](../../../hooks/useWildberriesSearch/interfaces/Product.md)
 
-Defined in: components/ProductCard.tsx:9
+Defined in: [components/ProductCard.tsx:9](https://github.com/MitrofanKaufman/unitcalc/blob/46369bebdb436c227fb4c58fb7e6af58af7c90ab/app/web/src/components/ProductCard.tsx#L9)
 
 Объект товара с полной информацией
